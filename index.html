@@ -31,7 +31,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 /* INTRO */
 #si{background:var(--bg);justify-content:flex-end;overflow-y:auto;}
-#swelcome{background:var(--bg);justify-content:flex-end;overflow-y:auto;position:relative;}
+#swelcome{background:var(--bg);justify-content:flex-end;overflow-y:auto;}
 .wel-atmo{position:absolute;inset:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,#0d1f10 0%,var(--bg) 60%);}
 .wel-light{position:absolute;width:240px;height:460px;border-radius:50%;filter:blur(50px);}
 .wel-light-l{top:-180px;left:-90px;background:radial-gradient(circle,rgba(0,230,118,.5),transparent 70%);transform:rotate(25deg);}
@@ -1110,14 +1110,20 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 </div>
 <script>
 (function(){
-  function setVH(){
+  function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
+    var app=document.getElementById('app');
+    if(app)app.style.height=h+'px';
     document.documentElement.style.setProperty('--vh',(h*0.01)+'px');
   }
-  setVH();
-  window.addEventListener('resize',setVH);
-  window.addEventListener('orientationchange',function(){setTimeout(setVH,150);});
-  if(window.visualViewport)window.visualViewport.addEventListener('resize',setVH);
+  setAppHeight();
+  window.addEventListener('load',setAppHeight);
+  window.addEventListener('resize',setAppHeight);
+  window.addEventListener('pageshow',setAppHeight);
+  window.addEventListener('orientationchange',function(){setTimeout(setAppHeight,150);setTimeout(setAppHeight,500);});
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',setAppHeight);
+  setTimeout(setAppHeight,300);
+  setTimeout(setAppHeight,1000);
 })();
 var CLUBS_L1=[
   {n:'FC Auxerre',city:'Auxerre',l:1,s:1200,e:'[A]',c:'#4a4a4a',m:0,str:24},
