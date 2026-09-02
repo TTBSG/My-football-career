@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>My Football Career</title>
 
 <!-- PWA -->
@@ -22,7 +22,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-content:center;touch-action:manipulation;}
-#app{width:100%;max-width:430px;height:100vh;position:relative;overflow:hidden;background:var(--bg2);}
+#app{width:100%;max-width:430px;height:100vh;height:100dvh;position:relative;overflow:hidden;background:var(--bg2);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .25s;}
 .screen.on{opacity:1;pointer-events:all;}
 .scroll{overflow-y:auto;overscroll-behavior:contain;flex:1;}
@@ -556,7 +556,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
     </div>
 
     <div class="stepnav">
-      <button class="stepnav-btn stepnav-btn-secondary" id="prevBtn" onclick="prevStep()" style="display:none">&#8592; PRECEDENT</button>
+      <button class="stepnav-btn stepnav-btn-secondary" id="prevBtn" onclick="prevStep()">&#8592; ACCUEIL</button>
       <button class="stepnav-btn stepnav-btn-primary" id="nextBtn" onclick="nextStep()">SUIVANT &#8594;</button>
     </div>
   </div>
@@ -567,6 +567,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
   <div class="trh"><div class="trtitle">Centres de<br>Formation</div><div class="trsub" id="acadsub">Ils s'interessent a toi</div></div>
   <div id="acadoffers"></div>
   <div class="trbtns">
+    <button class="btn btn-o" onclick="show('si')">&#8592; RETOUR</button>
     <button class="btn btn-g" id="btnacad" onclick="confirmAcademy()" disabled>REJOINDRE CE CENTRE (16 ANS)</button>
   </div>
 </div>
@@ -1777,7 +1778,7 @@ function nextStep(){
 }
 
 function prevStep(){
-  if(creationStep<=1)return;
+  if(creationStep<=1){show('swelcome');return;}
   creationStep--;
   updateStepUI();
 }
@@ -1789,7 +1790,8 @@ function updateStepUI(){
   document.getElementById('stepLabel').textContent='Etape '+creationStep+' / 3';
   document.getElementById('stepName').textContent=stepNames[creationStep-1];
   document.getElementById('stepFill').style.width=(creationStep/3*100)+'%';
-  document.getElementById('prevBtn').style.display=creationStep===1?'none':'block';
+  document.getElementById('prevBtn').style.display='block';
+  document.getElementById('prevBtn').innerHTML=creationStep===1?'&#8592; ACCUEIL':'&#8592; PRECEDENT';
   document.getElementById('nextBtn').innerHTML=creationStep===3?'VOIR LES CENTRES &#8594;':'SUIVANT &#8594;';
 }
 
