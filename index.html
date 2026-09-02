@@ -22,7 +22,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-content:center;touch-action:manipulation;}
-#app{width:100%;max-width:430px;height:100vh;height:100dvh;position:relative;overflow:hidden;background:var(--bg2);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);}
+#app{width:100%;max-width:430px;height:100vh;height:100dvh;height:calc(var(--vh,1vh) * 100);position:relative;overflow:hidden;background:var(--bg2);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .25s;}
 .screen.on{opacity:1;pointer-events:all;}
 .scroll{overflow-y:auto;overscroll-behavior:contain;flex:1;}
@@ -1109,6 +1109,16 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
+(function(){
+  function setVH(){
+    var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
+    document.documentElement.style.setProperty('--vh',(h*0.01)+'px');
+  }
+  setVH();
+  window.addEventListener('resize',setVH);
+  window.addEventListener('orientationchange',function(){setTimeout(setVH,150);});
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',setVH);
+})();
 var CLUBS_L1=[
   {n:'FC Auxerre',city:'Auxerre',l:1,s:1200,e:'[A]',c:'#4a4a4a',m:0,str:24},
   {n:'AC Angers',city:'Angers',l:1,s:1800,e:'[B]',c:'#5a3d2b',m:0,str:28},
