@@ -1119,13 +1119,8 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
   function fixSafeAreaTop(){
     var app=document.getElementById('app');
     if(!app)return;
-    var isStandalone=(window.navigator.standalone===true)||window.matchMedia('(display-mode: standalone)').matches;
-    var probe=document.createElement('div');
-    probe.style.cssText='position:absolute;top:0;left:0;visibility:hidden;padding-top:env(safe-area-inset-top);';
-    document.body.appendChild(probe);
-    var measured=parseFloat(getComputedStyle(probe).paddingTop)||0;
-    document.body.removeChild(probe);
-    if(isStandalone&&measured<20){
+    var isStandalone=(window.navigator.standalone===true);
+    if(isStandalone){
       app.style.paddingTop='54px';
     }else{
       app.style.paddingTop='max(20px, env(safe-area-inset-top))';
