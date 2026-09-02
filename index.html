@@ -1120,11 +1120,26 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
     var app=document.getElementById('app');
     if(!app)return;
     var isStandalone=(window.navigator.standalone===true);
-    if(isStandalone){
+    var mmStandalone=false;
+    try{mmStandalone=window.matchMedia('(display-mode: standalone)').matches;}catch(e){}
+    var probe=document.createElement('div');
+    probe.style.cssText='position:absolute;top:0;left:0;visibility:hidden;padding-top:env(safe-area-inset-top);';
+    document.body.appendChild(probe);
+    var measured=parseFloat(getComputedStyle(probe).paddingTop)||0;
+    document.body.removeChild(probe);
+    if(isStandalone||mmStandalone){
       app.style.paddingTop='54px';
     }else{
       app.style.paddingTop='max(20px, env(safe-area-inset-top))';
     }
+    var dbg=document.getElementById('dbgbadge');
+    if(!dbg){
+      dbg=document.createElement('div');
+      dbg.id='dbgbadge';
+      dbg.style.cssText='position:fixed;bottom:6px;left:6px;right:6px;background:rgba(255,0,0,.92);color:#fff;font-size:10px;font-family:monospace;padding:6px 8px;z-index:99999;border-radius:6px;line-height:1.5;white-space:pre-wrap;';
+      document.body.appendChild(dbg);
+    }
+    dbg.textContent='standalone:'+isStandalone+' matchMedia:'+mmStandalone+' envMeasured:'+measured+'px innerH:'+window.innerHeight+' visualVpH:'+(window.visualViewport?window.visualViewport.height:'n/a')+' appPadTop:'+app.style.paddingTop;
   }
   setAppHeight();
   fixSafeAreaTop();
