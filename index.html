@@ -1007,6 +1007,11 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
       <button class="btn btn-r" onclick="settingsDeleteSave()">SUPPRIMER MA SAUVEGARDE</button>
     </div>
 
+    <div class="slbl">Navigation</div>
+    <div class="card" style="margin-bottom:14px">
+      <button class="btn btn-o" onclick="goHomeScreen()">&#8962; RETOUR A L'ACCUEIL</button>
+    </div>
+
     <div class="slbl">A propos</div>
     <div class="card" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:center">
@@ -1109,7 +1114,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=1;
+var APP_VERSION=2;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -4168,6 +4173,12 @@ function genSquadSafe(g){
   try{sq=genSquad();}catch(e){sq={starters:[],bench:[]};}
   G=save;
   return sq;
+}
+
+function goHomeScreen(){
+  manualSave();
+  checkResume();
+  show('swelcome');
 }
 
 function checkResume(){
