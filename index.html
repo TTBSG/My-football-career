@@ -1109,6 +1109,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
+var APP_VERSION=1;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1124,6 +1125,30 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
   if(window.visualViewport)window.visualViewport.addEventListener('resize',setAppHeight);
   setTimeout(setAppHeight,300);
   setTimeout(setAppHeight,1000);
+})();
+(function(){
+  function checkVersion(){
+    fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
+      if(data&&data.version&&data.version>APP_VERSION){
+        showUpdateBanner(data.version);
+      }
+    }).catch(function(){});
+  }
+  function showUpdateBanner(newVersion){
+    if(document.getElementById('updbanner'))return;
+    var b=document.createElement('div');
+    b.id='updbanner';
+    b.style.cssText='position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));background:#101810;border:1px solid var(--g,#00e676);border-radius:14px;padding:13px 14px;z-index:99998;display:flex;align-items:center;gap:10px;box-shadow:0 12px 30px rgba(0,0,0,.55);font-family:"DM Sans",sans-serif;';
+    b.innerHTML='<div style="flex:1;font-size:12px;color:#e8f5e8;line-height:1.4"><b style="color:#00e676">Nouvelle version disponible</b><br>Ta partie sera conservee.</div><button id="updbtn" style="background:#00e676;color:#052c14;border:none;border-radius:9px;padding:9px 13px;font-weight:700;font-size:11px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap">Recharger</button>';
+    document.body.appendChild(b);
+    document.getElementById('updbtn').onclick=function(){
+      window.location.href=window.location.pathname+'?v='+newVersion;
+    };
+  }
+  setTimeout(checkVersion,1200);
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible')checkVersion();
+  });
 })();
 var CLUBS_L1=[
   {n:'FC Auxerre',city:'Auxerre',l:1,s:1200,e:'[A]',c:'#4a4a4a',m:0,str:24},
