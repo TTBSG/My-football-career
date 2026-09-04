@@ -1208,7 +1208,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=20;
+var APP_VERSION=21;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1257,7 +1257,8 @@ var CHANGELOG={
   13:{title:'Patrimoine personnel (nouvel onglet)',items:['Achete vehicules, bijoux et une residence','Boost Bonheur/Reputation, entretien hebdomadaire sur les biens chers']},
   14:{title:'Staff etoffe',items:['30 membres de staff possibles (contre 7 avant)','5 nouveaux roles : coach technique, nutritionniste, avocat, community manager, chasseur de sponsors']},
   15:{title:'Investissements',items:['18 options sur 6 categories','Nouveau : Obligations d\'Etat, Crypto, Art &amp; Collections','La Bourse a desormais de vrais krachs et envolees']},
-  20:{title:'Correctifs mini-jeux',items:['Tir : un but dans une zone libre compte desormais toujours comme un but','Vitesse : un double-tap rapide ne fait plus sauter un essai par erreur']}
+  20:{title:'Correctifs mini-jeux',items:['Tir : un but dans une zone libre compte desormais toujours comme un but','Vitesse : un double-tap rapide ne fait plus sauter un essai par erreur']},
+  21:{title:'Correctif nouvelle carriere',items:['Le journal de carriere se vide bien desormais en demarrant une nouvelle aventure (il pouvait garder d\'anciennes entrees avant)']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -2118,6 +2119,7 @@ function startGame(){
   G.riv.club=rivClubPool[Math.floor(Math.random()*rivClubPool.length)].n;
   AP={};
   lastLogSeason=null;
+  var logEl=document.getElementById('glog');if(logEl)logEl.innerHTML='';
   document.getElementById('gav').textContent=n.slice(0,2).toUpperCase();
   document.getElementById('gname').textContent=n;
   document.getElementById('gclub').textContent=G.club;
@@ -5165,6 +5167,8 @@ function discardSave(){
 function newGame(){
   deleteSave();
   G={};AP={};seltrain=null;selclub=null;selpos='ATT';selPosLabel='Attaquant';selArchetype=ARCHETYPES.ATT[0];selNation='FR';selStyle='bosseur';selAcademy=null;creationStep=1;
+  lastLogSeason=null;
+  var logEl=document.getElementById('glog');if(logEl)logEl.innerHTML='';
   alloc={vit:0,tir:0,phy:0,men:0,tec:0};
   document.getElementById('iname').value='';
   document.querySelectorAll('.mp-spot').forEach(function(b){b.classList.remove('on');});
