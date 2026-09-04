@@ -1208,7 +1208,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=19;
+var APP_VERSION=20;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1256,7 +1256,8 @@ var CHANGELOG={
   12:{title:'Correctif',items:['Bug corrige sur le mini-jeu Technique &amp; Dribble']},
   13:{title:'Patrimoine personnel (nouvel onglet)',items:['Achete vehicules, bijoux et une residence','Boost Bonheur/Reputation, entretien hebdomadaire sur les biens chers']},
   14:{title:'Staff etoffe',items:['30 membres de staff possibles (contre 7 avant)','5 nouveaux roles : coach technique, nutritionniste, avocat, community manager, chasseur de sponsors']},
-  15:{title:'Investissements',items:['18 options sur 6 categories','Nouveau : Obligations d\'Etat, Crypto, Art &amp; Collections','La Bourse a desormais de vrais krachs et envolees']}
+  15:{title:'Investissements',items:['18 options sur 6 categories','Nouveau : Obligations d\'Etat, Crypto, Art &amp; Collections','La Bourse a desormais de vrais krachs et envolees']},
+  20:{title:'Correctifs mini-jeux',items:['Tir : un but dans une zone libre compte desormais toujours comme un but','Vitesse : un double-tap rapide ne fait plus sauter un essai par erreur']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -2417,7 +2418,6 @@ function startShootoutMinigame(onDone){
   setPos(ballEl,50,100);
 
   var shotIdx=0,goals=0,locked=false;
-  var extraSave=selInt==='intense'?0.18:selInt==='leger'?0.05:0.10;
 
   function shoot(zoneIdx){
     if(locked)return;
@@ -2429,7 +2429,7 @@ function startShootoutMinigame(onDone){
     setPos(ballEl,z.cx,z.cy);
     setPos(keeperEl,kz.cx,kz.cy);
     setTimeout(function(){
-      var saved=(keeperIdx===zoneIdx)||(Math.random()<extraSave);
+      var saved=(keeperIdx===zoneIdx);
       if(!saved)goals++;
       var dot=document.getElementById('sgDot'+shotIdx);
       if(dot)dot.className='shootg-dot '+(saved?'miss':'hit');
@@ -2485,7 +2485,7 @@ function startReflexMinigame(onDone){
   var dotsEl=document.getElementById('rxDots');
   for(var i=0;i<3;i++){var d=document.createElement('div');d.className='reflex-dot';d.id='rxDot'+i;dotsEl.appendChild(d);}
   var lightEl=document.getElementById('rxLight');
-  var attempt=0,times=[],state='waiting',signalT=0,timeoutId=null;
+  var attempt=0,times=[],state='waiting',signalT=0,timeoutId=null,locked=false;
 
   function recordDot(idx,cls){
     var el=document.getElementById('rxDot'+idx);
@@ -2494,6 +2494,7 @@ function startReflexMinigame(onDone){
 
   function nextAttempt(){
     if(attempt>=3){finish();return;}
+    locked=false;
     state='waiting';
     lightEl.className='reflex-light';
     lightEl.textContent='PRET...';
@@ -2507,7 +2508,9 @@ function startReflexMinigame(onDone){
   }
 
   lightEl.onclick=function(){
+    if(locked)return;
     if(state==='waiting'){
+      locked=true;
       clearTimeout(timeoutId);
       times.push(600);
       recordDot(attempt,'bad');
@@ -2516,6 +2519,7 @@ function startReflexMinigame(onDone){
       attempt++;
       setTimeout(nextAttempt,900);
     }else if(state==='go'){
+      locked=true;
       var rt=performance.now()-signalT;
       times.push(rt);
       recordDot(attempt,rt<=300?'good':rt<=450?'mid':'bad');
