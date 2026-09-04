@@ -278,6 +278,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 /* TRANSFER */
 #strans{background:var(--bg);overflow-y:auto;}
 #sinvest{background:var(--bg);overflow-y:auto;}
+#spatrimoine{background:var(--bg);overflow-y:auto;}
 #ssocial{background:var(--bg);overflow-y:auto;}
 #sfamille{background:var(--bg);overflow-y:auto;}
 #smedia{background:var(--bg);overflow-y:auto;}
@@ -376,6 +377,11 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 .wseq-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .3s;}
 .wseq-dot.on{background:var(--g);width:18px;border-radius:3px;}
 .evt-txt{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:16px;text-align:center;}
+.changelog-body{max-height:52vh;overflow-y:auto;margin-bottom:14px;text-align:left;}
+.changelog-version{margin-bottom:14px;}
+.changelog-vtitle{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--g);letter-spacing:.5px;margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--b);}
+.changelog-list{margin:0;padding-left:18px;}
+.changelog-list li{font-size:12px;color:var(--t2);line-height:1.6;}
 .evt-opt{width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:11px;padding:12px;margin-bottom:8px;cursor:pointer;text-align:left;transition:all .2s;}
 .evt-opt:hover{border-color:var(--g);background:var(--gl);}
 .evt-opt-lbl{font-weight:700;font-size:13px;margin-bottom:2px;}
@@ -792,6 +798,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
         <div class="pcard" onclick="openSocial()"><div class="pico">&#127881;</div><div class="plb2">Vie sociale</div><div class="pval" id="psocial">Equilibre</div><div class="pcost">Voir les options</div></div>
         <div class="pcard" onclick="openFamille()"><div class="pico">&#10084;</div><div class="plb2">Famille</div><div class="pval" id="pfamille">Celibataire</div><div class="pcost">Voir</div></div>
         <div class="pcard" onclick="openMedia()"><div class="pico">&#128241;</div><div class="plb2">Medias</div><div class="pval" id="pmedia">Inconnu</div><div class="pcost">Voir</div></div>
+        <div class="pcard" onclick="openPatrimoine()"><div class="pico">&#127969;</div><div class="plb2">Patrimoine</div><div class="pval" id="ppatrim">Aucun bien</div><div class="pcost">Voir</div></div>
       </div>
       <div class="slbl">Carriere &amp; Business</div>
       <div class="pgrid">
@@ -982,10 +989,29 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
   <div id="investActive" style="padding:0 16px"></div>
   <div class="slbl" style="padding:0 16px">&#127968; Immobilier - stable, rendement fixe</div>
   <div id="investImmo"></div>
-  <div class="slbl" style="padding:0 16px">&#128200; Bourse - variable chaque semaine</div>
+  <div class="slbl" style="padding:0 16px">&#128179; Obligations - tres sur, rendement faible garanti</div>
+  <div id="investOblig"></div>
+  <div class="slbl" style="padding:0 16px">&#128200; Bourse - variable, krachs et envolees possibles</div>
   <div id="investBourse"></div>
+  <div class="slbl" style="padding:0 16px">&#128273; Crypto - extreme, tres volatil</div>
+  <div id="investCrypto"></div>
+  <div class="slbl" style="padding:0 16px">&#127912; Art &amp; Collections - lent, parfois un gros coup aux encheres</div>
+  <div id="investArt"></div>
   <div class="slbl" style="padding:0 16px">&#127970; Business - pari immediat, tout ou rien</div>
   <div id="investBiz"></div>
+  <div class="trbtns"><button class="btn btn-o" onclick="show('sg')">RETOUR</button></div>
+</div>
+
+<!-- PATRIMOINE PERSONNEL -->
+<div id="spatrimoine" class="screen">
+  <div class="trh"><div class="trtitle">Patrimoine<br>Personnel</div><div class="trsub">Profite de ta reussite</div></div>
+  <div id="patrimActive" style="padding:0 16px"></div>
+  <div class="slbl" style="padding:0 16px">&#128663; Vehicules</div>
+  <div id="patrimVehicule"></div>
+  <div class="slbl" style="padding:0 16px">&#128142; Bijoux &amp; Montres</div>
+  <div id="patrimBijou"></div>
+  <div class="slbl" style="padding:0 16px">&#127969; Residence</div>
+  <div id="patrimResidence"></div>
   <div class="trbtns"><button class="btn btn-o" onclick="show('sg')">RETOUR</button></div>
 </div>
 
@@ -1181,7 +1207,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=9;
+var APP_VERSION=17;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1222,6 +1248,48 @@ var APP_VERSION=9;
     if(document.visibilityState==='visible')checkVersion();
   });
 })();
+var CHANGELOG_KEY='mfc_changelog_seen_v4';
+var CHANGELOG={
+  10:{title:'Variete des evenements',items:['51 evenements aleatoires au lieu de 8 (presse, vestiaire, coach, fans...)','Protection anti-repetition sur plusieurs semaines']},
+  11:{title:'Sponsors',items:['19 sponsors avec des noms inspires de vraies marques','3 nouvelles categories : Fast-food, Telecom & Tech, Mode & Streetwear']},
+  12:{title:'Correctif',items:['Bug corrige sur le mini-jeu Technique &amp; Dribble']},
+  13:{title:'Patrimoine personnel (nouvel onglet)',items:['Achete vehicules, bijoux et une residence','Boost Bonheur/Reputation, entretien hebdomadaire sur les biens chers']},
+  14:{title:'Staff etoffe',items:['30 membres de staff possibles (contre 7 avant)','5 nouveaux roles : coach technique, nutritionniste, avocat, community manager, chasseur de sponsors']},
+  15:{title:'Investissements',items:['18 options sur 6 categories','Nouveau : Obligations d\'Etat, Crypto, Art &amp; Collections','La Bourse a desormais de vrais krachs et envolees']}
+};
+function showChangelog(fromV,toV){
+  var versions=[];
+  for(var v=fromV+1;v<=toV;v++){if(CHANGELOG[v])versions.push(v);}
+  if(versions.length===0)return;
+  var body='';
+  versions.forEach(function(v){
+    var c=CHANGELOG[v];
+    body+='<div class="changelog-version"><div class="changelog-vtitle">'+c.title+'</div><ul class="changelog-list">'+c.items.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';
+  });
+  var h='<div class="evt-overlay" id="changelogOverlay"><div class="evt-modal">'+
+    '<div class="evt-ico">&#127881;</div>'+
+    '<div class="evt-title">Nouveautes !</div>'+
+    '<div class="changelog-body">'+body+'</div>'+
+    '<button class="btn btn-g" id="changelogBtn">GENIAL, ON Y VA !</button>'+
+  '</div></div>';
+  document.body.insertAdjacentHTML('beforeend',h);
+  document.getElementById('changelogBtn').onclick=function(){
+    var ov=document.getElementById('changelogOverlay');if(ov)ov.remove();
+    try{localStorage.setItem(CHANGELOG_KEY,String(APP_VERSION));}catch(e){}
+  };
+}
+function checkChangelog(){
+  var seen=0;
+  try{seen=parseInt(localStorage.getItem(CHANGELOG_KEY)||'0',10)||0;}catch(e){}
+  if(seen===0){
+    try{localStorage.setItem(CHANGELOG_KEY,String(APP_VERSION));}catch(e){}
+    return;
+  }
+  if(seen<APP_VERSION){
+    setTimeout(function(){showChangelog(seen,APP_VERSION);},700);
+  }
+}
+checkChangelog();
 var CLUBS_L1=[
   {n:'FC Auxerre',city:'Auxerre',l:1,s:1200,e:'[A]',c:'#4a4a4a',m:0,str:24},
   {n:'AC Angers',city:'Angers',l:1,s:1800,e:'[B]',c:'#5a3d2b',m:0,str:28},
@@ -1585,10 +1653,33 @@ function toggleInterest(){
   updateUI();
 }
 var STAFF=[
- {id:'kine',ico:'&#129657;',n:'Kinesitherapeute',cost:800,dsc:'Risque de blessure /2'},
- {id:'physio',ico:'&#128170;',n:'Prep. physique',cost:600,dsc:'+20% gains Vitesse/Physique'},
- {id:'mental',ico:'&#129504;',n:'Coach mental',cost:700,dsc:'+20% gains Mental'},
- {id:'agent',ico:'&#129485;',n:'Agent personnel',cost:1000,dsc:'+15% sur les offres de transfert'},
+ {id:'kine',ico:'&#129657;',n:'Kinesitherapeute',cost:800,dsc:'Risque de blessure /2',cat:'kine'},
+ {id:'kine2',ico:'&#129657;',n:'Equipe medicale renforcee',cost:1800,dsc:'Risque de blessure /3',cat:'kine'},
+ {id:'kine3',ico:'&#129657;',n:'Suivi medical de pointe',cost:3200,dsc:'Risque de blessure /6, le meilleur suivi possible',cat:'kine'},
+ {id:'physio',ico:'&#128170;',n:'Prep. physique',cost:600,dsc:'+15% gains Vitesse/Physique',cat:'physio'},
+ {id:'physio2',ico:'&#128170;',n:'Prep. physique senior',cost:1400,dsc:'+30% gains Vitesse/Physique',cat:'physio'},
+ {id:'physio3',ico:'&#128170;',n:'Prep. physique elite',cost:2600,dsc:'+45% gains Vitesse/Physique',cat:'physio'},
+ {id:'mental',ico:'&#129504;',n:'Coach mental',cost:700,dsc:'+15% gains Mental',cat:'mental'},
+ {id:'mental2',ico:'&#129504;',n:'Coach mental senior',cost:1600,dsc:'+30% gains Mental',cat:'mental'},
+ {id:'mental3',ico:'&#129504;',n:'Psychologue du sport elite',cost:2800,dsc:'+45% gains Mental',cat:'mental'},
+ {id:'techcoach1',ico:'&#9917;',n:'Coach technique',cost:650,dsc:'+15% gains Tir/Technique',cat:'techcoach'},
+ {id:'techcoach2',ico:'&#9917;',n:'Coach technique senior',cost:1500,dsc:'+30% gains Tir/Technique',cat:'techcoach'},
+ {id:'techcoach3',ico:'&#9917;',n:'Ancien pro reconverti',cost:2700,dsc:'+45% gains Tir/Technique',cat:'techcoach'},
+ {id:'nutri1',ico:'&#127831;',n:'Nutritionniste',cost:500,dsc:'+2 Forme chaque semaine',cat:'nutri'},
+ {id:'nutri2',ico:'&#127831;',n:'Nutritionniste sportif',cost:1200,dsc:'+4 Forme chaque semaine',cat:'nutri'},
+ {id:'nutri3',ico:'&#127831;',n:'Dieteticien personnel',cost:2200,dsc:'+7 Forme chaque semaine',cat:'nutri'},
+ {id:'avocat1',ico:'&#9878;',n:'Avocat',cost:900,dsc:'-30% risque de scandale sponsor',cat:'avocat'},
+ {id:'avocat2',ico:'&#9878;',n:'Avocat specialise image',cost:2000,dsc:'-50% risque de scandale sponsor',cat:'avocat'},
+ {id:'avocat3',ico:'&#9878;',n:'Cabinet d\'avocats reputee',cost:3500,dsc:'-75% risque de scandale sponsor',cat:'avocat'},
+ {id:'commgr1',ico:'&#128241;',n:'Community manager',cost:500,dsc:'+15% followers gagnes',cat:'commgr'},
+ {id:'commgr2',ico:'&#128241;',n:'Community manager senior',cost:1200,dsc:'+30% followers gagnes',cat:'commgr'},
+ {id:'commgr3',ico:'&#128241;',n:'Agence digitale complete',cost:2200,dsc:'+50% followers gagnes',cat:'commgr'},
+ {id:'sponsorhunter1',ico:'&#128269;',n:'Chasseur de sponsors',cost:600,dsc:'Plus de nouvelles offres de sponsors',cat:'sponsorhunter'},
+ {id:'sponsorhunter2',ico:'&#128269;',n:'Chasseur de sponsors senior',cost:1400,dsc:'Encore plus de nouvelles offres',cat:'sponsorhunter'},
+ {id:'sponsorhunter3',ico:'&#128269;',n:'Reseau de contacts elite',cost:2500,dsc:'Un flux constant de nouvelles offres',cat:'sponsorhunter'},
+ {id:'agent',ico:'&#129485;',n:'Agent personnel',cost:1000,dsc:'+15% sur les offres de transfert',cat:'agent'},
+ {id:'agent2',ico:'&#129485;',n:'Agent confirme',cost:2200,dsc:'+25% sur les offres de transfert',cat:'agent'},
+ {id:'agent3',ico:'&#129485;',n:'Super-agent renomme',cost:4000,dsc:'+40% sur les offres de transfert',cat:'agent'},
  {id:'sponsormgr1',ico:'&#128188;',n:'Gestionnaire sponsors debutant',cost:500,dsc:'+1 emplacement sponsor',cat:'sponsormgr',slots:1},
  {id:'sponsormgr2',ico:'&#128188;',n:'Gestionnaire sponsors confirme',cost:1200,dsc:'+2 emplacements sponsors',cat:'sponsormgr',slots:2},
  {id:'sponsormgr3',ico:'&#128188;',n:'Gestionnaire sponsors elite',cost:2500,dsc:'+3 emplacements sponsors',cat:'sponsormgr',slots:3}
@@ -1703,7 +1794,50 @@ var EVTS=[
   {t:'Interview reussie ! +10 Rep.',r:10,m:0},
   {t:'Rumeurs de transfert... -3 Mental',r:5,m:-3},
   {t:'Stage mental ! +5 Mental',r:0,m:5},
-  {t:'Penalty manque decisif... -8 Mental',r:-5,m:-8}
+  {t:'Penalty manque decisif... -8 Mental',r:-5,m:-8},
+  {t:'Ta performance fait le tour des reseaux ! +8 Rep.',r:8,m:2},
+  {t:'Un journaliste specialise vante ton potentiel. +12 Rep.',r:12,m:2},
+  {t:'Tu fais la couverture d\'un magazine sportif ! +15 Rep.',r:15,m:3},
+  {t:'Ton geste technique devient viral. +10 Rep.',r:10,m:1},
+  {t:'Un article critique remet en question ton niveau. -8 Rep.',r:-8,m:-3},
+  {t:'Rumeurs infondees dans la presse... -5 Mental',r:-3,m:-5},
+  {t:'Comparaison peu flatteuse avec un autre joueur. -4 Rep.',r:-4,m:-2},
+  {t:'Un coequipier salue publiquement ton attitude. +3 Mental',r:2,m:3},
+  {t:'Petite tension dans le vestiaire... -4 Mental',r:0,m:-4},
+  {t:'Tu organises un repas d\'equipe, super ambiance ! +5 Mental',r:2,m:5},
+  {t:'Un veteran du club te prend sous son aile. +4 Mental',r:0,m:4},
+  {t:'Dispute avec un coequipier a l\'entrainement... -3 Mental',r:0,m:-3},
+  {t:'Le coach salue tes progres a l\'entrainement ! +4 Mental',r:2,m:4},
+  {t:'Le coach pointe du doigt un manque de rigueur. -5 Mental',r:0,m:-5},
+  {t:'Nouvelle consigne tactique bien assimilee. +3 Mental',r:0,m:3},
+  {t:'Tu es laisse sur le banc sans explication... -6 Mental',r:-2,m:-6},
+  {t:'Les supporters scandent ton nom ! +10 Rep.',r:10,m:4},
+  {t:'Une banderole a ton effigie dans les tribunes ! +8 Rep.',r:8,m:3},
+  {t:'Un groupe de supporters critique ton attitude... -6 Rep.',r:-6,m:-3},
+  {t:'Tu prends le temps de signer des autographes. +5 Rep.',r:5,m:2},
+  {t:'Une action chanceuse fait parler de toi ! +6 Rep.',r:6,m:2},
+  {t:'Une frayeur evitee de justesse... plus de peur que de mal. -2 Mental',r:0,m:-2},
+  {t:'Un arbitrage litigieux te frustre... -4 Mental',r:0,m:-4},
+  {t:'Ton but sublime finit dans le top 10 de la semaine ! +12 Rep.',r:12,m:3},
+  {t:'Ta famille assiste au match, ca te motive ! +5 Mental',r:0,m:5},
+  {t:'Un proche te felicite pour ton evolution. +3 Mental',r:0,m:3},
+  {t:'Tu prends un moment pour souffler loin du foot. +4 Mental',r:0,m:4},
+  {t:'Nuit blanche mal geree... -3 Mental',r:0,m:-3},
+  {t:'Trop de sollicitations exterieures cette semaine... -4 Mental',r:-2,m:-4},
+  {t:'Une sortie improvisee te change les idees. +2 Mental',r:0,m:2},
+  {t:'Un concurrent a ton poste hausse le niveau... -3 Mental',r:0,m:-3},
+  {t:'Tu prends l\'ascendant sur un concurrent direct ! +5 Mental',r:3,m:5},
+  {t:'Comparaison flatteuse avec un cadre de l\'equipe. +6 Rep.',r:6,m:2},
+  {t:'Tu prends la parole avant un match decisif. +4 Leadership',r:3,m:2,l:4},
+  {t:'Un jeune du centre de formation t\'admire. +2 Leadership',r:2,m:1,l:2},
+  {t:'Le vestiaire commence a se tourner vers toi. +3 Leadership',r:2,m:2,l:3},
+  {t:'Long deplacement fatigant pour le match. -3 Mental',r:0,m:-3},
+  {t:'Bonne ambiance dans le bus avant le match. +2 Mental',r:0,m:2},
+  {t:'Une masterclass improvisee du coach t\'inspire. +4 Mental',r:0,m:4},
+  {t:'Tu rates une passe decisive facile... -3 Mental',r:0,m:-3},
+  {t:'Un ancien du club salue ton parcours. +7 Rep.',r:7,m:3},
+  {t:'Le kine remarque ta belle progression physique. +3 Mental',r:0,m:3},
+  {t:'Une sequence d\'entrainement filmee impressionne. +9 Rep.',r:9,m:2}
 ];
 var INJS=[
   {t:'Claquage - 2 semaines',w:2,s:{p:-3}},
@@ -1957,7 +2091,7 @@ function startGame(){
     riv:{n:rn,ini:rn.slice(0,2).toUpperCase(),vit:20,tir:20,phy:20,men:20,tec:20,wins:0,draws:0,losses:0,rep:0},
     rivlast:null,national:false,natcaps:0,injwk:0,
     balance:50,famille:'Celibataire',fambonus:0,
-    formation:[],formations:{player:[],career:[]},media:'Inconnu',maxrep:0,selclub:null,staff:[],objFails:0,trophies:0,squad:[],clubStanding:Math.ceil(Math.random()*CLUBS.length),investments:[],happy:55,relationship:null,children:[],social:{},weekSpend:0,lastWeekSpend:0,lastWeekNet:0,sponsors:[],interestedClubs:[],clubSquads:{},contractYears:0,transferHistory:[],lastNegotiationSai:null,clubInterest:{},negotiatedOffers:[],negotiationAttempts:{},negotiations:{},renewalNegotiation:null,leagueScorers:[],
+    formation:[],formations:{player:[],career:[]},media:'Inconnu',maxrep:0,selclub:null,staff:[],objFails:0,trophies:0,squad:[],clubStanding:Math.ceil(Math.random()*CLUBS.length),investments:[],patrimoine:[],happy:55,relationship:null,children:[],social:{},weekSpend:0,lastWeekSpend:0,lastWeekNet:0,sponsors:[],interestedClubs:[],clubSquads:{},contractYears:0,transferHistory:[],lastNegotiationSai:null,clubInterest:{},negotiatedOffers:[],negotiationAttempts:{},negotiations:{},renewalNegotiation:null,leagueScorers:[],
     seasonGoals:0,seasonAssists:0,seasonCleanSheets:0,seasonYellow:0,seasonRed:0,seasonMOTM:0,seasonApps:0,
     careerGoals:0,careerAssists:0,careerCleanSheets:0,careerYellow:0,careerRed:0,careerMOTM:0,careerApps:0,
     loan:null,recentMatches:[],lastLoanOfferSai:null,winterWindowUsed:false,winterWindowNotified:false,transferMode:null,seasonHistory:[],
@@ -2603,7 +2737,7 @@ function startDribbleMinigame(onDone){
       resolved=true;
       locked=true;
       clearTimeout(timeoutId);
-      var ok=!timedOut&&chosenLane!==defLane;
+      var ok=chosenLane!==defLane;
       if(ok)success++;
       var dot=document.getElementById('drDot'+gate);
       if(dot)dot.className='shootg-dot '+(ok?'hit':'miss');
@@ -2772,9 +2906,16 @@ function doWeekActual(trainPerf){
   var t=seltrain;
   var fac=selInt==='leger'?0.5:selInt==='intense'?1.2:0.8;
   fac*=(typeof trainPerf==='number'?trainPerf:1);
-  if(G.staff.indexOf('physio')>=0&&(t==='vit'||t==='phy'))fac+=0.15;
+  if(G.staff.indexOf('physio3')>=0&&(t==='vit'||t==='phy'))fac+=0.45;
+  else if(G.staff.indexOf('physio2')>=0&&(t==='vit'||t==='phy'))fac+=0.30;
+  else if(G.staff.indexOf('physio')>=0&&(t==='vit'||t==='phy'))fac+=0.15;
   if(G.formations&&G.formations.player.indexOf('nutrition')>=0&&(t==='vit'||t==='phy'))fac+=0.1;
-  if(G.staff.indexOf('mental')>=0&&t==='men')fac+=0.15;
+  if(G.staff.indexOf('mental3')>=0&&t==='men')fac+=0.45;
+  else if(G.staff.indexOf('mental2')>=0&&t==='men')fac+=0.30;
+  else if(G.staff.indexOf('mental')>=0&&t==='men')fac+=0.15;
+  if(G.staff.indexOf('techcoach3')>=0&&(t==='tir'||t==='tec'))fac+=0.45;
+  else if(G.staff.indexOf('techcoach2')>=0&&(t==='tir'||t==='tec'))fac+=0.30;
+  else if(G.staff.indexOf('techcoach1')>=0&&(t==='tir'||t==='tec'))fac+=0.15;
   if(G.style==='prodige')fac+=0.12;
   if(G.style==='bosseur')fac+=0.08;
   if(G.style==='charismatique'&&t==='men')fac+=0.4;
@@ -2797,6 +2938,8 @@ function doWeekActual(trainPerf){
   else G.balance=Math.max(0,G.balance-3);
   if(selInt==='leger')G.balance=Math.min(100,G.balance+5);
   else if(selInt==='intense')G.balance=Math.max(0,G.balance-6);
+  var nutriBoost=G.staff.indexOf('nutri3')>=0?7:G.staff.indexOf('nutri2')>=0?4:G.staff.indexOf('nutri1')>=0?2:0;
+  if(nutriBoost)G.balance=Math.min(100,G.balance+nutriBoost);
   if(typeof G.happy!=='number')G.happy=55;
   if(G.happy>50)G.happy=Math.max(50,G.happy-1);
   else if(G.happy<50)G.happy=Math.min(50,G.happy+1);
@@ -2814,7 +2957,8 @@ function doWeekActual(trainPerf){
       if(s.repWeekly)G.rep=Math.max(0,G.rep+s.repWeekly);
       if(s.balanceWeekly)G.balance=Math.min(100,G.balance+s.balanceWeekly);
       if(s.happyWeekly)G.happy=Math.min(100,(G.happy||55)+s.happyWeekly);
-      var scandalP=s.scandalChance?s.scandalChance*(G.formations&&G.formations.player.indexOf('media')>=0?0.6:1):0;
+      var avocatMod=G.staff.indexOf('avocat3')>=0?0.25:G.staff.indexOf('avocat2')>=0?0.5:G.staff.indexOf('avocat1')>=0?0.7:1;
+      var scandalP=s.scandalChance?s.scandalChance*(G.formations&&G.formations.player.indexOf('media')>=0?0.6:1)*avocatMod:0;
       if(scandalP&&Math.random()<scandalP){
         G.rep=Math.max(0,G.rep-15);
         c.satisfaction=Math.max(0,c.satisfaction-15);
@@ -2859,7 +3003,14 @@ function doWeekActual(trainPerf){
     if(G._roundOppIdx>=0)G.thisWeekOpponent=CLUBS[G._roundOppIdx].n;
   }
   if(Math.random()<0.15){
-    var ev=EVTS[Math.floor(Math.random()*EVTS.length)];
+    if(!G._recentEvtIdx)G._recentEvtIdx=[];
+    var availIdx=[];
+    for(var ei=0;ei<EVTS.length;ei++){if(G._recentEvtIdx.indexOf(ei)<0)availIdx.push(ei);}
+    if(availIdx.length===0)availIdx=EVTS.map(function(_,ei){return ei;});
+    var pickIdx=availIdx[Math.floor(Math.random()*availIdx.length)];
+    var ev=EVTS[pickIdx];
+    G._recentEvtIdx.push(pickIdx);
+    if(G._recentEvtIdx.length>8)G._recentEvtIdx.shift();
     var repGain=G.style==='charismatique'&&ev.r>0?Math.round(ev.r*1.5):ev.r;
     G.rep=Math.max(0,G.rep+repGain);
     G.men=Math.min(99,Math.max(1,G.men+ev.m));
@@ -2868,7 +3019,9 @@ function doWeekActual(trainPerf){
   }
   var icBase=G.balance<30?0.15:0.08;
   var icMod=selInt==='leger'?0.5:selInt==='intense'?1.8:1;
-  if(G.staff.indexOf('kine')>=0)icMod*=0.5;
+  if(G.staff.indexOf('kine3')>=0)icMod*=0.15;
+  else if(G.staff.indexOf('kine2')>=0)icMod*=0.3;
+  else if(G.staff.indexOf('kine')>=0)icMod*=0.5;
   if(G.formations&&G.formations.player.indexOf('prevention')>=0)icMod*=0.8;
   if(selTactic==='offensif')icMod*=1.15;
   if(selTactic==='prudent')icMod*=0.85;
@@ -2961,7 +3114,8 @@ function doWeekActual(trainPerf){
       if(spUsed<spSlots){
         var occCats=(G.sponsors||[]).map(function(c){var s=SPONSOR_TYPES.filter(function(x){return x.id===c.id;})[0];return s?s.cat:null;});
         var eligible=SPONSOR_TYPES.filter(function(s){return G.rep>=s.minRep&&occCats.indexOf(s.cat)<0;});
-        if(eligible.length&&Math.random()<0.1){
+        var hunterChance=G.staff.indexOf('sponsorhunter3')>=0?0.25:G.staff.indexOf('sponsorhunter2')>=0?0.18:G.staff.indexOf('sponsorhunter1')>=0?0.13:0.1;
+        if(eligible.length&&Math.random()<hunterChance){
           PENDING_EVENT=true;
           G._sponsorOfferType=eligible[Math.floor(Math.random()*eligible.length)];
         }
@@ -3603,13 +3757,25 @@ function getSponsorSlots(){
 }
 
 var SPONSOR_TYPES=[
- {id:'equip1',cat:'Equipementier',n:'Marque sportive locale',ico:'&#128095;',minRep:0,pay:150,repWeekly:0.3,dsc:'Contrat modeste mais stable, aucun risque.'},
- {id:'equip2',cat:'Equipementier',n:'Grande marque sportive',ico:'&#128095;',minRep:150,pay:700,repWeekly:0.8,dsc:'Equipementier prestigieux, bonne image.'},
- {id:'bet',cat:'Paris sportifs',n:'Site de paris sportifs',ico:'&#127920;',minRep:80,pay:1200,repWeekly:-1.5,dsc:'Tres lucratif, mais mal vu. Risque de scandale.',scandalChance:0.025},
- {id:'energy',cat:'Boissons energetiques',n:'Marque de boissons energisantes',ico:'&#9889;',minRep:50,pay:400,balanceWeekly:0.4,dsc:'Petit boost de forme passif chaque semaine.'},
- {id:'luxury',cat:'Automobile & Luxe',n:'Marque de montres/voitures de luxe',ico:'&#8986;',minRep:300,pay:1500,repWeekly:0.6,dsc:'Sponsor tres prestigieux, image haut de gamme.'},
- {id:'game',cat:'Jeu video',n:'Studio de jeux video',ico:'&#127918;',minRep:60,pay:450,happyWeekly:0.4,dsc:'Populaire aupres des fans, petit boost de bonheur.'},
- {id:'bank',cat:'Banque & Assurance',n:'Banque nationale',ico:'&#127974;',minRep:0,pay:300,repWeekly:0,dsc:'Contrat neutre, stable, sans surprise.'}
+ {id:'equip1',cat:'Equipementier',n:'Nyke',ico:'&#128095;',minRep:0,pay:150,repWeekly:0.3,dsc:'Contrat modeste mais stable, aucun risque.'},
+ {id:'equip2',cat:'Equipementier',n:'Adidzz',ico:'&#128095;',minRep:150,pay:700,repWeekly:0.8,dsc:'Equipementier prestigieux, bonne image.'},
+ {id:'equip3',cat:'Equipementier',n:'Pumaa',ico:'&#128095;',minRep:300,pay:1200,repWeekly:1.1,dsc:'Le sommet du sponsoring sportif.'},
+ {id:'bet',cat:'Paris sportifs',n:'Winamaxx',ico:'&#127920;',minRep:80,pay:1200,repWeekly:-1.5,dsc:'Tres lucratif, mais mal vu. Risque de scandale.',scandalChance:0.025},
+ {id:'bet2',cat:'Paris sportifs',n:'Bwyn',ico:'&#127920;',minRep:40,pay:700,repWeekly:-1,dsc:'Moins lucratif mais un peu moins risque.',scandalChance:0.018},
+ {id:'energy',cat:'Boissons energetiques',n:'Monstr Energy',ico:'&#9889;',minRep:50,pay:400,balanceWeekly:0.4,dsc:'Petit boost de forme passif chaque semaine.'},
+ {id:'energy2',cat:'Boissons energetiques',n:'Red Buul',ico:'&#9889;',minRep:200,pay:850,balanceWeekly:0.6,dsc:'Marque premium, gros boost de forme.'},
+ {id:'luxury',cat:'Automobile & Luxe',n:'Rolexx',ico:'&#8986;',minRep:300,pay:1500,repWeekly:0.6,dsc:'Sponsor tres prestigieux, image haut de gamme.'},
+ {id:'luxury2',cat:'Automobile & Luxe',n:'Porshe',ico:'&#128663;',minRep:220,pay:1100,repWeekly:0.5,dsc:'Image sportive et haut de gamme.'},
+ {id:'game',cat:'Jeu video',n:'PlayStaton',ico:'&#127918;',minRep:60,pay:450,happyWeekly:0.4,dsc:'Populaire aupres des fans, petit boost de bonheur.'},
+ {id:'game2',cat:'Jeu video',n:'EA Sportz FC',ico:'&#127918;',minRep:130,pay:700,happyWeekly:0.5,dsc:'Ton visage sur le jeu le plus joue du monde.'},
+ {id:'bank',cat:'Banque & Assurance',n:'BNP Pariba',ico:'&#127974;',minRep:0,pay:300,repWeekly:0,dsc:'Contrat neutre, stable, sans surprise.'},
+ {id:'bank2',cat:'Banque & Assurance',n:'AXAA Assurances',ico:'&#127974;',minRep:120,pay:550,repWeekly:0.2,dsc:'Image serieuse et rassurante.'},
+ {id:'fastfood1',cat:'Restauration rapide',n:'BurgerKang',ico:'&#127828;',minRep:40,pay:500,happyWeekly:0.3,dsc:'Populaire, decontracte, bon pour le moral.'},
+ {id:'fastfood2',cat:'Restauration rapide',n:'TacoBel',ico:'&#127790;',minRep:90,pay:650,happyWeekly:0.4,dsc:'Marque tendance aupres des jeunes fans.'},
+ {id:'tech1',cat:'Telecom & Tech',n:'Samsun',ico:'&#128241;',minRep:100,pay:600,repWeekly:0.3,dsc:'Bonne visibilite, image moderne.'},
+ {id:'tech2',cat:'Telecom & Tech',n:'Applle',ico:'&#128241;',minRep:250,pay:1300,repWeekly:0.9,dsc:'Le sponsor tech le plus convoite.'},
+ {id:'fashion1',cat:'Mode & Streetwear',n:'Suprem',ico:'&#129521;',minRep:150,pay:750,happyWeekly:0.5,dsc:'Image branchee, tres suivi par les jeunes.'},
+ {id:'fashion2',cat:'Mode & Streetwear',n:'Off-Whyte',ico:'&#129521;',minRep:280,pay:1400,repWeekly:0.7,dsc:'Collaboration mode ultra prestigieuse.'}
 ];
 
 function calcSponsorIncome(){
@@ -3667,6 +3833,10 @@ function doPost(platformId,tierId){
   if(!G.social[platformId])G.social[platformId]=0;
   var success=Math.random()<t.rate;
   var gain=success?Math.floor(t.gainMin+Math.random()*(t.gainMax-t.gainMin)):Math.floor(t.failMin+Math.random()*(t.failMax-t.failMin));
+  if(success){
+    var commgrMult=G.staff.indexOf('commgr3')>=0?1.5:G.staff.indexOf('commgr2')>=0?1.3:G.staff.indexOf('commgr1')>=0?1.15:1;
+    gain=Math.round(gain*commgrMult);
+  }
   G.social[platformId]=Math.max(0,G.social[platformId]+gain);
   var extra='';
   if(success){
@@ -3685,13 +3855,92 @@ function doPost(platformId,tierId){
   renderMedia();
   updateUI();
 }
+var PATRIMOINE_OPTIONS=[
+ {id:'car1',cat:'vehicule',n:'Citadine',ico:'&#128663;',cost:15000,happy:5,rep:2,upkeep:0,dsc:'Pratique pour se deplacer au quotidien.'},
+ {id:'car2',cat:'vehicule',n:'Berline premium',ico:'&#128665;',cost:45000,happy:10,rep:5,upkeep:30,dsc:'Confort et prestige.'},
+ {id:'car3',cat:'vehicule',n:'Voiture de sport',ico:'&#127950;',cost:120000,happy:16,rep:12,upkeep:80,dsc:'Le style avant tout.'},
+ {id:'car4',cat:'vehicule',n:'Hypercar',ico:'&#127937;',cost:400000,happy:25,rep:25,upkeep:200,dsc:'Le sommet absolu, tout le monde en parle.'},
+ {id:'watch1',cat:'bijou',n:'Montre elegante',ico:'&#8986;',cost:5000,happy:4,rep:3,upkeep:0,dsc:'Discrete et chic.'},
+ {id:'watch2',cat:'bijou',n:'Montre de luxe',ico:'&#128142;',cost:25000,happy:9,rep:8,upkeep:0,dsc:'Ca se remarque tout de suite.'},
+ {id:'watch3',cat:'bijou',n:'Piece d\'exception',ico:'&#128081;',cost:90000,happy:15,rep:18,upkeep:0,dsc:'Une piece unique et rare.'},
+ {id:'home1',cat:'residence',n:'Appartement',ico:'&#127968;',cost:60000,happy:8,rep:2,upkeep:40,balance:2,dsc:'Ton chez-toi, simple et efficace.'},
+ {id:'home2',cat:'residence',n:'Maison',ico:'&#127969;',cost:200000,happy:16,rep:6,upkeep:120,balance:4,dsc:'Plus d\'espace pour bien recuperer.'},
+ {id:'home3',cat:'residence',n:'Villa avec piscine',ico:'&#127965;',cost:600000,happy:26,rep:14,upkeep:350,balance:7,dsc:'Le reve pour beaucoup de joueurs.'},
+ {id:'home4',cat:'residence',n:'Manoir',ico:'&#127984;',cost:1500000,happy:35,rep:25,upkeep:800,balance:10,dsc:'Un vrai palace, tres peu peuvent se le permettre.'}
+];
+
+function openPatrimoine(){
+  renderPatrimoine();
+  show('spatrimoine');
+  setTimeout(function(){showTutorial('spatrimoine');},300);
+}
+
+function renderPatrimoine(){
+  if(!G.patrimoine)G.patrimoine=[];
+  var actEl=document.getElementById('patrimActive');
+  if(G.patrimoine.length===0){
+    actEl.innerHTML='<div class="card" style="margin-bottom:14px"><div style="font-size:12px;color:var(--t2)">Tu ne possedes encore aucun bien personnel.</div></div>';
+  }else{
+    var upkeep=G.patrimoine.reduce(function(a,p){return a+(p.upkeep||0);},0);
+    var h='<div class="card" style="margin-bottom:14px"><div class="slbl" style="margin:0 0 5px">Ton patrimoine</div>';
+    G.patrimoine.forEach(function(p){
+      h+='<div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-top:1px solid rgba(255,255,255,.05)"><span>'+p.n+'</span><span style="color:'+(p.upkeep?'var(--red)':'var(--t2)')+';font-weight:700">'+(p.upkeep?'-'+p.upkeep+' EUR/sem':'Aucun entretien')+'</span></div>';
+    });
+    h+='<div style="display:flex;justify-content:space-between;font-size:13px;padding-top:8px;margin-top:4px;border-top:1px solid var(--b)"><b>Entretien total</b><b style="color:var(--red)">-'+upkeep+' EUR/sem</b></div></div>';
+    actEl.innerHTML=h;
+  }
+  function cardHtml(o){
+    var owned=G.patrimoine.some(function(p){return p.optId===o.id;});
+    var afford=G.money>=o.cost;
+    return '<div class="cof'+(owned||!afford?' locked':'')+'"'+(owned||!afford?'':' onclick="buyPatrimoine(\''+o.id+'\')"')+'><div class="cbadge" style="background:rgba(0,230,118,.15);border:2px solid var(--g)">'+o.ico+'</div><div style="flex:1"><div class="cn">'+o.n+'</div><div class="cl">'+o.dsc+'</div><div class="cs">'+o.cost.toLocaleString()+' EUR'+(o.upkeep?' &#183; -'+o.upkeep+' EUR/sem':'')+' &#183; +'+o.happy+' Bonheur</div></div>'+(owned?'<div style="font-size:9px;color:var(--g);font-weight:700">POSSEDE</div>':'')+'</div>';
+  }
+  document.getElementById('patrimVehicule').innerHTML=PATRIMOINE_OPTIONS.filter(function(o){return o.cat==='vehicule';}).map(cardHtml).join('');
+  document.getElementById('patrimBijou').innerHTML=PATRIMOINE_OPTIONS.filter(function(o){return o.cat==='bijou';}).map(cardHtml).join('');
+  document.getElementById('patrimResidence').innerHTML=PATRIMOINE_OPTIONS.filter(function(o){return o.cat==='residence';}).map(cardHtml).join('');
+}
+
+function buyPatrimoine(id){
+  var o=PATRIMOINE_OPTIONS.filter(function(x){return x.id===id;})[0];
+  if(!o)return;
+  if(!G.patrimoine)G.patrimoine=[];
+  if(G.patrimoine.some(function(p){return p.optId===o.id;})){notif('Tu possedes deja ce bien !','bad');return;}
+  if(G.money<o.cost){notif('Pas assez d\'argent !','bad');return;}
+  spendMoney(o.cost);
+  if(o.cat==='residence'){
+    var old=G.patrimoine.filter(function(p){return p.cat==='residence';})[0];
+    if(old){
+      G.spend=Math.max(0,(G.spend||0)-(old.upkeep||0));
+      G.patrimoine=G.patrimoine.filter(function(p){return p.cat!=='residence';});
+      addLog('Tu quittes '+old.n+' pour emmenager dans '+o.n,'perso');
+    }
+  }
+  G.patrimoine.push({optId:o.id,n:o.n,cat:o.cat,upkeep:o.upkeep||0});
+  G.happy=Math.min(100,(G.happy||55)+o.happy);
+  G.rep=Math.max(0,(G.rep||0)+o.rep);
+  if(o.balance)G.balance=Math.min(100,(G.balance||50)+o.balance);
+  if(o.upkeep)G.spend=(G.spend||0)+o.upkeep;
+  notif(o.n+' acquis !');
+  addLog(o.n+' acquis pour '+o.cost.toLocaleString()+' EUR','perso',true);
+  renderPatrimoine();
+  updateUI();
+}
+
 var INVEST_OPTIONS=[
  {id:'immo1',cat:'immo',n:'Petit appartement',ico:'&#127968;',cost:5000,ret:150,dsc:'Revenu locatif stable et previsible.'},
  {id:'immo2',cat:'immo',n:'Immeuble locatif',ico:'&#127969;',cost:20000,ret:600,dsc:'Plusieurs loyers chaque semaine.'},
  {id:'immo3',cat:'immo',n:'Complexe residentiel',ico:'&#127978;',cost:60000,ret:1800,dsc:'Un vrai patrimoine immobilier.'},
- {id:'bourse1',cat:'bourse',n:'Portefeuille prudent',ico:'&#128200;',cost:3000,ret:120,dsc:'Rendement variable chaque semaine.'},
+ {id:'oblig1',cat:'obligation',n:'Obligation d\'Etat courte',ico:'&#128179;',cost:2000,ret:35,dsc:'Le placement le plus sur qui existe.'},
+ {id:'oblig2',cat:'obligation',n:'Obligation d\'Etat longue',ico:'&#128179;',cost:8000,ret:150,dsc:'Rendement garanti, zero surprise.'},
+ {id:'oblig3',cat:'obligation',n:'Panier d\'obligations souveraines',ico:'&#128179;',cost:25000,ret:480,dsc:'Diversifie et toujours aussi sur.'},
+ {id:'bourse1',cat:'bourse',n:'Portefeuille prudent',ico:'&#128200;',cost:3000,ret:120,dsc:'Rendement variable, quelques a-coups.'},
  {id:'bourse2',cat:'bourse',n:'Portefeuille dynamique',ico:'&#128202;',cost:12000,ret:450,dsc:'Plus volatil, plus de potentiel.'},
- {id:'bourse3',cat:'bourse',n:'Portefeuille agressif',ico:'&#127920;',cost:40000,ret:1400,dsc:'Fortes variations, quitte ou double.'},
+ {id:'bourse3',cat:'bourse',n:'Portefeuille agressif',ico:'&#127920;',cost:40000,ret:1400,dsc:'Fortes variations, krachs et envolees possibles.'},
+ {id:'crypto1',cat:'crypto',n:'Panier crypto debutant',ico:'&#128273;',cost:2000,ret:150,dsc:'Tres volatil : crashs et pics frequents.'},
+ {id:'crypto2',cat:'crypto',n:'Portefeuille crypto diversifie',ico:'&#128273;',cost:8000,ret:550,dsc:'Montagnes russes garanties.'},
+ {id:'crypto3',cat:'crypto',n:'Gros pari crypto',ico:'&#128273;',cost:25000,ret:1600,dsc:'Extreme. Ca peut exploser dans les deux sens.'},
+ {id:'art1',cat:'art',n:'Petite oeuvre d\'art',ico:'&#127912;',cost:10000,ret:200,dsc:'Valeur lente mais stable, parfois une belle surprise aux encheres.'},
+ {id:'art2',cat:'art',n:'Collection d\'objets rares',ico:'&#128142;',cost:35000,ret:650,dsc:'Un patrimoine culturel qui prend de la valeur.'},
+ {id:'art3',cat:'art',n:'Oeuvre de maitre',ico:'&#127916;',cost:100000,ret:1800,dsc:'Illiquide mais potentiellement enorme aux encheres.'},
  {id:'biz1',cat:'biz',n:'Petit commerce',ico:'&#127978;',cost:8000,ret:400,dsc:'Resultat immediat, 60% de reussite.',rate:0.6},
  {id:'biz2',cat:'biz',n:'PME',ico:'&#127981;',cost:25000,ret:1400,dsc:'Plus gros pari, 55% de reussite.',rate:0.55},
  {id:'biz3',cat:'biz',n:'Start-up',ico:'&#128640;',cost:80000,ret:5000,dsc:'Tout ou rien, 40% de reussite.',rate:0.4}
@@ -3723,7 +3972,10 @@ function renderInvest(){
     return '<div class="cof'+(owned||!afford?' locked':'')+'"'+(owned||!afford?'':' onclick="buyInvestment(\''+o.id+'\')"')+'><div class="cbadge" style="background:rgba(0,230,118,.15);border:2px solid var(--g)">'+o.ico+'</div><div style="flex:1"><div class="cn">'+o.n+'</div><div class="cl">'+o.dsc+'</div><div class="cs">'+o.cost.toLocaleString()+' EUR &#183; +'+o.ret+' EUR/sem'+(o.rate?' &#183; '+Math.round(o.rate*100)+'% reussite':'')+'</div></div>'+(owned?'<div style="font-size:9px;color:var(--g);font-weight:700">ACQUIS</div>':'')+'</div>';
   }
   document.getElementById('investImmo').innerHTML=INVEST_OPTIONS.filter(function(o){return o.cat==='immo';}).map(cardHtml).join('');
+  document.getElementById('investOblig').innerHTML=INVEST_OPTIONS.filter(function(o){return o.cat==='obligation';}).map(cardHtml).join('');
   document.getElementById('investBourse').innerHTML=INVEST_OPTIONS.filter(function(o){return o.cat==='bourse';}).map(cardHtml).join('');
+  document.getElementById('investCrypto').innerHTML=INVEST_OPTIONS.filter(function(o){return o.cat==='crypto';}).map(cardHtml).join('');
+  document.getElementById('investArt').innerHTML=INVEST_OPTIONS.filter(function(o){return o.cat==='art';}).map(cardHtml).join('');
   document.getElementById('investBiz').innerHTML=INVEST_OPTIONS.filter(function(o){return o.cat==='biz';}).map(cardHtml).join('');
 }
 
@@ -3755,8 +4007,43 @@ function calcInvestIncome(){
   if(!G.investments)return 0;
   var total=0;
   G.investments.forEach(function(inv){
-    if(inv.cat==='bourse')total+=Math.round(inv.ret*(0.3+Math.random()*2.2)-inv.ret*0.5);
-    else total+=inv.ret;
+    if(inv.cat==='bourse'){
+      var r=Math.random();
+      var ret;
+      if(r<0.035){
+        ret=-Math.round(inv.ret*(1.5+Math.random()*1.5));
+        addLog('Krach boursier sur '+inv.n+' ! '+ret+' EUR cette semaine','perso');
+      }else if(r<0.085){
+        ret=Math.round(inv.ret*(2+Math.random()*2));
+        addLog('Envolee boursiere sur '+inv.n+' ! +'+ret+' EUR cette semaine','perso',true);
+      }else{
+        ret=Math.round(inv.ret*(0.6+Math.random()*0.8));
+      }
+      total+=ret;
+    }else if(inv.cat==='crypto'){
+      var r2=Math.random();
+      var ret2;
+      if(r2<0.06){
+        ret2=-Math.round(inv.ret*(2+Math.random()*2));
+        addLog('Crash crypto sur '+inv.n+' ! '+ret2+' EUR cette semaine','perso');
+      }else if(r2<0.14){
+        ret2=Math.round(inv.ret*(3+Math.random()*4));
+        addLog(inv.n+' explose ! +'+ret2+' EUR cette semaine','perso',true);
+      }else{
+        ret2=Math.round(inv.ret*(0.3+Math.random()*1.2));
+      }
+      total+=ret2;
+    }else if(inv.cat==='art'){
+      if(Math.random()<0.03){
+        var bonus=Math.round(inv.ret*(4+Math.random()*6));
+        addLog(inv.n+' part aux encheres pour une fortune ! +'+bonus+' EUR','perso',true);
+        total+=bonus;
+      }else{
+        total+=inv.ret;
+      }
+    }else{
+      total+=inv.ret;
+    }
   });
   if(G.formations&&G.formations.player.indexOf('patrimoine')>=0)total=Math.round(total*1.15);
   return total;
@@ -4296,7 +4583,8 @@ function goTransfer(){
     top=top.concat(rest.slice(-remaining).reverse());
   }
   if(top.length===0&&negotiatedNames.length===0)top=[CLUBS[0]];
-  var agentBoost=G.staff.indexOf('agent')>=0;
+  var agentMult=G.staff.indexOf('agent3')>=0?1.4:G.staff.indexOf('agent2')>=0?1.25:G.staff.indexOf('agent')>=0?1.15:1;
+  var agentBoost=agentMult>1;
   selclub=null;document.getElementById('btntrans').disabled=true;
   var totalOffers=(G.negotiatedOffers||[]).length+top.length;
   document.getElementById('trsub').textContent='Reputation: '+Math.round(G.rep)+' - '+totalOffers+' offre(s)'+(agentBoost?' (boostees par ton agent)':'');
@@ -4304,11 +4592,11 @@ function goTransfer(){
   var h='';
   (G.negotiatedOffers||[]).forEach(function(o){
     var club=CLUBS.filter(function(c){return c.n===o.n;})[0]||{c:'#4a4a4a',e:'[?]'};
-    var sal=agentBoost?Math.round(o.s*1.15):o.s;
+    var sal=agentBoost?Math.round(o.s*agentMult):o.s;
     h+='<div class="cof" style="border-color:var(--g)" onclick="pickClub(this,\''+o.n+'\','+sal+','+o.l+','+o.y+')"><div class="cbadge" style="background:'+club.c+'33;border:2px solid '+club.c+'">'+club.e+'</div><div style="flex:1"><div class="cn">'+o.n+' &#10003;</div><div class="cl" style="color:var(--g)">Offre negociee &#183; '+o.y+' an'+(o.y>1?'s':'')+'</div><div class="cs">'+sal.toLocaleString()+' EUR/sem</div></div><div class="cstar">'+('*'.repeat(o.l))+'</div></div>';
   });
   top.forEach(function(c){
-    var sal=agentBoost?Math.round(c.s*1.15):c.s;
+    var sal=agentBoost?Math.round(c.s*agentMult):c.s;
     var playerInt=G.interestedClubs&&G.interestedClubs.indexOf(c.n)>=0;
     var interestLvl=(G.clubInterest&&G.clubInterest[c.n])||0;
     var badges=(playerInt?' &#11088;':'')+(interestLvl>=50?' &#128269;':'');
@@ -4661,6 +4949,7 @@ var TUTORIALS={
  rival:{ico:'&#128293;',title:'Onglet Rival',text:'Ta rivalite avec un adversaire de longue date, et ta selection en equipe nationale une fois assez connu.'},
  log:{ico:'&#128203;',title:'Journal',text:'L\'historique complet de ta carriere : matchs, evenements, blessures, transferts... tout ce qui t\'arrive semaine apres semaine.'},
  sinvest:{ico:'&#128176;',title:'Investissements',text:'Fais fructifier ton argent : immobilier (stable), bourse (variable), business (pari risque). Chaque investissement rapporte chaque semaine.'},
+ spatrimoine:{ico:'&#127969;',title:'Patrimoine personnel',text:'Offre-toi des vehicules, des bijoux et une residence a la hauteur de ta reussite. Ca booste ton Bonheur et ta Reputation, mais attention aux couts d entretien hebdomadaires des biens les plus chers !'},
  ssocial:{ico:'&#127881;',title:'Vie sociale',text:'Chaque choix a un vrai compromis entre Bonheur et Forme. Gere ton equilibre pour rester performant.'},
  sfamille:{ico:'&#10084;',title:'Vie sentimentale',text:'Rencontre quelqu\'un, construis une relation, marie-toi, fonde une famille. Chaque etape a ses activites et ses couts.'},
  smedia:{ico:'&#128241;',title:'Reseaux sociaux',text:'Developpe ta communaute sur 5 plateformes differentes. Certaines rapportent de l\'argent, d\'autres de la reputation.'},
@@ -4730,6 +5019,7 @@ function manualSave(){
 function normalizeG(g){
   if(!g.staff)g.staff=[];
   if(!g.investments)g.investments=[];
+  if(!g.patrimoine)g.patrimoine=[];
   if(typeof g.happy!=='number')g.happy=55;
   if(g.relationship===undefined)g.relationship=null;
   if(!g.children)g.children=[];
@@ -5212,6 +5502,7 @@ function updateUI(){
   document.getElementById('gsalary').textContent=G.sal.toLocaleString();
   document.getElementById('ginvrev').textContent='+'+((G.investments||[]).reduce(function(a,i){return a+i.ret;},0)+calcSocialIncome()+calcSponsorIncome()+(G.fambonus||0))+'/sem';
   if(document.getElementById('pinvest'))document.getElementById('pinvest').textContent=(G.investments&&G.investments.length)?G.investments.length+' actif(s)':'Aucun';
+  if(document.getElementById('ppatrim'))document.getElementById('ppatrim').textContent=(G.patrimoine&&G.patrimoine.length)?G.patrimoine.length+' bien(s)':'Aucun bien';
   document.getElementById('gspend').textContent='-'+((G.spend||0)+(G.lastWeekSpend||0)).toLocaleString();
   var netEl=document.getElementById('gnetweek');
   var net=G.lastWeekNet||0;
