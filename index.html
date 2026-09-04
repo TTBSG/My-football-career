@@ -1207,7 +1207,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=17;
+var APP_VERSION=18;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1279,11 +1279,20 @@ function showChangelog(fromV,toV){
   };
 }
 function checkChangelog(){
-  var seen=0;
-  try{seen=parseInt(localStorage.getItem(CHANGELOG_KEY)||'0',10)||0;}catch(e){}
-  if(seen===0){
-    try{localStorage.setItem(CHANGELOG_KEY,String(APP_VERSION));}catch(e){}
-    return;
+  var hasKey=false,seen=0;
+  try{
+    var raw=localStorage.getItem(CHANGELOG_KEY);
+    hasKey=(raw!==null);
+    seen=parseInt(raw||'0',10)||0;
+  }catch(e){}
+  var existingPlayer=false;
+  try{existingPlayer=!!localStorage.getItem('mfc_save_v4');}catch(e){}
+  if(!hasKey){
+    if(!existingPlayer){
+      try{localStorage.setItem(CHANGELOG_KEY,String(APP_VERSION));}catch(e){}
+      return;
+    }
+    seen=0;
   }
   if(seen<APP_VERSION){
     setTimeout(function(){showChangelog(seen,APP_VERSION);},700);
