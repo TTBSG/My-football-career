@@ -1091,7 +1091,8 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
     <div class="slbl">Aide &amp; decouverte</div>
     <div class="card" style="margin-bottom:14px">
       <div style="font-size:12px;color:var(--t2);margin-bottom:11px">Les messages d'aide affiches une seule fois par page peuvent etre reactives si tu veux les revoir.</div>
-      <button class="btn btn-o" onclick="resetAllTutorials()">REINITIALISER LES TUTORIELS</button>
+      <button class="btn btn-o" style="margin-bottom:9px" onclick="resetAllTutorials()">REINITIALISER LES TUTORIELS</button>
+      <button class="btn btn-o" onclick="showChangelog(0,APP_VERSION)">&#127881; VOIR LES NOUVEAUTES</button>
     </div>
 
     <div class="slbl">Sauvegarde</div>
@@ -1207,7 +1208,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=18;
+var APP_VERSION=19;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1295,7 +1296,13 @@ function checkChangelog(){
     seen=0;
   }
   if(seen<APP_VERSION){
-    setTimeout(function(){showChangelog(seen,APP_VERSION);},700);
+    var hasContent=false;
+    for(var v=seen+1;v<=APP_VERSION;v++){if(CHANGELOG[v]){hasContent=true;break;}}
+    if(hasContent){
+      setTimeout(function(){showChangelog(seen,APP_VERSION);},700);
+    }else{
+      try{localStorage.setItem(CHANGELOG_KEY,String(APP_VERSION));}catch(e){}
+    }
   }
 }
 checkChangelog();
