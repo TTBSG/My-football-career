@@ -446,6 +446,23 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 .mem-btn.wrong{opacity:1;filter:grayscale(.7);}
 .mem-status{font-size:13px;color:var(--t2);text-align:center;margin-bottom:16px;}
 
+/* MATCH EN DIRECT */
+.livematch-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1050;display:flex;align-items:center;justify-content:center;padding:18px;}
+.livematch-card{background:var(--card);border:1px solid var(--g);border-radius:18px;padding:20px 18px;max-width:380px;width:100%;animation:pi .3s cubic-bezier(.34,1.56,.64,1);}
+.livematch-badge{text-align:center;font-size:10px;font-weight:700;color:var(--yel);letter-spacing:1px;margin-bottom:10px;background:rgba(255,214,0,.1);border:1px solid rgba(255,214,0,.3);border-radius:8px;padding:5px;}
+.livematch-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.livematch-team{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;width:38%;line-height:1.3;}
+.livematch-team.right{text-align:right;}
+.livematch-score{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--g);letter-spacing:1px;}
+.livematch-minute{text-align:center;font-size:11px;color:var(--yel);font-weight:700;letter-spacing:1px;margin-bottom:14px;}
+.livematch-feed{height:280px;overflow-y:auto;display:flex;flex-direction:column-reverse;border-top:1px solid var(--b);padding-top:10px;}
+.livematch-item{font-size:12.5px;color:var(--t2);line-height:1.5;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);animation:pi .25s ease;}
+.livematch-item b{color:var(--t);}
+.livematch-item.goal{color:var(--g);font-weight:700;}
+.livematch-item.goal b{color:var(--g);}
+.livematch-item.bad{color:var(--red);font-weight:700;}
+.livematch-item.bad b{color:var(--red);}
+
 /* MINI-JEU TECHNIQUE & DRIBBLE (slalom) */
 .dribl-lane{position:relative;height:190px;border-radius:8px;overflow:hidden;margin-bottom:14px;background:linear-gradient(180deg,#0f4023,#082818);box-shadow:0 16px 20px -14px rgba(0,0,0,.6);}
 .dribl-line{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.14);}
@@ -1153,6 +1170,24 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
   </div>
 </div>
 
+<!-- PASSAGE PRO -->
+<div id="sacadgrad" class="screen">
+  <div class="reth">
+    <div class="retrico">&#127881;</div>
+    <div class="rettitle">BIENVENUE<br>CHEZ LES PROS !</div>
+    <div class="retsub" id="gradSub">Ta saison en centre de formation est terminee.</div>
+  </div>
+  <div class="f4g" style="padding:0 20px">
+    <div class="fstat"><div class="fsv" id="gradGoals">0</div><div class="fsl">Buts</div></div>
+    <div class="fstat"><div class="fsv" id="gradAssists">0</div><div class="fsl">Passes D.</div></div>
+    <div class="fstat"><div class="fsv" id="gradApps">0</div><div class="fsl">Matchs</div></div>
+    <div class="fstat"><div class="fsv" id="gradRep">0</div><div class="fsl">Reputation</div></div>
+  </div>
+  <div class="card" style="margin:20px 20px 0" id="gradMsg"></div>
+  <div style="padding:20px"><button class="btn btn-g" onclick="confirmAcademyGraduation()">REJOINDRE L'EQUIPE PRO</button></div>
+</div>
+
+
 <!-- APRES -->
 <div id="sapres" class="screen">
   <div class="apbar">
@@ -1208,7 +1243,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=21;
+var APP_VERSION=24;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1258,7 +1293,10 @@ var CHANGELOG={
   14:{title:'Staff etoffe',items:['30 membres de staff possibles (contre 7 avant)','5 nouveaux roles : coach technique, nutritionniste, avocat, community manager, chasseur de sponsors']},
   15:{title:'Investissements',items:['18 options sur 6 categories','Nouveau : Obligations d\'Etat, Crypto, Art &amp; Collections','La Bourse a desormais de vrais krachs et envolees']},
   20:{title:'Correctifs mini-jeux',items:['Tir : un but dans une zone libre compte desormais toujours comme un but','Vitesse : un double-tap rapide ne fait plus sauter un essai par erreur']},
-  21:{title:'Correctif nouvelle carriere',items:['Le journal de carriere se vide bien desormais en demarrant une nouvelle aventure (il pouvait garder d\'anciennes entrees avant)']}
+  21:{title:'Correctif nouvelle carriere',items:['Le journal de carriere se vide bien desormais en demarrant une nouvelle aventure (il pouvait garder d\'anciennes entrees avant)']},
+  22:{title:'Match en direct !',items:['Le match n\'est plus instantane : suis-le en direct avec un fil de commentaires minute par minute','Sur certaines grandes occasions (aleatoire), un mini-jeu se declenche pour decider si TU marques','Le score et le resultat final restent bases sur ton niveau, ta forme et ta tactique']},
+  23:{title:'Match en direct - milieux et gardiens',items:['Milieux/ailiers : possibilite d\'un moment de passe decisive interactive','Gardiens : moment d\'arret decisif propre au poste, plus besoin de tirer au but !']},
+  24:{title:'Centre de formation approfondi',items:['Championnat Jeunes distinct avec sa propre ambiance en match et son propre classement','Nouveaux evenements narratifs propres a la formation (observateurs, coach, etc.)','Vrai ecran de passage pro avec bilan de ta saison en centre de formation']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -1857,6 +1895,25 @@ var EVTS=[
   {t:'Le kine remarque ta belle progression physique. +3 Mental',r:0,m:3},
   {t:'Une sequence d\'entrainement filmee impressionne. +9 Rep.',r:9,m:2}
 ];
+var ACADEMY_EVTS=[
+  {t:'Le coach des jeunes note tes progres dans son carnet. +5 Mental',r:2,m:5},
+  {t:'Tu es invite a t\'entrainer une journee avec l\'equipe pro ! +10 Rep.',r:10,m:4},
+  {t:'Un observateur d\'un grand club assiste a ton match. +6 Rep.',r:6,m:2},
+  {t:'Le directeur du centre de formation te felicite. +4 Mental',r:2,m:4},
+  {t:'Petite baisse de regime a l\'entrainement... -3 Mental',r:0,m:-3},
+  {t:'Tu deviens un exemple pour les plus jeunes du centre. +3 Leadership',r:2,m:2,l:3},
+  {t:'Un coequipier de promo te chambre gentiment. +1 Mental',r:0,m:1},
+  {t:'Le coach te felicite pour ton attitude exemplaire. +4 Mental',r:0,m:4},
+  {t:'Tu rates le bus pour un match, petit stress avant le coup d\'envoi... -3 Mental',r:0,m:-3},
+  {t:'Une bonne note aux etudes/formation en parallele du foot. +2 Mental',r:0,m:2},
+  {t:'Le centre de formation partage ta progression sur ses reseaux. +5 Rep.',r:5,m:2},
+  {t:'Un ancien du centre, devenu pro, te donne des conseils. +4 Mental',r:0,m:4},
+  {t:'Petite blessure sans gravite a l\'entrainement... -2 Mental',r:0,m:-2},
+  {t:'Tu es choisi pour representer le centre lors d\'un evenement. +5 Rep.',r:5,m:2},
+  {t:'Le staff medical du centre suit ta progression physique de pres. +3 Mental',r:0,m:3},
+  {t:'Un rival de ta generation te pousse a te depasser. +4 Mental',r:0,m:4},
+  {t:'Tu impressionnes lors d\'un match amical contre une equipe pro B. +8 Rep.',r:8,m:3}
+];
 var INJS=[
   {t:'Claquage - 2 semaines',w:2,s:{p:-3}},
   {t:'Entorse - 4 semaines',w:4,s:{p:-5,v:-2}},
@@ -2366,6 +2423,71 @@ function maybeShowMinigameTuto(key,ico,title,text,onContinue){
     var ov=document.getElementById('mgTutOverlay');if(ov)ov.remove();
     onContinue();
   };
+}
+
+var MC_MODES={
+  shoot:{ico:'&#9889;',title:'GRANDE OCCASION !',sub:'Une seule frappe. Vise une zone libre !',oppIco:'&#129508;'},
+  save:{ico:'&#128737;',title:'TIR ADVERSE !',sub:'Choisis ou plonger pour arreter le tir !',oppIco:'&#9917;'},
+  assist:{ico:'&#127919;',title:'PASSE DECISIVE !',sub:'Trouve la bonne ouverture pour ton coequipier !',oppIco:'&#128737;'}
+};
+function startMatchChanceMinigame(mode,onDone){
+  var cfg=MC_MODES[mode]||MC_MODES.shoot;
+  var ov=document.createElement('div');
+  ov.className='trainmg-overlay';
+  ov.style.zIndex='1100';
+  ov.innerHTML='<div class="trainmg-card">'+
+    '<div class="trainmg-ico">'+cfg.ico+'</div>'+
+    '<div class="trainmg-title">'+cfg.title+'</div>'+
+    '<div class="trainmg-sub">'+cfg.sub+'</div>'+
+    '<div class="shootg-persp"><div class="shootg-goal" id="mcGoal">'+
+      '<svg viewBox="0 0 300 169" preserveAspectRatio="none">'+
+        '<defs>'+
+          '<linearGradient id="mcPost" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="45%" stop-color="#ffffff"/><stop offset="100%" stop-color="#c4c4c4"/></linearGradient>'+
+          '<pattern id="mcNet" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="13" y2="0" stroke="rgba(255,255,255,.16)" stroke-width="1"/><line x1="0" y1="0" x2="0" y2="13" stroke="rgba(255,255,255,.16)" stroke-width="1"/></pattern>'+
+          '<linearGradient id="mcShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity=".35"/></linearGradient>'+
+        '</defs>'+
+        '<rect x="16" y="16" width="268" height="140" fill="url(#mcNet)"/>'+
+        '<rect x="16" y="16" width="268" height="140" fill="url(#mcShade)"/>'+
+        '<rect x="6" y="6" width="288" height="12" rx="5" fill="url(#mcPost)"/>'+
+        '<rect x="6" y="6" width="12" height="150" rx="5" fill="url(#mcPost)"/>'+
+        '<rect x="282" y="6" width="12" height="150" rx="5" fill="url(#mcPost)"/>'+
+      '</svg>'+
+      '<div class="shootg-zonegrid">'+
+      SG_ZONES.map(function(z,i){return '<div class="shootg-zone" data-idx="'+i+'" style="grid-column:'+z.col+';grid-row:'+z.row+'"></div>';}).join('')+
+      '<div class="shootg-keeper" id="mcKeeper">'+cfg.oppIco+'</div>'+
+      '<div class="shootg-ball" id="mcBall"></div>'+
+      '</div>'+
+    '</div><div class="shootg-ground"></div></div>'+
+  '</div>';
+  document.body.appendChild(ov);
+  var keeperEl=document.getElementById('mcKeeper');
+  var ballEl=document.getElementById('mcBall');
+  function setPos(el,cx,cy){el.style.left=cx+'%';el.style.top=cy+'%';}
+  setPos(keeperEl,50,75);
+  ballEl.style.opacity='0';
+  setPos(ballEl,50,100);
+  var locked=false;
+  function shoot(zoneIdx){
+    if(locked)return;
+    locked=true;
+    var z=SG_ZONES[zoneIdx];
+    var oppIdx=Math.floor(Math.random()*6);
+    var oz=SG_ZONES[oppIdx];
+    ballEl.style.opacity='1';
+    setPos(ballEl,z.cx,z.cy);
+    setPos(keeperEl,oz.cx,oz.cy);
+    setTimeout(function(){
+      var matched=(oppIdx===zoneIdx);
+      var success=mode==='save'?matched:!matched;
+      setTimeout(function(){
+        document.body.removeChild(ov);
+        onDone(success);
+      },550);
+    },380);
+  }
+  ov.querySelectorAll('.shootg-zonegrid .shootg-zone').forEach(function(zEl){
+    zEl.onclick=function(){shoot(parseInt(zEl.getAttribute('data-idx'),10));};
+  });
 }
 
 function startShootoutMinigame(onDone){
@@ -2925,6 +3047,7 @@ function doWeek(){
 }
 
 function doWeekActual(trainPerf){
+  G._liveMatchData=null;
   var t=seltrain;
   var fac=selInt==='leger'?0.5:selInt==='intense'?1.2:0.8;
   fac*=(typeof trainPerf==='number'?trainPerf:1);
@@ -3025,12 +3148,13 @@ function doWeekActual(trainPerf){
     if(G._roundOppIdx>=0)G.thisWeekOpponent=CLUBS[G._roundOppIdx].n;
   }
   if(Math.random()<0.15){
+    var EVT_POOL=G.inAcademy?ACADEMY_EVTS:EVTS;
     if(!G._recentEvtIdx)G._recentEvtIdx=[];
     var availIdx=[];
-    for(var ei=0;ei<EVTS.length;ei++){if(G._recentEvtIdx.indexOf(ei)<0)availIdx.push(ei);}
-    if(availIdx.length===0)availIdx=EVTS.map(function(_,ei){return ei;});
+    for(var ei=0;ei<EVT_POOL.length;ei++){if(G._recentEvtIdx.indexOf(ei)<0)availIdx.push(ei);}
+    if(availIdx.length===0)availIdx=EVT_POOL.map(function(_,ei){return ei;});
     var pickIdx=availIdx[Math.floor(Math.random()*availIdx.length)];
-    var ev=EVTS[pickIdx];
+    var ev=EVT_POOL[pickIdx];
     G._recentEvtIdx.push(pickIdx);
     if(G._recentEvtIdx.length>8)G._recentEvtIdx.shift();
     var repGain=G.style==='charismatique'&&ev.r>0?Math.round(ev.r*1.5):ev.r;
@@ -3144,7 +3268,15 @@ function doWeekActual(trainPerf){
       }
     }
   }
-  if(G.sem>SEASON_WEEKS){PENDING_EVENT=false;setTimeout(showFin,800);}
+  if(G._liveMatchData){
+    setTimeout(function(){
+      startLiveMatchSequence(function(){
+        finalizeMatchDisplay();
+        if(G.sem>SEASON_WEEKS){PENDING_EVENT=false;setTimeout(showFin,500);}
+        else showWeekSequence(t,G.thisWeekOpponent);
+      });
+    },250);
+  }else if(G.sem>SEASON_WEEKS){PENDING_EVENT=false;setTimeout(showFin,800);}
   else setTimeout(function(){showWeekSequence(t,G.thisWeekOpponent);},250);
 }
 
@@ -3432,6 +3564,159 @@ function simulateScoreline(diffFor){
   return {gf:Math.min(6,gf),ga:Math.min(6,ga)};
 }
 
+var LM_FLAVOR=[
+  'Bonne recuperation de balle au milieu de terrain.',
+  'Le gardien capte sans probleme.',
+  'Occasion manquee de peu.',
+  'Beau une-deux entre les milieux.',
+  'Faute au milieu, coup franc sans danger.',
+  'Le public pousse son equipe.',
+  'Tacle appuye, l\'arbitre laisse jouer.',
+  'Relais collectif interessant, mais rien de concret.',
+  'L\'entraineur donne ses consignes depuis le bord du terrain.',
+  'Corner sans consequence.',
+  'Bonne intervention defensive.',
+  'Le rythme du match ralentit quelques instants.'
+];
+var LM_FLAVOR_ACADEMY=[
+  'Bonne recuperation au milieu, le coach des jeunes hoche la tete.',
+  'Le gardien adverse capte sans probleme sur le stade annexe.',
+  'Occasion manquee de peu devant les quelques parents presents.',
+  'Beau une-deux entre les jeunes du centre.',
+  'Faute au milieu, coup franc sans danger.',
+  'Les familles encouragent depuis la petite tribune.',
+  'Tacle appuye, l\'arbitre laisse jouer.',
+  'Bel enchainement collectif, mais rien de concret.',
+  'Le coach des jeunes crie ses consignes depuis le bord du terrain.',
+  'Corner sans consequence.',
+  'Bonne intervention defensive d\'un jeune du centre.',
+  'Un recruteur note quelque chose sur son carnet en tribune.'
+];
+var LM_GOAL_TPL=[
+  'BUT ! <b>{s}</b> trouve le chemin des filets !',
+  'BUT ! Quelle frappe de <b>{s}</b> !',
+  'BUT ! <b>{s}</b> ne tremble pas face au gardien !',
+  'BUT ! <b>{s}</b> conclut une belle action collective !'
+];
+var LM_OPPGOAL_TPL=[
+  'L\'adversaire marque. Coup dur.',
+  'But encaisse, l\'adversaire revient dans le match.',
+  'L\'adversaire trouve la faille.'
+];
+
+function startLiveMatchSequence(onComplete){
+  var d=G._liveMatchData;
+  if(!d){onComplete();return;}
+  var ov=document.createElement('div');
+  ov.className='livematch-overlay';
+  ov.innerHTML='<div class="livematch-card">'+
+    (d.isAcademy?'<div class="livematch-badge">&#127793; CHAMPIONNAT JEUNES</div>':'')+
+    '<div class="livematch-header">'+
+      '<div class="livematch-team">'+d.myClub+'</div>'+
+      '<div class="livematch-score" id="lmScore">0 - 0</div>'+
+      '<div class="livematch-team right">'+d.oppClub+'</div>'+
+    '</div>'+
+    '<div class="livematch-minute" id="lmMinute">COUP D\'ENVOI</div>'+
+    '<div class="livematch-feed" id="lmFeed"></div>'+
+  '</div>';
+  document.body.appendChild(ov);
+  var feedEl=document.getElementById('lmFeed');
+  var scoreEl=document.getElementById('lmScore');
+  var minuteEl=document.getElementById('lmMinute');
+  var curGf=0,curGa=0;
+
+  function addFeed(minute,txt,cls){
+    var el=document.createElement('div');
+    el.className='livematch-item'+(cls?' '+cls:'');
+    el.innerHTML='<b>'+minute+'&#39;</b> &#183; '+txt;
+    feedEl.insertBefore(el,feedEl.firstChild);
+  }
+
+  var timeline=d.events.slice();
+  var flavorPool=(d.isAcademy?LM_FLAVOR_ACADEMY:LM_FLAVOR).slice().sort(function(){return Math.random()-0.5;});
+  var numFlavor=Math.min(flavorPool.length,Math.max(3,8-timeline.length));
+  for(var i=0;i<numFlavor;i++)timeline.push({type:'flavor',text:flavorPool[i]});
+  var usedMinutes=[];
+  timeline.forEach(function(ev){
+    var m;
+    do{m=3+Math.floor(Math.random()*87);}while(usedMinutes.indexOf(m)>=0);
+    usedMinutes.push(m);
+    ev.minute=m;
+  });
+  timeline.sort(function(a,b){return a.minute-b.minute;});
+
+  var idx=0,goalTplIdx=0;
+  function nextBeat(){
+    if(idx>=timeline.length){finish();return;}
+    var item=timeline[idx++];
+    minuteEl.textContent=item.minute+'\'';
+    if(item.type==='goal'){
+      if(item.contested&&!item.resolved){
+        addFeed(item.minute,'<b>'+item.scorerName+'</b> se retrouve seul face au gardien !');
+        setTimeout(function(){
+          startMatchChanceMinigame('shoot',function(success){
+            resolveContestedGoal(success);
+            curGf++;
+            scoreEl.textContent=curGf+' - '+curGa;
+            if(success)addFeed(item.minute,'BUT ! Quel sang-froid de <b>'+G.name+'</b> !','goal');
+            else addFeed(item.minute,'<b>'+item.scorerName+'</b> est le plus prompt sur le rebond et marque !','goal');
+            setTimeout(nextBeat,1000);
+          });
+        },700);
+        return;
+      }else if(item.contestedAssist&&!item.resolved){
+        addFeed(item.minute,'<b>'+G.name+'</b> se retrouve avec le ballon, un coequipier appelle devant !');
+        setTimeout(function(){
+          startMatchChanceMinigame('assist',function(success){
+            resolveContestedAssist(success);
+            curGf++;
+            scoreEl.textContent=curGf+' - '+curGa;
+            if(success)addFeed(item.minute,'BUT ! <b>'+item.scorerName+'</b> conclut sur une passe parfaite de <b>'+G.name+'</b> !','goal');
+            else addFeed(item.minute,'BUT ! <b>'+item.scorerName+'</b> marque, la passe venait de quelqu\'un d\'autre.','goal');
+            setTimeout(nextBeat,1000);
+          });
+        },700);
+        return;
+      }else{
+        curGf++;
+        scoreEl.textContent=curGf+' - '+curGa;
+        var tpl=LM_GOAL_TPL[goalTplIdx%LM_GOAL_TPL.length];goalTplIdx++;
+        var txt=tpl.replace('{s}',item.scorerName);
+        if(item.assistName)txt+=' <span style="color:var(--t2);font-weight:400">(passe de '+item.assistName+')</span>';
+        addFeed(item.minute,txt,'goal');
+      }
+    }else if(item.type==='save'){
+      addFeed(item.minute,'L\'adversaire se presente seul face a <b>'+G.name+'</b> !');
+      setTimeout(function(){
+        startMatchChanceMinigame('save',function(success){
+          resolveContestedSave(success);
+          if(success)addFeed(item.minute,'ARRET DECISIF de <b>'+G.name+'</b> ! Quel reflexe !','goal');
+          else addFeed(item.minute,'<b>'+G.name+'</b> ne peut rien faire sur ce tir surpuissant...','bad');
+          setTimeout(nextBeat,1000);
+        });
+      },700);
+      return;
+    }else if(item.type==='oppgoal'){
+      curGa++;
+      scoreEl.textContent=curGf+' - '+curGa;
+      addFeed(item.minute,LM_OPPGOAL_TPL[Math.floor(Math.random()*LM_OPPGOAL_TPL.length)],'bad');
+    }else{
+      addFeed(item.minute,item.text);
+    }
+    setTimeout(nextBeat,850+Math.random()*450);
+  }
+
+  function finish(){
+    minuteEl.textContent='COUP DE SIFFLET FINAL';
+    setTimeout(function(){
+      if(ov.parentNode)document.body.removeChild(ov);
+      onComplete();
+    },1300);
+  }
+
+  setTimeout(nextBeat,600);
+}
+
 function playMatch(){
   var force=weightedOv();
   var mb=(G.men-22)/10,bb=(G.balance-50)/15,hb=((G.happy||50)-50)/18;
@@ -3464,15 +3749,36 @@ function playMatch(){
   res.gf=gf;res.ga=ga;
   var myGoals=0,myAssists=0;
   var squad=getMySquadEntries();
+  var matchEvents=[];
+  var contestedEvent=null;
+  var playerContestUsed=false;
   if(gf>0){
     var shootBoost=1+((G.tir-50)/90);
     var scorers=attributeGoals(squad,gf,shootBoost);
     scorers.forEach(function(sc){
-      if(sc.isPlayer)myGoals++;
       var assist=attributeAssist(squad,sc);
+      var isContestedShot=false,isContestedAssist=false;
+      if(!playerContestUsed){
+        if(sc.isPlayer&&G.pos!=='GAR'&&Math.random()<0.5){
+          isContestedShot=true;playerContestUsed=true;
+        }else if(assist&&assist.isPlayer&&Math.random()<0.5){
+          isContestedAssist=true;playerContestUsed=true;
+        }
+      }
+      if(sc.isPlayer)myGoals++;
       if(assist&&assist.isPlayer)myAssists++;
       addLeagueGoal(G.myClubIdx,sc.n);
+      var ev={type:'goal',scorerName:sc.n,scorerIsPlayer:!!sc.isPlayer,assistName:assist?assist.n:null,assistIsPlayer:!!(assist&&assist.isPlayer),contested:isContestedShot,contestedAssist:isContestedAssist};
+      matchEvents.push(ev);
+      if(isContestedShot||isContestedAssist)contestedEvent=ev;
     });
+  }
+  for(var gi=0;gi<ga;gi++)matchEvents.push({type:'oppgoal'});
+  if(!playerContestUsed&&G.pos==='GAR'&&ga>0&&Math.random()<0.5){
+    playerContestUsed=true;
+    var saveEv={type:'save',contested:true};
+    matchEvents.push(saveEv);
+    contestedEvent=saveEv;
   }
   G.seasonGoals=(G.seasonGoals||0)+myGoals;G.careerGoals=(G.careerGoals||0)+myGoals;
   G.seasonAssists=(G.seasonAssists||0)+myAssists;G.careerAssists=(G.careerAssists||0)+myAssists;
@@ -3505,15 +3811,90 @@ function playMatch(){
   var oppTxt=G.thisWeekOpponent?' vs '+G.thisWeekOpponent:'';
   var scoreTxt=gf+'-'+ga;
   var sub='Sem.'+G.sem+' Saison '+G.sai+' &#183; '+tacLbl+oppTxt+(rf?' (duel avec '+G.riv.n+')':'');
+  WEEK_RESULT={kind:'match',res:res,sub:sub};
+  G._liveMatchData={
+    events:matchEvents,contested:contestedEvent,
+    myClub:G.inAcademy?G.academyClub.n+' (jeunes)':G.club,
+    oppClub:(G.inAcademy&&G.thisWeekOpponent)?G.thisWeekOpponent+' (jeunes)':(G.thisWeekOpponent||'Adversaire'),
+    gf:gf,ga:ga,resType:res.type,rf:rf,rivName:rf?G.riv.n:null,
+    sub:sub,scoreTxt:scoreTxt,isAcademy:!!G.inAcademy
+  };
+}
+
+function finalizeMatchDisplay(){
+  var res=WEEK_RESULT.res,sub=WEEK_RESULT.sub;
+  var scoreTxt=res.gf+'-'+res.ga;
   document.getElementById('gmatch').innerHTML='<div class="mc '+res.type+'"><div class="mico">'+res.ico+'</div><div class="mlb '+res.type+'">'+res.lbl+' '+scoreTxt+'</div><div class="msub">'+sub+'</div><div class="mrep" style="color:'+(res.type==='lose'?'var(--red)':'var(--g)')+'">'+res.rep+'</div></div>';
   var perfBits=[];
-  if(myGoals>0)perfBits.push((myGoals>1?myGoals+' buts':'1 but'));
-  if(myAssists>0)perfBits.push((myAssists>1?myAssists+' passes D.':'1 passe D.'));
-  if(motm)perfBits.push('Homme du match');
-  if(card)perfBits.push('Carton '+(card==='red'?'rouge':'jaune'));
+  if(res.myGoals>0)perfBits.push((res.myGoals>1?res.myGoals+' buts':'1 but'));
+  if(res.myAssists>0)perfBits.push((res.myAssists>1?res.myAssists+' passes D.':'1 passe D.'));
+  if(res.motm)perfBits.push('Homme du match');
+  if(res.card)perfBits.push('Carton '+(res.card==='red'?'rouge':'jaune'));
   var perfTxt=perfBits.length?' ('+perfBits.join(', ')+')':'';
-  addLog(res.lbl+' '+scoreTxt+(rf?' (vs '+G.riv.n+')':'')+perfTxt,res.type==='win'?'win':res.type==='lose'?'lose':'draw',myGoals>=2||motm);
-  WEEK_RESULT={kind:'match',res:res,sub:sub};
+  var rf=G._liveMatchData&&G._liveMatchData.rf;
+  var rivName=G._liveMatchData&&G._liveMatchData.rivName;
+  addLog(res.lbl+' '+scoreTxt+(rf?' (vs '+rivName+')':'')+perfTxt,res.type==='win'?'win':res.type==='lose'?'lose':'draw',res.myGoals>=2||res.motm);
+}
+
+function resolveContestedGoal(success){
+  var d=G._liveMatchData;
+  if(!d||!d.contested||d.contested.resolved)return;
+  d.contested.resolved=true;
+  if(!success){
+    G.seasonGoals=Math.max(0,G.seasonGoals-1);
+    G.careerGoals=Math.max(0,G.careerGoals-1);
+    WEEK_RESULT.res.myGoals=Math.max(0,WEEK_RESULT.res.myGoals-1);
+    if(WEEK_RESULT.res.motm){
+      var newScore=WEEK_RESULT.res.myGoals*3+WEEK_RESULT.res.myAssists*2+(d.resType==='win'?1:0)+(WEEK_RESULT.res.cleanSheet?2:0);
+      if(newScore<4.5){
+        WEEK_RESULT.res.motm=false;
+        G.seasonMOTM=Math.max(0,G.seasonMOTM-1);
+        G.careerMOTM=Math.max(0,G.careerMOTM-1);
+      }
+    }
+    d.contested.scorerIsPlayer=false;
+    var teammates=getMySquadEntries().filter(function(p){return !p.isPlayer;});
+    if(teammates.length)d.contested.scorerName=teammates[Math.floor(Math.random()*teammates.length)].n;
+  }
+}
+
+function resolveContestedAssist(success){
+  var d=G._liveMatchData;
+  if(!d||!d.contested||d.contested.resolved)return;
+  d.contested.resolved=true;
+  if(!success){
+    G.seasonAssists=Math.max(0,G.seasonAssists-1);
+    G.careerAssists=Math.max(0,G.careerAssists-1);
+    WEEK_RESULT.res.myAssists=Math.max(0,WEEK_RESULT.res.myAssists-1);
+    if(WEEK_RESULT.res.motm){
+      var newScore=WEEK_RESULT.res.myGoals*3+WEEK_RESULT.res.myAssists*2+(d.resType==='win'?1:0)+(WEEK_RESULT.res.cleanSheet?2:0);
+      if(newScore<4.5){
+        WEEK_RESULT.res.motm=false;
+        G.seasonMOTM=Math.max(0,G.seasonMOTM-1);
+        G.careerMOTM=Math.max(0,G.careerMOTM-1);
+      }
+    }
+    d.contested.assistIsPlayer=false;
+    var teammates=getMySquadEntries().filter(function(p){return !p.isPlayer;});
+    if(teammates.length)d.contested.assistName=teammates[Math.floor(Math.random()*teammates.length)].n;
+  }
+}
+
+function resolveContestedSave(success){
+  var d=G._liveMatchData;
+  if(!d||!d.contested||d.contested.resolved)return;
+  d.contested.resolved=true;
+  d.contested.saveSuccess=success;
+  if(success){
+    G.rep=(G.rep||0)+3;
+    if(G.rep>G.maxrep)G.maxrep=G.rep;
+    var newScore=WEEK_RESULT.res.myGoals*3+WEEK_RESULT.res.myAssists*2+(d.resType==='win'?1:0)+(WEEK_RESULT.res.cleanSheet?2:0)+3;
+    if(!WEEK_RESULT.res.motm&&newScore>=4.5&&Math.random()<0.6){
+      WEEK_RESULT.res.motm=true;
+      G.seasonMOTM=(G.seasonMOTM||0)+1;
+      G.careerMOTM=(G.careerMOTM||0)+1;
+    }
+  }
 }
 
 function rivProgress(){
@@ -4675,21 +5056,15 @@ function confirmTransfer(){
     show('sg');updateUI();
     return;
   }
-  notif('Transfert vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
-  if(isNew)addLog('Transfert vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
+  notif(wasAcademy?'Tu quittes le centre de formation pour rejoindre '+G.club+' !':'Transfert vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
+  if(isNew)addLog(wasAcademy?'Fin de ta formation - tu rejoins l\'equipe pro de '+G.club+' !':'Transfert vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
   nextSeason();
 }
 
 function resterClub(){
   if(G.inAcademy){
-    var c=G.academyClub;
-    G.club=c.n;G.clvl=c.l;G.sal=c.s;G.inAcademy=false;
-    G.squad=genSquad();G.clubStanding=Math.ceil(Math.random()*CLUBS.length);
-    G.contractYears=2+Math.floor(Math.random()*3);
-    if(!G.transferHistory)G.transferHistory=[];
-    G.transferHistory.push({sai:G.sai,club:G.club,sal:G.sal});
-    addLog('Tu integres l\'equipe pro du '+c.n+' !','transfer',true);
-    notif('Bienvenue chez les pros !');
+    showAcademyGraduation();
+    return;
   }else if(G.loan){
     var parentName=G.loan.parentClub;
     G.club=G.loan.parentClub;G.clvl=G.loan.parentClvl;G.myClubIdx=G.loan.parentClubIdx;
@@ -4705,6 +5080,35 @@ function resterClub(){
     notif('Contrat expire ! Le club te propose juste 1 an, -'+cut+'% de salaire.','bad');
     addLog('Contrat expire sans negociation - accord minimal impose ('+G.sal.toLocaleString()+' EUR/sem, 1 an, -'+cut+'%)','injury');
   }
+  nextSeason();
+}
+
+function showAcademyGraduation(){
+  var c=G.academyClub;
+  document.getElementById('gradGoals').textContent=G.seasonGoals||0;
+  document.getElementById('gradAssists').textContent=G.seasonAssists||0;
+  document.getElementById('gradApps').textContent=G.seasonApps||0;
+  document.getElementById('gradRep').textContent=Math.round(G.rep||0);
+  document.getElementById('gradSub').textContent='Ta saison en centre de formation chez '+c.n+' est terminee.';
+  var msgs=[
+    'Le staff technique est unanime : tu as les qualites pour franchir un palier.',
+    'Ton travail acharne a paye. L\'equipe pro t\'attend.',
+    'Les recruteurs du club ont suivi tes progres de pres cette saison.',
+    'Tu quittes les installations jeunes pour rejoindre le grand vestiaire.'
+  ];
+  document.getElementById('gradMsg').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+  show('sacadgrad');
+}
+
+function confirmAcademyGraduation(){
+  var c=G.academyClub;
+  G.club=c.n;G.clvl=c.l;G.sal=c.s;G.inAcademy=false;
+  G.squad=genSquad();G.clubStanding=Math.ceil(Math.random()*CLUBS.length);
+  G.contractYears=2+Math.floor(Math.random()*3);
+  if(!G.transferHistory)G.transferHistory=[];
+  G.transferHistory.push({sai:G.sai,club:G.club,sal:G.sal});
+  addLog('Tu integres l\'equipe pro du '+c.n+' !','transfer',true);
+  notif('Bienvenue chez les pros !');
   nextSeason();
 }
 
@@ -5194,8 +5598,8 @@ function renderLigue(){
   var avgStr=CLUBS.reduce(function(a,c){return a+c.str;},0)/CLUBS.length;
   var maxStr=Math.max.apply(null,CLUBS.map(function(c){return c.str;}));
   var ligueRep=Math.round(avgStr/maxStr*100);
-  document.getElementById('liguename').textContent=G.league==='L2'?'Ligue 2':'Ligue 1';
-  document.getElementById('liguedesc').textContent=(G.league==='L2'?'Deuxieme division. Les 2 premiers montent en Ligue 1 en fin de saison.':'Elite du football national, '+CLUBS.length+' clubs. Les 2 derniers descendent en Ligue 2 en fin de saison.');
+  document.getElementById('liguename').textContent=G.inAcademy?'Championnat Jeunes':(G.league==='L2'?'Ligue 2':'Ligue 1');
+  document.getElementById('liguedesc').textContent=G.inAcademy?'Championnat reserve aux centres de formation. Fais tes preuves avant de rejoindre l\'equipe pro.':(G.league==='L2'?'Deuxieme division. Les 2 premiers montent en Ligue 1 en fin de saison.':'Elite du football national, '+CLUBS.length+' clubs. Les 2 derniers descendent en Ligue 2 en fin de saison.');
   document.getElementById('liguerepbar').style.width=ligueRep+'%';
   document.getElementById('liguerepval').textContent=ligueRep+'/100';
   document.getElementById('ligueclubs').textContent=CLUBS.length;
