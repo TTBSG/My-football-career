@@ -1244,7 +1244,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=29;
+var APP_VERSION=30;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1302,7 +1302,8 @@ var CHANGELOG={
   26:{title:'Relookage general',items:['Nouvelle police d\'affichage facon stade/tableau d\'affichage sur tous les ecrans','Les cartes et menus perdent leur effet vitre pour un style plus net et plus jeu','Boutons et blocs de stats (victoires/nuls/defaites, etc.) look plaque de score']},
   27:{title:'Nouvelles icones',items:['Les emojis du menu, de l\'entrainement et de l\'onglet Perso sont remplaces par de vraies icones dessinees','Suite du relookage a venir sur les autres ecrans']},
   28:{title:'Correctif icone',items:['L\'icone de "Travail Mental" ressemblait a des poumons, elle a ete refaite pour ressembler a un cerveau']},
-  29:{title:'Icones du Staff, Sponsors et Investissements',items:['Toutes les icones emoji de ces 3 ecrans sont remplacees par de vraies icones dessinees','Chaque metier de staff, chaque categorie de sponsor et chaque type d\'investissement a sa propre icone']}
+  29:{title:'Icones du Staff, Sponsors et Investissements',items:['Toutes les icones emoji de ces 3 ecrans sont remplacees par de vraies icones dessinees','Chaque metier de staff, chaque categorie de sponsor et chaque type d\'investissement a sa propre icone']},
+  30:{title:'Reseaux sociaux : partage tes exploits',items:['Apres un but, une passe decisive, un homme du match ou un clean sheet, tu peux partager ton geste et gagner des followers en bonus','Chance de devenir viral pour un gros bonus de followers et de reputation','Le contenu s\'adapte a ton poste (un gardien parle de ses arrets, pas de ses buts)']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -2361,6 +2362,15 @@ function showWeekResultModal(){
     if(r.card)bits.push(r.card==='red'?'&#128308; Carton rouge':'&#128993; Carton jaune');
     if(r.cleanSheet)bits.push('&#128737; Clean sheet');
     if(bits.length)perfLine='<div style="font-size:12px;color:var(--t2);text-align:center;margin-bottom:10px">'+bits.join(' &#183; ')+'</div>';
+    var viralWorthy=r.myGoals>=2||r.myAssists>=2||r.motm||r.cleanSheet;
+    var postSection='';
+    if(viralWorthy){
+      if(WEEK_RESULT._posted){
+        postSection='<div style="background:var(--bg3);border:1px solid rgba(47,158,92,.25);border-radius:10px;padding:10px;margin-bottom:12px;font-size:12px;text-align:center">'+(WEEK_RESULT._postViral?'&#128293; ':'')+WEEK_RESULT._postTxt+' <b style="color:var(--g)">+'+WEEK_RESULT._postGain+' followers</b>'+(WEEK_RESULT._postViral?'<br><span style="color:var(--yel)">Ca devient viral !</span>':'')+'</div>';
+      }else{
+        postSection='<button class="btn btn-o" style="margin-bottom:9px" onclick="postViralMoment()">&#127925; PARTAGER TON GESTE</button>';
+      }
+    }
     h='<div class="evt-overlay" id="resultOverlay"><div class="evt-modal">'+
       '<div class="evt-ico">'+(r.type==='win'?'&#127942;':r.type==='lose'?'&#128546;':'&#129309;')+'</div>'+
       '<div class="evt-title" style="color:'+col+'">'+r.lbl+'</div>'+
@@ -2368,10 +2378,41 @@ function showWeekResultModal(){
       '<div class="evt-txt">'+WEEK_RESULT.sub+'</div>'+
       perfLine+
       '<div style="font-size:13px;font-weight:700;color:'+col+';text-align:center;margin-bottom:14px">'+r.rep+'</div>'+
+      postSection+
       '<button class="btn btn-g" onclick="closeResultModal()">CONTINUER</button>'+
     '</div></div>';
   }
   document.getElementById('app').insertAdjacentHTML('beforeend',h);
+}
+
+function getViralPost(r){
+  if(G.pos==='GAR'&&r.motm){return {ico:'&#127942;',txt:'Elu homme du match malgre la pression, tes arrets tournent en boucle...',base:600};}
+  if(G.pos==='GAR'&&r.cleanSheet){return {ico:'&#128737;',txt:'Tu postes ton clean sheet et tes plus beaux arrets...',base:500};}
+  if(r.myGoals>=2){return {ico:'&#9917;',txt:'Tu postes ton but qui fait le tour des reseaux...',base:400+r.myGoals*350};}
+  if(r.myAssists>=2){return {ico:'&#127939;',txt:'Ta passe decisive fait le buzz sur les reseaux...',base:350+r.myAssists*300};}
+  if(r.motm){return {ico:'&#127942;',txt:'Elu homme du match, les fans s\'enflamment sur les reseaux...',base:600};}
+  if(r.cleanSheet){return {ico:'&#128737;',txt:'Ta performance defensive impressionne les fans...',base:450};}
+  return {ico:'&#127925;',txt:'Tu postes un extrait de ton match...',base:300};
+}
+
+function postViralMoment(){
+  if(!WEEK_RESULT||WEEK_RESULT.kind!=='match'||WEEK_RESULT._posted)return;
+  var r=WEEK_RESULT.res;
+  var vp=getViralPost(r);
+  var viral=Math.random()<0.15;
+  var mult=viral?(2+Math.random()):(0.85+Math.random()*0.5);
+  var gain=Math.round(vp.base*mult);
+  if(!G.social)G.social={};
+  G.social.clipwave=(G.social.clipwave||0)+gain;
+  if(viral)G.rep=(G.rep||0)+3;
+  WEEK_RESULT._posted=true;
+  WEEK_RESULT._postGain=gain;
+  WEEK_RESULT._postViral=viral;
+  WEEK_RESULT._postTxt=vp.txt;
+  addLog('Post ClipWave du match - +'+gain+' followers'+(viral?' (viral !)':''),'perso',viral);
+  var ov=document.getElementById('resultOverlay');if(ov)ov.remove();
+  showWeekResultModal();
+  updateUI();
 }
 
 function closeResultModal(){
@@ -4244,7 +4285,12 @@ function renderMedia(){
     h+='<div style="display:flex;justify-content:space-between;margin-bottom:9px;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.06)"><div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--g)">'+formatFollowers(followers)+'</div><div style="font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:1px">Followers</div></div><div style="text-align:right"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:'+(p.monetizable?'var(--yel)':'var(--t3)')+'">'+(p.monetizable?'+'+plIncome.toLocaleString():'--')+'</div><div style="font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:1px">'+(p.monetizable?'EUR/sem':'Non monetisable')+'</div></div></div>';
     h+='<div class="pgrid">';
     p.posts.forEach(function(t){
-      h+='<div class="pcard" onclick="doPost(\''+p.id+'\',\''+t.id+'\')"><div class="pico">&#128172;</div><div class="plb2">'+t.n+'</div><div class="pval" style="font-size:9px">'+t.dsc+'</div><div class="pcost">'+(t.cost>0?t.cost.toLocaleString()+' EUR':'Gratuit')+' &#183; '+Math.round(t.rate*100)+'%</div></div>';
+      var tn=t.n,td=t.dsc;
+      if(p.id==='streamtube'&&t.id==='analyse'){
+        if(G.pos==='GAR'){tn='Analyse de tes arrets';td='Du contenu qui montre tes reflexes';}
+        else if(['ATT','AIL'].indexOf(G.pos)>=0){tn='Analyse de tes buts';td='Du contenu qui montre ta finition';}
+      }
+      h+='<div class="pcard" onclick="doPost(\''+p.id+'\',\''+t.id+'\')"><div class="pico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg></div><div class="plb2">'+tn+'</div><div class="pval" style="font-size:9px">'+td+'</div><div class="pcost">'+(t.cost>0?t.cost.toLocaleString()+' EUR':'Gratuit')+' &#183; '+Math.round(t.rate*100)+'%</div></div>';
     });
     h+='</div></div>';
   });
