@@ -1244,7 +1244,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=30;
+var APP_VERSION=31;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1303,7 +1303,8 @@ var CHANGELOG={
   27:{title:'Nouvelles icones',items:['Les emojis du menu, de l\'entrainement et de l\'onglet Perso sont remplaces par de vraies icones dessinees','Suite du relookage a venir sur les autres ecrans']},
   28:{title:'Correctif icone',items:['L\'icone de "Travail Mental" ressemblait a des poumons, elle a ete refaite pour ressembler a un cerveau']},
   29:{title:'Icones du Staff, Sponsors et Investissements',items:['Toutes les icones emoji de ces 3 ecrans sont remplacees par de vraies icones dessinees','Chaque metier de staff, chaque categorie de sponsor et chaque type d\'investissement a sa propre icone']},
-  30:{title:'Reseaux sociaux : partage tes exploits',items:['Apres un but, une passe decisive, un homme du match ou un clean sheet, tu peux partager ton geste et gagner des followers en bonus','Chance de devenir viral pour un gros bonus de followers et de reputation','Le contenu s\'adapte a ton poste (un gardien parle de ses arrets, pas de ses buts)']}
+  30:{title:'Reseaux sociaux : partage tes exploits',items:['Apres un but, une passe decisive, un homme du match ou un clean sheet, tu peux partager ton geste et gagner des followers en bonus','Chance de devenir viral pour un gros bonus de followers et de reputation','Le contenu s\'adapte a ton poste (un gardien parle de ses arrets, pas de ses buts)']},
+  31:{title:'Ordre plus logique de la semaine',items:['La semaine se deroule maintenant vraiment dans l\'ordre : entrainement, puis la semaine qui defile (lundi a samedi), puis le match en direct','Avant, le match se jouait avant que la semaine ne soit racontee']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -2303,7 +2304,7 @@ function confirmMatchPrep(){
 var WEEK_SEQ_ICONS={vit:'&#9889;',tir:'&#127919;',phy:'&#128170;',men:'&#129504;',tec:'&#9917;',bal:'&#11088;'};
 var WEEK_SEQ_NAMES={vit:'Vitesse & Sprint',tir:'Finition & Tir',phy:'Preparation Physique',men:'Travail Mental',tec:'Technique & Dribble',bal:'Entrainement Complet'};
 
-function showWeekSequence(trainType,opponent){
+function showWeekSequence(trainType,opponent,onDone){
   var steps=[
     {day:'LUNDI',lbl:'Entrainement',dsc:WEEK_SEQ_NAMES[trainType]||'Seance collective',ico:WEEK_SEQ_ICONS[trainType]||'&#9917;'},
     {day:'MERCREDI',lbl:'Vie de club',dsc:'Recuperation et travail collectif',ico:'&#127967;'},
@@ -2326,7 +2327,7 @@ function showWeekSequence(trainType,opponent){
     if(idx>=steps.length){
       clearInterval(timer);
       var ov2=document.getElementById('weekSeqOverlay');if(ov2)ov2.remove();
-      showWeekResultModal();
+      if(onDone)onDone();else showWeekResultModal();
       return;
     }
     renderStep();
@@ -3325,16 +3326,27 @@ function doWeekActual(trainPerf){
       }
     }
   }
-  if(G._liveMatchData){
+  if(G.sem>SEASON_WEEKS){
+    if(G._liveMatchData){
+      setTimeout(function(){
+        startLiveMatchSequence(function(){
+          finalizeMatchDisplay();
+          PENDING_EVENT=false;setTimeout(showFin,500);
+        });
+      },250);
+    }else{PENDING_EVENT=false;setTimeout(showFin,800);}
+  }else if(G._liveMatchData){
     setTimeout(function(){
-      startLiveMatchSequence(function(){
-        finalizeMatchDisplay();
-        if(G.sem>SEASON_WEEKS){PENDING_EVENT=false;setTimeout(showFin,500);}
-        else showWeekSequence(t,G.thisWeekOpponent);
+      showWeekSequence(t,G.thisWeekOpponent,function(){
+        startLiveMatchSequence(function(){
+          finalizeMatchDisplay();
+          showWeekResultModal();
+        });
       });
     },250);
-  }else if(G.sem>SEASON_WEEKS){PENDING_EVENT=false;setTimeout(showFin,800);}
-  else setTimeout(function(){showWeekSequence(t,G.thisWeekOpponent);},250);
+  }else{
+    setTimeout(function(){showWeekSequence(t,G.thisWeekOpponent);},250);
+  }
 }
 
 function pickWeighted(pool){
