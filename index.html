@@ -1244,7 +1244,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=31;
+var APP_VERSION=32;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1304,7 +1304,8 @@ var CHANGELOG={
   28:{title:'Correctif icone',items:['L\'icone de "Travail Mental" ressemblait a des poumons, elle a ete refaite pour ressembler a un cerveau']},
   29:{title:'Icones du Staff, Sponsors et Investissements',items:['Toutes les icones emoji de ces 3 ecrans sont remplacees par de vraies icones dessinees','Chaque metier de staff, chaque categorie de sponsor et chaque type d\'investissement a sa propre icone']},
   30:{title:'Reseaux sociaux : partage tes exploits',items:['Apres un but, une passe decisive, un homme du match ou un clean sheet, tu peux partager ton geste et gagner des followers en bonus','Chance de devenir viral pour un gros bonus de followers et de reputation','Le contenu s\'adapte a ton poste (un gardien parle de ses arrets, pas de ses buts)']},
-  31:{title:'Ordre plus logique de la semaine',items:['La semaine se deroule maintenant vraiment dans l\'ordre : entrainement, puis la semaine qui defile (lundi a samedi), puis le match en direct','Avant, le match se jouait avant que la semaine ne soit racontee']}
+  31:{title:'Ordre plus logique de la semaine',items:['La semaine se deroule maintenant vraiment dans l\'ordre : entrainement, puis la semaine qui defile (lundi a samedi), puis le match en direct','Avant, le match se jouait avant que la semaine ne soit racontee']},
+  32:{title:'Centre de formation requilibre',items:['Tes coequipiers en centre de formation sont maintenant de vrais jeunes de 15-18 ans avec des notes realistes, plus des pros de 25 ans recycles du club senior','La difficulte des matchs du Championnat Jeunes est aussi ajustee pour un niveau formation, plus la meme force que les vrais clubs pros']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -1552,8 +1553,10 @@ function getSquadStartersFor(clubIdx){
 }
 
 function simAiMatch(homeIdx,awayIdx){
-  var hs=CLUBS[homeIdx].str+3+Math.floor(Math.random()*10)-5;
-  var as=CLUBS[awayIdx].str+Math.floor(Math.random()*10)-5;
+  var hStr=G.inAcademy?clubYouthStr(CLUBS[homeIdx]):CLUBS[homeIdx].str;
+  var aStr=G.inAcademy?clubYouthStr(CLUBS[awayIdx]):CLUBS[awayIdx].str;
+  var hs=hStr+3+Math.floor(Math.random()*10)-5;
+  var as=aStr+Math.floor(Math.random()*10)-5;
   var diff=hs-as;
   var score=simulateScoreline(diff/2);
   var gf=score.gf,ga=score.ga;
@@ -1582,6 +1585,28 @@ function mkWorldPlayer(pos,clubLvl,age){
   var ov=Math.max(20,Math.min(92,base+Math.floor(Math.random()*16)-8));
   if(!G._nextPlayerId)G._nextPlayerId=1;
   return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null};
+}
+
+function mkYouthPlayer(pos,tier,age){
+  var base=16+tier*7;
+  var ov=Math.max(8,Math.min(55,base+Math.floor(Math.random()*15)-7));
+  if(!G._nextPlayerId)G._nextPlayerId=1;
+  return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null};
+}
+
+function initAcademyYouthPlayers(tier){
+  G.academyYouthPlayers=[];
+  if(!G._nextPlayerId)G._nextPlayerId=1;
+  WORLD_FORMATION.concat(WORLD_BENCH).forEach(function(slot){
+    for(var i=0;i<slot.n;i++){
+      var age=15+Math.floor(Math.random()*4);
+      G.academyYouthPlayers.push(mkYouthPlayer(slot.p,tier,age));
+    }
+  });
+}
+
+function clubYouthStr(c){
+  return Math.round(15+c.str*0.15);
 }
 
 function initWorldPlayers(){
@@ -1614,7 +1639,7 @@ function pickFromRoster(roster,used,pos,count){
 
 function genSquad(){
   var myName=G.inAcademy?G.academyClub.n:G.club;
-  var roster=getClubRoster(myName);
+  var roster=G.inAcademy?(G.academyYouthPlayers||[]):getClubRoster(myName);
   var starters=[],bench=[],used={};
   WORLD_FORMATION.forEach(function(slot){
     var count=slot.p===G.pos?slot.n-1:slot.n;
@@ -2156,7 +2181,7 @@ function pickAcademy(el,idx){
   el.classList.add('on');
   var a=ACADEMIES[idx];
   var club=CLUBS[a.clubIdx];
-  selAcademy={bonus:a.bonus,club:club,sal:Math.max(150,Math.round(club.s*0.08))};
+  selAcademy={bonus:a.bonus,club:club,sal:Math.max(150,Math.round(club.s*0.08)),tier:idx};
   document.getElementById('btnacad').disabled=false;
 }
 
@@ -2168,7 +2193,7 @@ function confirmAcademy(){
 function startGame(){
   var n=document.getElementById('iname').value.trim();
   if(!n){notif('Entre ton nom !','bad');creationStep=1;updateStepUI();return;}
-  if(!selAcademy){var c0=CLUBS[0];selAcademy={bonus:{},club:c0,sal:Math.max(150,Math.round(c0.s*0.08))};}
+  if(!selAcademy){var c0=CLUBS[0];selAcademy={bonus:{},club:c0,sal:Math.max(150,Math.round(c0.s*0.08)),tier:0};}
   var rn=RIVALS[Math.floor(Math.random()*RIVALS.length)];
   var prof=POS_PROFILES[selpos];
   function stat(key){return Math.max(6,Math.min(60,STAT_FLOOR+prof[key]+alloc[key]+(selAcademy.bonus[key]||0)));}
@@ -2207,6 +2232,7 @@ function startGame(){
   rebuildActiveClubs();
   initClubEconomy();
   initWorldPlayers();
+  initAcademyYouthPlayers(selAcademy.tier||0);
   G.squad=genSquad();
   initLeagueSeason();
   addLog('Entree au '+G.club+' a 16 ans - '+natObj.n+' - Style: '+styleObj.n,'info');
@@ -3792,7 +3818,7 @@ function playMatch(){
   var tacFor=selTactic==='offensif'?2:selTactic==='prudent'?-1:0;
   var range=selTactic==='offensif'?22:selTactic==='prudent'?8:14;
   var oppClub=(G._roundOppIdx>=0&&CLUBS[G._roundOppIdx])?CLUBS[G._roundOppIdx]:null;
-  var oppStr=oppClub?oppClub.str:((CLUBS[G.myClubIdx]||{}).str||50);
+  var oppStr=oppClub?(G.inAcademy?clubYouthStr(oppClub):oppClub.str):((CLUBS[G.myClubIdx]||{}).str||50);
   var adv=10+(oppStr*0.5)+(G.sai*1.5)+Math.floor(force*0.18)+Math.floor(Math.random()*18);
   var roll=Math.floor(Math.random()*range)-Math.floor(range/2);
   var total=force+mb+bb+hb+roll+tacFor;
