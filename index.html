@@ -1244,7 +1244,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=35;
+var APP_VERSION=36;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1308,7 +1308,8 @@ var CHANGELOG={
   32:{title:'Centre de formation requilibre',items:['Tes coequipiers en centre de formation sont maintenant de vrais jeunes de 15-18 ans avec des notes realistes, plus des pros de 25 ans recycles du club senior','La difficulte des matchs du Championnat Jeunes est aussi ajustee pour un niveau formation, plus la meme force que les vrais clubs pros']},
   33:{title:'Fiches joueurs',items:['Clique sur un coequipier (titulaire ou remplacant) ou sur ton rival pour voir sa fiche : stats, notoriete et ta relation avec lui','La relation evolue naturellement au fil des semaines passees ensemble','Tous les joueurs du monde ont maintenant de vraies stats detaillees, pas juste une note globale']},
   34:{title:'Le coach t\'explique ses choix',items:['Plus de message generique quand tu es sur le banc : le coach t\'explique la vraie raison (forme, niveau du remplaçant, ou match tres serre)','Quand tu es titulaire, le coach t\'explique aussi pourquoi il te fait confiance']},
-  35:{title:'Correctif transfert',items:['En changeant de club en fin de saison, tu retrouvais les memes coequipiers que dans ton ancien club : c\'est corrige, le nouveau club a maintenant son propre effectif']}
+  35:{title:'Correctif transfert',items:['En changeant de club en fin de saison, tu retrouvais les memes coequipiers que dans ton ancien club : c\'est corrige, le nouveau club a maintenant son propre effectif']},
+  36:{title:'Forme et Mental moins punitifs',items:['Une petite regeneration passive chaque semaine (+3 Forme, +2 Mental) vient compenser la fatigue normale','Les plus gros malus sont reduits : entrainement intense, defaite, banc de touche font moins mal qu\'avant','La mecanique reste la meme, mais geree sans discipline parfaite tu ne t\'effondres plus aussi vite']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -3294,10 +3295,12 @@ function doWeekActual(trainPerf){
   if(G.lead>99)G.lead=99;
   if(G.age>30){G.vit=Math.max(1,G.vit-1);G.phy=Math.max(1,G.phy-1);}
   if(G.age>35)G.vit=Math.max(1,G.vit-1);
+  G.balance=Math.min(100,G.balance+3);
+  G.men=Math.min(99,G.men+2);
   if(t==='men')G.balance=Math.min(100,G.balance+5);
-  else G.balance=Math.max(0,G.balance-3);
+  else G.balance=Math.max(0,G.balance-2);
   if(selInt==='leger')G.balance=Math.min(100,G.balance+5);
-  else if(selInt==='intense')G.balance=Math.max(0,G.balance-6);
+  else if(selInt==='intense')G.balance=Math.max(0,G.balance-4);
   var nutriBoost=G.staff.indexOf('nutri3')>=0?7:G.staff.indexOf('nutri2')>=0?4:G.staff.indexOf('nutri1')>=0?2:0;
   if(nutriBoost)G.balance=Math.min(100,G.balance+nutriBoost);
   if(typeof G.happy!=='number')G.happy=55;
@@ -3415,8 +3418,8 @@ function doWeekActual(trainPerf){
     document.getElementById('ginjury').innerHTML='';
     var lineup=checkLineupStatus();
     if(!lineup.starting){
-      G.men=Math.max(1,G.men-4);
-      G.happy=Math.max(0,(G.happy||55)-3);
+      G.men=Math.max(1,G.men-3);
+      G.happy=Math.max(0,(G.happy||55)-2);
       if(roundFixtures&&myPairIdx>=0){
         var pr2=roundFixtures[myPairIdx];
         var outcome2=simAiMatch(pr2[0],pr2[1]);
@@ -3983,7 +3986,7 @@ function playMatch(){
     res={type:'win',lbl:'VICTOIRE',ico:'&#127942;',rep:'+'+winRep+' rep'};
     if(rf){G.riv.losses++;G.rivlast='Sem.'+G.sem+' - Tu as gagne contre '+G.riv.n;}
   }else if(gf<ga){
-    G.losses++;G.rep=Math.max(0,G.rep-loseRep);G.men=Math.max(1,G.men-3);G.balance=Math.max(0,G.balance-5);
+    G.losses++;G.rep=Math.max(0,G.rep-loseRep);G.men=Math.max(1,G.men-2);G.balance=Math.max(0,G.balance-3);
     res={type:'lose',lbl:'DEFAITE',ico:'&#128546;',rep:'-'+loseRep+' rep'};
     if(rf){G.riv.wins++;G.rivlast='Sem.'+G.sem+' - '+G.riv.n+' a gagne';}
   }else{
