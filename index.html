@@ -925,7 +925,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
     <!-- RIVAL -->
     <div id="prival" class="page">
       <div class="slbl">Ton rival</div>
-      <div class="rcard">
+      <div class="rcard" onclick="showRivalProfile()" style="cursor:pointer">
         <div class="rhd">
           <div class="rav" id="rivav">??</div>
           <div style="flex:1"><div style="font-weight:700;font-size:14px" id="rivname">Rival</div><div style="font-size:11px;color:var(--t2)" id="rivsub">Meme niveau</div></div>
@@ -1244,7 +1244,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=32;
+var APP_VERSION=33;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1305,7 +1305,8 @@ var CHANGELOG={
   29:{title:'Icones du Staff, Sponsors et Investissements',items:['Toutes les icones emoji de ces 3 ecrans sont remplacees par de vraies icones dessinees','Chaque metier de staff, chaque categorie de sponsor et chaque type d\'investissement a sa propre icone']},
   30:{title:'Reseaux sociaux : partage tes exploits',items:['Apres un but, une passe decisive, un homme du match ou un clean sheet, tu peux partager ton geste et gagner des followers en bonus','Chance de devenir viral pour un gros bonus de followers et de reputation','Le contenu s\'adapte a ton poste (un gardien parle de ses arrets, pas de ses buts)']},
   31:{title:'Ordre plus logique de la semaine',items:['La semaine se deroule maintenant vraiment dans l\'ordre : entrainement, puis la semaine qui defile (lundi a samedi), puis le match en direct','Avant, le match se jouait avant que la semaine ne soit racontee']},
-  32:{title:'Centre de formation requilibre',items:['Tes coequipiers en centre de formation sont maintenant de vrais jeunes de 15-18 ans avec des notes realistes, plus des pros de 25 ans recycles du club senior','La difficulte des matchs du Championnat Jeunes est aussi ajustee pour un niveau formation, plus la meme force que les vrais clubs pros']}
+  32:{title:'Centre de formation requilibre',items:['Tes coequipiers en centre de formation sont maintenant de vrais jeunes de 15-18 ans avec des notes realistes, plus des pros de 25 ans recycles du club senior','La difficulte des matchs du Championnat Jeunes est aussi ajustee pour un niveau formation, plus la meme force que les vrais clubs pros']},
+  33:{title:'Fiches joueurs',items:['Clique sur un coequipier (titulaire ou remplacant) ou sur ton rival pour voir sa fiche : stats, notoriete et ta relation avec lui','La relation evolue naturellement au fil des semaines passees ensemble','Tous les joueurs du monde ont maintenant de vraies stats detaillees, pas juste une note globale']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -1580,18 +1581,31 @@ function updateStanding(){
 var WORLD_FORMATION=[{p:'GAR',n:1},{p:'DEF',n:4},{p:'MDC',n:1},{p:'MIL',n:2},{p:'AIL',n:2},{p:'ATT',n:1}];
 var WORLD_BENCH=[{p:'GAR',n:1},{p:'DEF',n:1},{p:'MIL',n:2},{p:'ATT',n:1}];
 
+function statsFromOv(ov,pos){
+  var prof=POS_PROFILES[pos]||POS_PROFILES.MIL;
+  var keys=['vit','tir','phy','men','tec'];
+  var out={};
+  keys.forEach(function(k){
+    var bias=(prof[k]||0)*2;
+    out[k]=Math.max(5,Math.min(99,Math.round(ov+bias+Math.floor(Math.random()*11)-5)));
+  });
+  return out;
+}
+
 function mkWorldPlayer(pos,clubLvl,age){
   var base=25+clubLvl*9;
   var ov=Math.max(20,Math.min(92,base+Math.floor(Math.random()*16)-8));
   if(!G._nextPlayerId)G._nextPlayerId=1;
-  return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null};
+  var st=statsFromOv(ov,pos);
+  return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null,vit:st.vit,tir:st.tir,phy:st.phy,men:st.men,tec:st.tec,rep:Math.round(ov*1.2)};
 }
 
 function mkYouthPlayer(pos,tier,age){
   var base=16+tier*7;
   var ov=Math.max(8,Math.min(55,base+Math.floor(Math.random()*15)-7));
   if(!G._nextPlayerId)G._nextPlayerId=1;
-  return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null};
+  var st=statsFromOv(ov,pos);
+  return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null,vit:st.vit,tir:st.tir,phy:st.phy,men:st.men,tec:st.tec,rep:Math.round(ov*1.2)};
 }
 
 function initAcademyYouthPlayers(tier){
@@ -1648,6 +1662,7 @@ function genSquad(){
   WORLD_BENCH.forEach(function(slot){
     bench=bench.concat(pickFromRoster(roster,used,slot.p,slot.n));
   });
+  starters.concat(bench).forEach(function(p){if(p.relation==null)p.relation=50;});
   return {starters:starters,bench:bench};
 }
 
@@ -1659,8 +1674,114 @@ function genGenericSquad(clubName){
   return {starters:starters,bench:bench};
 }
 
+function findNpcById(id){
+  var pools=[];
+  if(G.squad){pools.push(G.squad.starters||[]);pools.push(G.squad.bench||[]);}
+  if(G.worldPlayers)pools.push(G.worldPlayers);
+  if(G.academyYouthPlayers)pools.push(G.academyYouthPlayers);
+  if(G.clubSquads){for(var k in G.clubSquads){pools.push((G.clubSquads[k].starters||[]).concat(G.clubSquads[k].bench||[]));}}
+  for(var i=0;i<pools.length;i++){
+    var f=pools[i].filter(function(p){return p.id===id;})[0];
+    if(f)return f;
+  }
+  return null;
+}
+
+function ensureNpcExtras(p){
+  if(!p)return p;
+  if(p.vit==null){
+    var st=statsFromOv(p.ov,p.p);
+    p.vit=st.vit;p.tir=st.tir;p.phy=st.phy;p.men=st.men;p.tec=st.tec;
+  }
+  if(p.rep==null)p.rep=Math.round(p.ov*1.2);
+  return p;
+}
+
+function relationLabel(v){
+  if(v==null)return null;
+  if(v>=80)return 'Complice';
+  if(v>=60)return 'Bonne entente';
+  if(v>=40)return 'Neutre';
+  if(v>=20)return 'Distant';
+  return 'Tendu';
+}
+
+function npcRadarSvg(stats){
+  var cx=90,cy=90,r=62;
+  var keys=['vit','tir','phy','men','tec'];
+  var labels=['VIT','TIR','PHY','MEN','TEC'];
+  var grid='';
+  [0.25,0.5,0.75,1].forEach(function(f){
+    var pts=[];
+    for(var i=0;i<5;i++){var a=(-90+i*72)*Math.PI/180;pts.push((cx+r*f*Math.cos(a))+','+(cy+r*f*Math.sin(a)));}
+    grid+='<polygon points="'+pts.join(' ')+'" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1"/>';
+  });
+  var lbl='',poly=[];
+  for(var i=0;i<5;i++){
+    var a=(-90+i*72)*Math.PI/180;
+    var lx=cx+(r+15)*Math.cos(a),ly=cy+(r+15)*Math.sin(a);
+    lbl+='<text x="'+lx+'" y="'+ly+'" fill="#7a9a7a" font-size="9" font-weight="700" text-anchor="middle" dominant-baseline="middle">'+labels[i]+'</text>';
+    var val=stats[keys[i]]||0;
+    var rv=Math.min(r,(val/99)*r);
+    poly.push((cx+rv*Math.cos(a))+','+(cy+rv*Math.sin(a)));
+  }
+  return '<svg viewBox="0 0 180 180" style="width:170px;height:170px"><g>'+grid+'</g><polygon points="'+poly.join(' ')+'" fill="rgba(47,158,92,.28)" stroke="var(--g)" stroke-width="2" stroke-linejoin="round"/><g>'+lbl+'</g></svg>';
+}
+
+function showNpcProfile(id){
+  var p=ensureNpcExtras(findNpcById(id));
+  if(!p)return;
+  var relLbl=relationLabel(p.relation);
+  var relBlock=relLbl?'<div class="card" style="margin-top:9px"><div class="slbl" style="margin:0 0 3px">Relation avec toi</div><div style="font-size:14px;font-weight:700;color:var(--g)">'+relLbl+'</div></div>':'';
+  var initials=p.n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+  var h='<div class="evt-overlay" id="npcProfileOverlay" onclick="if(event.target===this)closeNpcProfile()"><div class="evt-modal" style="max-width:320px">'+
+    '<div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--gd),var(--g));display:flex;align-items:center;justify-content:center;font-family:Staatliches,sans-serif;font-size:20px;color:var(--bg);margin:0 auto 10px">'+initials+'</div>'+
+    '<div class="evt-title" style="margin-bottom:1px">'+p.n+'</div>'+
+    '<div style="font-size:11px;color:var(--t2);text-align:center;margin-bottom:12px">'+p.p+' &#183; '+p.age+' ans'+(p.club?' &#183; '+p.club:'')+'</div>'+
+    '<div class="b3" style="margin-bottom:12px">'+
+      '<div class="bi"><div class="bv" style="color:var(--g)">'+p.ov+'</div><div class="bl">Note</div></div>'+
+      '<div class="bi"><div class="bv" style="color:var(--yel)">'+p.rep+'</div><div class="bl">Notoriete</div></div>'+
+      '<div class="bi"><div class="bv">'+p.age+'</div><div class="bl">Age</div></div>'+
+    '</div>'+
+    '<div style="display:flex;justify-content:center;margin-bottom:6px">'+npcRadarSvg(p)+'</div>'+
+    relBlock+
+    '<button class="btn btn-g" style="margin-top:14px" onclick="closeNpcProfile()">FERMER</button>'+
+  '</div></div>';
+  document.getElementById('app').insertAdjacentHTML('beforeend',h);
+}
+
+function closeNpcProfile(){
+  var ov=document.getElementById('npcProfileOverlay');if(ov)ov.remove();
+}
+
+function rivalRelationLabel(){
+  var w=(G.riv&&G.riv.wins)||0,l=(G.riv&&G.riv.losses)||0;
+  if(w>l+2)return 'Tu domines cette rivalite';
+  if(l>w+2)return 'Il/elle te domine pour l\'instant';
+  return 'Rivalite equilibree';
+}
+
+function showRivalProfile(){
+  var r=G.riv;
+  if(!r)return;
+  var h='<div class="evt-overlay" id="npcProfileOverlay" onclick="if(event.target===this)closeNpcProfile()"><div class="evt-modal" style="max-width:320px">'+
+    '<div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#7a1414,#c0453a);display:flex;align-items:center;justify-content:center;font-family:Staatliches,sans-serif;font-size:20px;color:#fff;margin:0 auto 10px">'+r.ini+'</div>'+
+    '<div class="evt-title" style="margin-bottom:1px">'+r.n+'</div>'+
+    '<div style="font-size:11px;color:var(--t2);text-align:center;margin-bottom:12px">Ton rival</div>'+
+    '<div class="b3" style="margin-bottom:12px">'+
+      '<div class="bi"><div class="bv" style="color:var(--g)">'+(r.wins||0)+'</div><div class="bl">Tes V.</div></div>'+
+      '<div class="bi"><div class="bv" style="color:var(--yel)">'+(r.draws||0)+'</div><div class="bl">Nuls</div></div>'+
+      '<div class="bi"><div class="bv" style="color:var(--red)">'+(r.losses||0)+'</div><div class="bl">Ses V.</div></div>'+
+    '</div>'+
+    '<div style="display:flex;justify-content:center;margin-bottom:6px">'+npcRadarSvg(r)+'</div>'+
+    '<div class="card" style="margin-top:9px"><div class="slbl" style="margin:0 0 3px">Relation</div><div style="font-size:14px;font-weight:700;color:var(--red)">'+rivalRelationLabel()+'</div></div>'+
+    '<button class="btn btn-g" style="margin-top:14px" onclick="closeNpcProfile()">FERMER</button>'+
+  '</div></div>';
+  document.getElementById('app').insertAdjacentHTML('beforeend',h);
+}
+
 function pitchHtmlFor(squadData,meEntry){
-  function chip(p){return '<div class="pitchp'+(p.isPlayer?' me':'')+'"><div class="pitchp-badge">'+p.ov+'</div><div class="pitchp-nm">'+(p.isPlayer?'TOI':p.n.split(' ')[0])+'</div></div>';}
+  function chip(p){return '<div class="pitchp'+(p.isPlayer?' me':'')+'"'+(p.isPlayer?'':' onclick="showNpcProfile(\''+p.id+'\')" style="cursor:pointer"')+'><div class="pitchp-badge">'+p.ov+'</div><div class="pitchp-nm">'+(p.isPlayer?'TOI':p.n.split(' ')[0])+'</div></div>';}
   var rowGar=squadData.starters.filter(function(p){return p.p==='GAR';});
   var rowDef=squadData.starters.filter(function(p){return p.p==='DEF';});
   var rowMil=squadData.starters.filter(function(p){return p.p==='MDC'||p.p==='MIL';});
@@ -3132,6 +3253,11 @@ function doWeek(){
 
 function doWeekActual(trainPerf){
   G._liveMatchData=null;
+  if(G.squad){
+    (G.squad.starters||[]).concat(G.squad.bench||[]).forEach(function(p){
+      if(p.relation!=null&&Math.random()<0.5)p.relation=Math.min(100,p.relation+1);
+    });
+  }
   var t=seltrain;
   var fac=selInt==='leger'?0.5:selInt==='intense'?1.2:0.8;
   fac*=(typeof trainPerf==='number'?trainPerf:1);
@@ -3542,6 +3668,9 @@ function ageWorldPlayers(){
     else if(p.age<=29)delta=Math.floor(Math.random()*3)-1;
     else delta=-(1+Math.floor(Math.random()*3));
     p.ov=Math.max(15,Math.min(94,p.ov+delta));
+    var st=statsFromOv(p.ov,p.p);
+    p.vit=st.vit;p.tir=st.tir;p.phy=st.phy;p.men=st.men;p.tec=st.tec;
+    p.rep=Math.max(0,(p.rep==null?Math.round(p.ov*1.2):p.rep)+Math.round((p.ov-45)/10)+Math.floor(Math.random()*3)-1);
     var retireChance=p.age>=34?Math.min(0.6,(p.age-33)*0.15):0;
     if(p.age>=38||Math.random()<retireChance){
       var clubDef=findClubDef(p.club)||{l:2};
@@ -5971,14 +6100,14 @@ function renderClub(){
   else if(G.pos==='DEF')rowDef.push(me);
   else if(G.pos==='MDC'||G.pos==='MIL')rowMil.push(me);
   else rowAtt.push(me);
-  function chip(p){return '<div class="pitchp'+(p.isPlayer?' me':'')+'"><div class="pitchp-badge">'+p.ov+'</div><div class="pitchp-nm">'+(p.isPlayer?'TOI':p.n.split(' ')[0])+'</div></div>';}
+  function chip(p){return '<div class="pitchp'+(p.isPlayer?' me':'')+'"'+(p.isPlayer?'':' onclick="showNpcProfile(\''+p.id+'\')" style="cursor:pointer"')+'><div class="pitchp-badge">'+p.ov+'</div><div class="pitchp-nm">'+(p.isPlayer?'TOI':p.n.split(' ')[0])+'</div></div>';}
   var pitchHtml='<div class="pitch">'+
     '<div class="pitchrow">'+rowAtt.map(chip).join('')+'</div>'+
     '<div class="pitchrow">'+rowMil.map(chip).join('')+'</div>'+
     '<div class="pitchrow">'+rowDef.map(chip).join('')+'</div>'+
     '<div class="pitchrow">'+rowGar.map(chip).join('')+'</div>'+
   '</div>';
-  var benchHtml=(G.squad.bench||[]).map(function(p){return '<div class="sqrow"><div class="sqpos">'+p.p+'</div><div class="sqname">'+p.n+'</div><div class="sqov">'+p.ov+'</div></div>';}).join('');
+  var benchHtml=(G.squad.bench||[]).map(function(p){return '<div class="sqrow" onclick="showNpcProfile(\''+p.id+'\')" style="cursor:pointer"><div class="sqpos">'+p.p+'</div><div class="sqname">'+p.n+'</div><div class="sqov">'+p.ov+'</div></div>';}).join('');
   document.getElementById('clubsquad').innerHTML=pitchHtml+'<div class="slbl">Remplacants</div>'+benchHtml;
 }
 
