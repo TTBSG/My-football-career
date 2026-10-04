@@ -148,10 +148,10 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 .sg-atmo{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% -10%,rgba(47,158,92,.09) 0%,transparent 45%);z-index:0;}
 .tbar{position:relative;z-index:1;background:var(--bg2);border-bottom:2px solid var(--b);padding:11px 15px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .av{width:40px;height:40px;background:linear-gradient(135deg,var(--gd),var(--g));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Staatliches',sans-serif;font-size:16px;color:var(--bg);flex-shrink:0;}
-.tbar-mid{flex:1;margin:0 10px;}
+.tbar-mid{flex:1;margin:0 10px;min-width:0;}
 .tbar-name{font-weight:700;font-size:14px;line-height:1.2;}
 .tbar-sub{font-size:11px;color:var(--t2);}
-.tbar-quick{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:10px;color:var(--t3);flex-wrap:wrap;}
+.tbar-quick{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:10px;color:var(--t3);flex-wrap:nowrap;overflow:hidden;white-space:nowrap;}
 .tbar-quick b{color:var(--t);font-weight:700;font-family:'Share Tech Mono',monospace;}
 .tbar-right{text-align:right;}
 .tbar-s{font-family:'Staatliches',sans-serif;font-size:22px;color:var(--g);line-height:1;}
@@ -482,7 +482,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 /* MENU DEROULANT (style BitLife) */
 .menubtn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--b);border-radius:10px;font-size:17px;color:var(--g);cursor:pointer;flex-shrink:0;margin-left:8px;}
-.dropmenu{position:absolute;top:62px;right:14px;background:var(--card);border:1px solid var(--g);border-radius:14px;padding:7px;z-index:500;display:none;flex-direction:column;min-width:190px;box-shadow:0 14px 34px rgba(0,0,0,.55);}
+.dropmenu{position:absolute;top:70px;right:14px;background:var(--card);border:1px solid var(--g);border-radius:14px;padding:7px;z-index:500;display:none;flex-direction:column;min-width:190px;box-shadow:0 14px 34px rgba(0,0,0,.55);}
 .dropmenu.open{display:flex;}
 .dmitem{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;font-size:13px;font-weight:700;color:var(--t2);cursor:pointer;transition:all .15s;}
 .dmcat{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);padding:10px 12px 4px;}
@@ -1245,7 +1245,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=39;
+var APP_VERSION=40;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1313,7 +1313,8 @@ var CHANGELOG={
   36:{title:'Forme et Mental moins punitifs',items:['Une petite regeneration passive chaque semaine (+3 Forme, +2 Mental) vient compenser la fatigue normale','Les plus gros malus sont reduits : entrainement intense, defaite, banc de touche font moins mal qu\'avant','La mecanique reste la meme, mais geree sans discipline parfaite tu ne t\'effondres plus aussi vite']},
   37:{title:'Premier League : pars jouer en Angleterre',items:['18 clubs anglais prestigieux viennent s\'ajouter a la Ligue 1 et la Ligue 2','Une fois ta reputation assez haute, des offres anglaises apparaissent dans tes transferts','Pas de montee/descente avec l\'Angleterre : c\'est une destination de prestige a part, accessible via le marche des transferts']},
   38:{title:'Prets plus realistes',items:['Les destinations de pret proposees sont desormais de vrais clubs qui ont besoin de ton poste et peuvent se le permettre','Les clubs qui t\'ont deja manifeste de l\'interet (badge Interesse) sont prioritaires dans les propositions']},
-  39:{title:'Disponibilite de pret et option d\'achat',items:['Marche ferme ? Mets-toi en disponibilite de pret depuis l\'onglet Contrat pour attirer l\'interet des clubs compatibles en attendant l\'ouverture','Certains prets incluent desormais une option d\'achat : si tes perfs sont bonnes, le club peut te proposer de rester definitivement en fin de saison (a toi d\'accepter ou refuser)']}
+  39:{title:'Disponibilite de pret et option d\'achat',items:['Marche ferme ? Mets-toi en disponibilite de pret depuis l\'onglet Contrat pour attirer l\'interet des clubs compatibles en attendant l\'ouverture','Certains prets incluent desormais une option d\'achat : si tes perfs sont bonnes, le club peut te proposer de rester definitivement en fin de saison (a toi d\'accepter ou refuser)']},
+  40:{title:'Correctif affichage du menu',items:['Le menu deroulant pouvait recouvrir et rendre illisible le bas de ta fiche joueur (forme, argent) quand le texte etait un peu long','C\'est corrige : la fiche reste sur une ligne et le menu s\'ouvre proprement en dessous']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
