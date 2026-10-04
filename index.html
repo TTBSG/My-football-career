@@ -873,6 +873,8 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
         <div class="bi"><div class="bv" id="liguebudget" style="color:var(--yel);font-size:16px">-</div><div class="bl">Budget cumule</div></div>
         <div class="bi"><div class="bv" id="liguechamp" style="color:var(--t);font-size:11px">-</div><div class="bl">Champion en titre</div></div>
       </div>
+      <div class="slbl" style="margin:0 0 6px">Autres championnats</div>
+      <div id="otherLeaguesRow" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"></div>
       <div class="ligsubtabs">
         <div class="ligsubtab on" data-sub="classement" onclick="goLigueSub('classement',this)">Classement</div>
         <div class="ligsubtab" data-sub="calendrier" onclick="goLigueSub('calendrier',this)">Calendrier</div>
@@ -1245,7 +1247,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=42;
+var APP_VERSION=44;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1316,7 +1318,9 @@ var CHANGELOG={
   39:{title:'Disponibilite de pret et option d\'achat',items:['Marche ferme ? Mets-toi en disponibilite de pret depuis l\'onglet Contrat pour attirer l\'interet des clubs compatibles en attendant l\'ouverture','Certains prets incluent desormais une option d\'achat : si tes perfs sont bonnes, le club peut te proposer de rester definitivement en fin de saison (a toi d\'accepter ou refuser)']},
   40:{title:'Correctif affichage du menu',items:['Le menu deroulant pouvait recouvrir et rendre illisible le bas de ta fiche joueur (forme, argent) quand le texte etait un peu long','C\'est corrige : la fiche reste sur une ligne et le menu s\'ouvre proprement en dessous']},
   41:{title:'Vrai correctif du menu qui se superposait',items:['Le precedent correctif utilisait une position fixe qui ne marchait pas sur tous les appareils (polices, tailles d\'ecran)','Le menu calcule maintenant sa position directement depuis la vraie hauteur de ta fiche a chaque ouverture, donc ca marche partout']},
-  42:{title:'Correctif du flou en haut d\'ecran sur iOS',items:['Sur iPhone en app installee (ecran d\'accueil), iOS affichait l\'heure/batterie en transparence avec un effet de flou par-dessus le haut de ta fiche joueur','C\'etait un reglage iOS (barre de statut translucide), pas un bug d\'affichage du jeu - la barre est maintenant opaque et ne floute plus rien']}
+  42:{title:'Correctif du flou en haut d\'ecran sur iOS',items:['Sur iPhone en app installee (ecran d\'accueil), iOS affichait l\'heure/batterie en transparence avec un effet de flou par-dessus le haut de ta fiche joueur','C\'etait un reglage iOS (barre de statut translucide), pas un bug d\'affichage du jeu - la barre est maintenant opaque et ne floute plus rien']},
+  43:{title:'Consulte les autres championnats',items:['Depuis l\'onglet Ligue, tu peux maintenant consulter le classement simule de n\'importe quel autre championnat (Ligue 1, Ligue 2, Premier League)','Pratique pour suivre ou te situer avant un transfert vers un autre championnat']},
+  44:{title:'Centres de formation repenses',items:['5 centres au choix au lieu de 3, chacun avec une vraie philosophie (technique, physique, mentale ou equilibree) qui accelere la progression des stats correspondantes','Un indicateur de profil (ideal / bon / neutre) selon ton poste t\'aide a choisir','Vrai compromis : un centre prestigieux a plus de concurrence interne (donc moins de temps de jeu) mais t\'apporte un vrai bonus de reputation en passant pro']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -2030,10 +2034,26 @@ var STYLES=[
 ];
 var creationStep=1,selNation='FR',selStyle='bosseur',ALLOC_POOL=35,STAT_FLOOR=10,selAcademy=null;
 var alloc={vit:0,tir:0,phy:0,men:0,tec:0};
+var ACADEMY_PHILOSOPHIES={
+ equilibre:{label:'Formation equilibree',ico:'&#9878;',desc:'Developpement harmonieux de toutes tes qualites, sans priorite particuliere.',statBoost:{}},
+ technique:{label:'Formation technique',ico:'&#9917;',desc:'Priorite au ballon : technique et finition progressent plus vite ici.',statBoost:{tec:2}},
+ physique:{label:'Formation physique',ico:'&#128170;',desc:'Priorite au corps : vitesse et physique progressent plus vite ici.',statBoost:{phy:2}},
+ mental:{label:'Formation mentale',ico:'&#129504;',desc:'Priorite a la tete : mental et sang-froid progressent plus vite ici.',statBoost:{men:2}}
+};
+var ACADEMY_PHILO_KEYS={technique:['tec','tir'],physique:['phy','vit'],mental:['men'],equilibre:null};
+function academyFitLabel(philo,pos){
+  if(philo==='equilibre')return 'Polyvalent';
+  var keys=ACADEMY_PHILO_KEYS[philo];
+  var w=POS_WEIGHTS[pos]||POS_WEIGHTS.MIL;
+  var score=keys.reduce(function(s,k){return s+(w[k]||0);},0);
+  return score>=0.4?'Profil ideal':score>=0.25?'Bon profil':'Profil neutre';
+}
 var ACADEMIES=[
- {clubIdx:0,min:0,bonus:{}},
- {clubIdx:1,min:24,bonus:{tec:1,men:1}},
- {clubIdx:2,min:30,bonus:{vit:1,tir:1}}
+ {clubIdx:0,min:0,tier:0,philo:'equilibre'},
+ {clubIdx:1,min:16,tier:0,philo:'physique'},
+ {clubIdx:2,min:22,tier:1,philo:'technique'},
+ {clubIdx:3,min:28,tier:1,philo:'mental'},
+ {clubIdx:4,min:34,tier:2,philo:'equilibre'}
 ];
 
 function calcPeak(){
@@ -2331,9 +2351,12 @@ function showAcademies(){
   var h='';
   ACADEMIES.forEach(function(a,idx){
     var club=CLUBS[a.clubIdx];
+    var philo=ACADEMY_PHILOSOPHIES[a.philo];
     var locked=peak<a.min;
     var ysal=Math.max(150,Math.round(club.s*0.08));
-    h+='<div class="cof'+(locked?' locked':'')+'"'+(locked?'':' onclick="pickAcademy(this,'+idx+')"')+'><div class="cbadge" style="background:'+club.c+'33;border:2px solid '+club.c+'">'+club.e+'</div><div style="flex:1"><div class="cn">Centre de formation</div><div class="cl">'+club.n+'</div><div class="cs">'+(locked?'Niveau insuffisant (pic min '+a.min+')':ysal.toLocaleString()+' EUR/sem &#183; integration possible a 17 ans')+'</div></div></div>';
+    var fit=academyFitLabel(a.philo,selpos);
+    var tierLbl=a.tier>=2?'Centre prestigieux - concurrence rude, meilleure visibilite':a.tier===1?'Centre ambitieux - bon compromis':'Petit centre - temps de jeu garanti';
+    h+='<div class="cof'+(locked?' locked':'')+'"'+(locked?'':' onclick="pickAcademy(this,'+idx+')"')+'><div class="cbadge" style="background:'+club.c+'33;border:2px solid '+club.c+'">'+club.e+'</div><div style="flex:1"><div class="cn">'+club.n+'</div><div class="cl">'+philo.ico+' '+philo.label+' &#183; <span style="color:var(--g)">'+fit+'</span></div><div class="cs">'+(locked?'Niveau insuffisant (pic min '+a.min+')':philo.desc+' '+tierLbl+' &#183; '+ysal.toLocaleString()+' EUR/sem')+'</div></div></div>';
   });
   document.getElementById('acadoffers').innerHTML=h;
   document.getElementById('acadsub').textContent='Ton meilleur attribut: '+peak;
@@ -2347,7 +2370,8 @@ function pickAcademy(el,idx){
   el.classList.add('on');
   var a=ACADEMIES[idx];
   var club=CLUBS[a.clubIdx];
-  selAcademy={bonus:a.bonus,club:club,sal:Math.max(150,Math.round(club.s*0.08)),tier:idx};
+  var philo=ACADEMY_PHILOSOPHIES[a.philo];
+  selAcademy={bonus:philo.statBoost,club:club,sal:Math.max(150,Math.round(club.s*0.08)),tier:a.tier,philo:a.philo};
   document.getElementById('btnacad').disabled=false;
 }
 
@@ -2359,7 +2383,7 @@ function confirmAcademy(){
 function startGame(){
   var n=document.getElementById('iname').value.trim();
   if(!n){notif('Entre ton nom !','bad');creationStep=1;updateStepUI();return;}
-  if(!selAcademy){var c0=CLUBS[0];selAcademy={bonus:{},club:c0,sal:Math.max(150,Math.round(c0.s*0.08)),tier:0};}
+  if(!selAcademy){var c0=CLUBS[0];selAcademy={bonus:{},club:c0,sal:Math.max(150,Math.round(c0.s*0.08)),tier:0,philo:'equilibre'};}
   var rn=RIVALS[Math.floor(Math.random()*RIVALS.length)];
   var prof=POS_PROFILES[selpos];
   function stat(key){return Math.max(6,Math.min(60,STAT_FLOOR+prof[key]+alloc[key]+(selAcademy.bonus[key]||0)));}
@@ -2371,7 +2395,7 @@ function startGame(){
     rep:0,sem:1,sai:1,age:16,
     wins:0,draws:0,losses:0,twins:0,tsai:0,
     money:0,sal:selAcademy.sal,invrev:0,spend:0,
-    club:'Centre de formation - '+selAcademy.club.n,clvl:0,nclubs:1,inAcademy:true,academyClub:selAcademy.club,
+    club:'Centre de formation - '+selAcademy.club.n,clvl:0,nclubs:1,inAcademy:true,academyClub:selAcademy.club,academyPhilo:selAcademy.philo||'equilibre',academyTier:selAcademy.tier||0,
     riv:{n:rn,ini:rn.slice(0,2).toUpperCase(),vit:20,tir:20,phy:20,men:20,tec:20,wins:0,draws:0,losses:0,rep:0},
     rivlast:null,national:false,natcaps:0,injwk:0,
     balance:50,famille:'Celibataire',fambonus:0,
@@ -3329,6 +3353,11 @@ function doWeekActual(trainPerf){
   if(G.staff.indexOf('techcoach3')>=0&&(t==='tir'||t==='tec'))fac+=0.45;
   else if(G.staff.indexOf('techcoach2')>=0&&(t==='tir'||t==='tec'))fac+=0.30;
   else if(G.staff.indexOf('techcoach1')>=0&&(t==='tir'||t==='tec'))fac+=0.15;
+  if(G.inAcademy){
+    if(G.academyPhilo==='technique'&&(t==='tir'||t==='tec'))fac+=0.25;
+    else if(G.academyPhilo==='physique'&&(t==='vit'||t==='phy'))fac+=0.25;
+    else if(G.academyPhilo==='mental'&&t==='men')fac+=0.25;
+  }
   if(G.style==='prodige')fac+=0.12;
   if(G.style==='bosseur')fac+=0.08;
   if(G.style==='charismatique'&&t==='men')fac+=0.4;
@@ -5516,6 +5545,11 @@ function confirmAcademyGraduation(){
   G.contractYears=2+Math.floor(Math.random()*3);
   if(!G.transferHistory)G.transferHistory=[];
   G.transferHistory.push({sai:G.sai,club:G.club,sal:G.sal});
+  var prestigeBonus=(G.academyTier||0)*4;
+  if(prestigeBonus>0){
+    G.rep=(G.rep||0)+prestigeBonus;
+    addLog('La reputation de ton centre de formation te precede - +'+prestigeBonus+' Rep','transfer');
+  }
   addLog('Tu integres l\'equipe pro du '+c.n+' !','transfer',true);
   notif('Bienvenue chez les pros !');
   nextSeason();
@@ -6015,7 +6049,7 @@ function renderLigue(){
   var budget=CLUBS.reduce(function(a,c){return a+c.s*52;},0);
   document.getElementById('liguebudget').textContent=Math.round(budget/1000000)+'M EUR';
   document.getElementById('liguechamp').textContent=G.lastChampion||'Aucun';
-  if(!G.table){el.innerHTML='';if(elSub)elSub.textContent='-';return;}
+  if(!G.table){el.innerHTML='';if(elSub)elSub.textContent='-';renderOtherLeaguesRow();return;}
   if(elSub)elSub.innerHTML=CLUBS.length+' clubs &#183; saison '+G.sai;
   var sorted=G.table.map(function(t,i){return {i:i,n:t.n,pts:t.pts,w:t.w,d:t.d,l:t.l};}).sort(function(a,b){return b.pts-a.pts||b.w-a.w;});
   var h='';
@@ -6030,6 +6064,52 @@ function renderLigue(){
   });
   el.innerHTML=h;
   renderScorers();
+  renderOtherLeaguesRow();
+}
+
+var LEAGUE_DISPLAY_NAMES={L1:'Ligue 1',L2:'Ligue 2',ENG:'Premier League'};
+
+function clubsForLeagueId(id){
+  if(id==='ENG')return CLUBS_ENG;
+  if(id==='L2')return (G.l2Membership||CLUBS_L2_NAMES).map(findClubDef).filter(Boolean);
+  return (G.l1Membership||CLUBS_L1_NAMES).map(findClubDef).filter(Boolean);
+}
+
+function getOtherLeagueTable(id){
+  if(!G._otherLeagueTables)G._otherLeagueTables={};
+  var cached=G._otherLeagueTables[id];
+  if(cached&&cached.sai===G.sai)return cached.table;
+  var table=simulateFullSeasonBatch(clubsForLeagueId(id));
+  G._otherLeagueTables[id]={sai:G.sai,table:table};
+  return table;
+}
+
+function renderOtherLeaguesRow(){
+  var el=document.getElementById('otherLeaguesRow');
+  if(!el)return;
+  var others=G.inAcademy?['L1','L2','ENG']:['L1','L2','ENG'].filter(function(id){return id!==G.league;});
+  el.innerHTML=others.map(function(id){
+    return '<button class="btn btn-o" style="flex:1;min-width:100px;padding:9px 6px;font-size:11px" onclick="showOtherLeague(\''+id+'\')">'+LEAGUE_DISPLAY_NAMES[id]+'</button>';
+  }).join('');
+}
+
+function showOtherLeague(id){
+  var table=getOtherLeagueTable(id);
+  var rows=table.map(function(t,idx){
+    return '<div class="sqrow"><div class="sqpos">'+(idx+1)+'</div><div class="sqname">'+t.n+'</div><div class="sqov" style="color:var(--t2)">'+t.pts+'</div></div>';
+  }).join('');
+  var h='<div class="evt-overlay" id="otherLeagueOverlay"><div class="evt-modal" style="max-height:80vh;overflow-y:auto">'+
+    '<div class="evt-title" style="color:var(--yel)">'+LEAGUE_DISPLAY_NAMES[id]+'</div>'+
+    '<div class="evt-txt" style="margin-bottom:10px">Classement simule pour la saison '+G.sai+' ('+table.length+' clubs).</div>'+
+    rows+
+    '<button class="btn btn-g" style="margin-top:14px" onclick="closeOtherLeagueOverlay()">FERMER</button>'+
+  '</div></div>';
+  document.getElementById('app').insertAdjacentHTML('beforeend',h);
+}
+
+function closeOtherLeagueOverlay(){
+  var ov=document.getElementById('otherLeagueOverlay');
+  if(ov)ov.remove();
 }
 
 function renderScorers(){
