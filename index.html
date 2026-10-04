@@ -11,7 +11,7 @@
 
 <!-- iOS installable app support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="MFC">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
@@ -1245,7 +1245,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=41;
+var APP_VERSION=42;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1315,7 +1315,8 @@ var CHANGELOG={
   38:{title:'Prets plus realistes',items:['Les destinations de pret proposees sont desormais de vrais clubs qui ont besoin de ton poste et peuvent se le permettre','Les clubs qui t\'ont deja manifeste de l\'interet (badge Interesse) sont prioritaires dans les propositions']},
   39:{title:'Disponibilite de pret et option d\'achat',items:['Marche ferme ? Mets-toi en disponibilite de pret depuis l\'onglet Contrat pour attirer l\'interet des clubs compatibles en attendant l\'ouverture','Certains prets incluent desormais une option d\'achat : si tes perfs sont bonnes, le club peut te proposer de rester definitivement en fin de saison (a toi d\'accepter ou refuser)']},
   40:{title:'Correctif affichage du menu',items:['Le menu deroulant pouvait recouvrir et rendre illisible le bas de ta fiche joueur (forme, argent) quand le texte etait un peu long','C\'est corrige : la fiche reste sur une ligne et le menu s\'ouvre proprement en dessous']},
-  41:{title:'Vrai correctif du menu qui se superposait',items:['Le precedent correctif utilisait une position fixe qui ne marchait pas sur tous les appareils (polices, tailles d\'ecran)','Le menu calcule maintenant sa position directement depuis la vraie hauteur de ta fiche a chaque ouverture, donc ca marche partout']}
+  41:{title:'Vrai correctif du menu qui se superposait',items:['Le precedent correctif utilisait une position fixe qui ne marchait pas sur tous les appareils (polices, tailles d\'ecran)','Le menu calcule maintenant sa position directement depuis la vraie hauteur de ta fiche a chaque ouverture, donc ca marche partout']},
+  42:{title:'Correctif du flou en haut d\'ecran sur iOS',items:['Sur iPhone en app installee (ecran d\'accueil), iOS affichait l\'heure/batterie en transparence avec un effet de flou par-dessus le haut de ta fiche joueur','C\'etait un reglage iOS (barre de statut translucide), pas un bug d\'affichage du jeu - la barre est maintenant opaque et ne floute plus rien']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
