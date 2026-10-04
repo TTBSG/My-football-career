@@ -656,7 +656,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 <!-- CENTRES DE FORMATION -->
 <div id="sacad" class="screen">
   <div class="trh"><div class="trtitle">Centres de<br>Formation</div><div class="trsub" id="acadsub">Ils s'interessent a toi</div></div>
-  <div id="acadoffers"></div>
+  <div class="scroll"><div id="acadoffers"></div></div>
   <div class="trbtns">
     <button class="btn btn-o" onclick="show('si')">&#8592; RETOUR</button>
     <button class="btn btn-g" id="btnacad" onclick="confirmAcademy()" disabled>REJOINDRE CE CENTRE (16 ANS)</button>
@@ -1247,7 +1247,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=44;
+var APP_VERSION=46;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1320,7 +1320,9 @@ var CHANGELOG={
   41:{title:'Vrai correctif du menu qui se superposait',items:['Le precedent correctif utilisait une position fixe qui ne marchait pas sur tous les appareils (polices, tailles d\'ecran)','Le menu calcule maintenant sa position directement depuis la vraie hauteur de ta fiche a chaque ouverture, donc ca marche partout']},
   42:{title:'Correctif du flou en haut d\'ecran sur iOS',items:['Sur iPhone en app installee (ecran d\'accueil), iOS affichait l\'heure/batterie en transparence avec un effet de flou par-dessus le haut de ta fiche joueur','C\'etait un reglage iOS (barre de statut translucide), pas un bug d\'affichage du jeu - la barre est maintenant opaque et ne floute plus rien']},
   43:{title:'Consulte les autres championnats',items:['Depuis l\'onglet Ligue, tu peux maintenant consulter le classement simule de n\'importe quel autre championnat (Ligue 1, Ligue 2, Premier League)','Pratique pour suivre ou te situer avant un transfert vers un autre championnat']},
-  44:{title:'Centres de formation repenses',items:['5 centres au choix au lieu de 3, chacun avec une vraie philosophie (technique, physique, mentale ou equilibree) qui accelere la progression des stats correspondantes','Un indicateur de profil (ideal / bon / neutre) selon ton poste t\'aide a choisir','Vrai compromis : un centre prestigieux a plus de concurrence interne (donc moins de temps de jeu) mais t\'apporte un vrai bonus de reputation en passant pro']}
+  44:{title:'Centres de formation repenses',items:['5 centres au choix au lieu de 3, chacun avec une vraie philosophie (technique, physique, mentale ou equilibree) qui accelere la progression des stats correspondantes','Un indicateur de profil (ideal / bon / neutre) selon ton poste t\'aide a choisir','Vrai compromis : un centre prestigieux a plus de concurrence interne (donc moins de temps de jeu) mais t\'apporte un vrai bonus de reputation en passant pro']},
+  45:{title:'Centres de formation aleatoires',items:['Les 5 centres proposes a la creation sont maintenant tires au hasard parmi un plus grand nombre de clubs, avec des philosophies aleatoires','Chaque nouvelle partie propose une offre differente, au lieu des 3 memes clubs a chaque fois']},
+  46:{title:'Correctif ecran des centres de formation',items:['Avec 5 centres a afficher, le bouton pour rejoindre un centre pouvait se retrouver coupe en bas de l\'ecran','La liste defile maintenant correctement et les boutons restent toujours visibles en bas']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -2048,13 +2050,19 @@ function academyFitLabel(philo,pos){
   var score=keys.reduce(function(s,k){return s+(w[k]||0);},0);
   return score>=0.4?'Profil ideal':score>=0.25?'Bon profil':'Profil neutre';
 }
-var ACADEMIES=[
- {clubIdx:0,min:0,tier:0,philo:'equilibre'},
- {clubIdx:1,min:16,tier:0,philo:'physique'},
- {clubIdx:2,min:22,tier:1,philo:'technique'},
- {clubIdx:3,min:28,tier:1,philo:'mental'},
- {clubIdx:4,min:34,tier:2,philo:'equilibre'}
-];
+var ACADEMY_CANDIDATE_IDX=[0,1,2,3,4,5,6,7];
+var ACADEMY_MINS=[0,16,22,28,34];
+var ACADEMY_TIERS=[0,0,1,1,2];
+var ACADEMIES=[];
+function generateAcademies(){
+  var philoPool=['equilibre','technique','physique','mental'];
+  var shuffled=ACADEMY_CANDIDATE_IDX.slice().sort(function(){return Math.random()-0.5;});
+  var chosenIdx=shuffled.slice(0,5).sort(function(a,b){return CLUBS_L1[a].str-CLUBS_L1[b].str;});
+  ACADEMIES=chosenIdx.map(function(clubIdx,i){
+    return {clubIdx:clubIdx,min:ACADEMY_MINS[i],tier:ACADEMY_TIERS[i],philo:philoPool[Math.floor(Math.random()*philoPool.length)]};
+  });
+}
+generateAcademies();
 
 function calcPeak(){
   var prof=POS_PROFILES[selpos];
@@ -2347,6 +2355,7 @@ function updateStepUI(){
 }
 
 function showAcademies(){
+  generateAcademies();
   var peak=calcPeak();
   var h='';
   ACADEMIES.forEach(function(a,idx){
