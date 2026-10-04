@@ -1245,7 +1245,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=40;
+var APP_VERSION=41;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1314,7 +1314,8 @@ var CHANGELOG={
   37:{title:'Premier League : pars jouer en Angleterre',items:['18 clubs anglais prestigieux viennent s\'ajouter a la Ligue 1 et la Ligue 2','Une fois ta reputation assez haute, des offres anglaises apparaissent dans tes transferts','Pas de montee/descente avec l\'Angleterre : c\'est une destination de prestige a part, accessible via le marche des transferts']},
   38:{title:'Prets plus realistes',items:['Les destinations de pret proposees sont desormais de vrais clubs qui ont besoin de ton poste et peuvent se le permettre','Les clubs qui t\'ont deja manifeste de l\'interet (badge Interesse) sont prioritaires dans les propositions']},
   39:{title:'Disponibilite de pret et option d\'achat',items:['Marche ferme ? Mets-toi en disponibilite de pret depuis l\'onglet Contrat pour attirer l\'interet des clubs compatibles en attendant l\'ouverture','Certains prets incluent desormais une option d\'achat : si tes perfs sont bonnes, le club peut te proposer de rester definitivement en fin de saison (a toi d\'accepter ou refuser)']},
-  40:{title:'Correctif affichage du menu',items:['Le menu deroulant pouvait recouvrir et rendre illisible le bas de ta fiche joueur (forme, argent) quand le texte etait un peu long','C\'est corrige : la fiche reste sur une ligne et le menu s\'ouvre proprement en dessous']}
+  40:{title:'Correctif affichage du menu',items:['Le menu deroulant pouvait recouvrir et rendre illisible le bas de ta fiche joueur (forme, argent) quand le texte etait un peu long','C\'est corrige : la fiche reste sur une ligne et le menu s\'ouvre proprement en dessous']},
+  41:{title:'Vrai correctif du menu qui se superposait',items:['Le precedent correctif utilisait une position fixe qui ne marchait pas sur tous les appareils (polices, tailles d\'ecran)','Le menu calcule maintenant sa position directement depuis la vraie hauteur de ta fiche a chaque ouverture, donc ca marche partout']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -2435,7 +2436,16 @@ function goTab(tab,el){
 }
 
 function toggleMenu(){
-  document.getElementById('dropmenu').classList.toggle('open');
+  var dm=document.getElementById('dropmenu');
+  if(!dm.classList.contains('open')){
+    var tbar=document.querySelector('.tbar');
+    var app=document.getElementById('app');
+    if(tbar&&app){
+      var tbarBottom=tbar.getBoundingClientRect().bottom-app.getBoundingClientRect().top;
+      dm.style.top=Math.round(tbarBottom+6)+'px';
+    }
+  }
+  dm.classList.toggle('open');
 }
 
 function handleWeekBtn(){
