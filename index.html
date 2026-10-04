@@ -984,6 +984,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
   <div style="font-family:'Staatliches',sans-serif;font-size:48px;color:var(--yel);line-height:1" id="fnote">-</div>
   <div style="font-size:9px;color:var(--t2);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">Note de la saison /100</div>
   <div id="fpromrel" style="width:100%;margin-bottom:8px"></div>
+  <div id="fbuyoption" style="width:100%;margin-bottom:8px"></div>
   <div id="fawards" style="width:100%;margin-bottom:8px"></div>
   <div class="card" id="objresult" style="width:100%;margin-bottom:16px;text-align:left"></div>
   <button class="btn btn-g" onclick="goTransfer()" style="margin-bottom:8px">OFFRES DE TRANSFERT</button>
@@ -1244,7 +1245,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=36;
+var APP_VERSION=39;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1309,7 +1310,10 @@ var CHANGELOG={
   33:{title:'Fiches joueurs',items:['Clique sur un coequipier (titulaire ou remplacant) ou sur ton rival pour voir sa fiche : stats, notoriete et ta relation avec lui','La relation evolue naturellement au fil des semaines passees ensemble','Tous les joueurs du monde ont maintenant de vraies stats detaillees, pas juste une note globale']},
   34:{title:'Le coach t\'explique ses choix',items:['Plus de message generique quand tu es sur le banc : le coach t\'explique la vraie raison (forme, niveau du remplaçant, ou match tres serre)','Quand tu es titulaire, le coach t\'explique aussi pourquoi il te fait confiance']},
   35:{title:'Correctif transfert',items:['En changeant de club en fin de saison, tu retrouvais les memes coequipiers que dans ton ancien club : c\'est corrige, le nouveau club a maintenant son propre effectif']},
-  36:{title:'Forme et Mental moins punitifs',items:['Une petite regeneration passive chaque semaine (+3 Forme, +2 Mental) vient compenser la fatigue normale','Les plus gros malus sont reduits : entrainement intense, defaite, banc de touche font moins mal qu\'avant','La mecanique reste la meme, mais geree sans discipline parfaite tu ne t\'effondres plus aussi vite']}
+  36:{title:'Forme et Mental moins punitifs',items:['Une petite regeneration passive chaque semaine (+3 Forme, +2 Mental) vient compenser la fatigue normale','Les plus gros malus sont reduits : entrainement intense, defaite, banc de touche font moins mal qu\'avant','La mecanique reste la meme, mais geree sans discipline parfaite tu ne t\'effondres plus aussi vite']},
+  37:{title:'Premier League : pars jouer en Angleterre',items:['18 clubs anglais prestigieux viennent s\'ajouter a la Ligue 1 et la Ligue 2','Une fois ta reputation assez haute, des offres anglaises apparaissent dans tes transferts','Pas de montee/descente avec l\'Angleterre : c\'est une destination de prestige a part, accessible via le marche des transferts']},
+  38:{title:'Prets plus realistes',items:['Les destinations de pret proposees sont desormais de vrais clubs qui ont besoin de ton poste et peuvent se le permettre','Les clubs qui t\'ont deja manifeste de l\'interet (badge Interesse) sont prioritaires dans les propositions']},
+  39:{title:'Disponibilite de pret et option d\'achat',items:['Marche ferme ? Mets-toi en disponibilite de pret depuis l\'onglet Contrat pour attirer l\'interet des clubs compatibles en attendant l\'ouverture','Certains prets incluent desormais une option d\'achat : si tes perfs sont bonnes, le club peut te proposer de rester definitivement en fin de saison (a toi d\'accepter ou refuser)']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -1399,9 +1403,30 @@ var CLUBS_L2=[
   {n:'AS Caen',city:'Caen',l:2,s:4650,e:'[V9]',c:'#1565c0',m:30,str:29},
   {n:'FC Amiens',city:'Amiens',l:2,s:5100,e:'[W1]',c:'#2e7d32',m:35,str:30}
 ];
-var CLUBS_ALL=CLUBS_L1.concat(CLUBS_L2);
+var CLUBS_ENG=[
+  {n:'AFC Leeds',city:'Leeds',l:5,s:60000,e:'[Y1]',c:'#1d4289',m:650,str:78},
+  {n:'FC Burnley',city:'Burnley',l:5,s:66000,e:'[Y2]',c:'#6c1d45',m:675,str:79},
+  {n:'FC Wolverhampton',city:'Wolverhampton',l:5,s:73000,e:'[Y3]',c:'#fdb913',m:700,str:80},
+  {n:'AC Crystal',city:'Londres',l:5,s:82000,e:'[Y4]',c:'#1b458f',m:730,str:81},
+  {n:'AS Brighton',city:'Brighton',l:5,s:92000,e:'[Y5]',c:'#0057b8',m:760,str:82},
+  {n:'AC Everton',city:'Liverpool',l:5,s:104000,e:'[Y6]',c:'#003399',m:795,str:83},
+  {n:'US Fulham',city:'Londres',l:5,s:118000,e:'[Y7]',c:'#000000',m:830,str:84},
+  {n:'AFC Southampton',city:'Southampton',l:5,s:134000,e:'[Y8]',c:'#d71920',m:870,str:85},
+  {n:'FC Nottingham',city:'Nottingham',l:5,s:152000,e:'[Y9]',c:'#dd0000',m:910,str:86},
+  {n:'AS West Ham',city:'Londres',l:5,s:172000,e:'[Z1]',c:'#7a263a',m:955,str:87},
+  {n:'AC Newcastle',city:'Newcastle',l:5,s:195000,e:'[Z2]',c:'#241f20',m:1000,str:88},
+  {n:'FC Aston',city:'Birmingham',l:5,s:222000,e:'[Z3]',c:'#670e36',m:1050,str:89},
+  {n:'AS Leicester',city:'Leicester',l:5,s:252000,e:'[Z4]',c:'#003090',m:1100,str:90},
+  {n:'AFC Tottenham',city:'Londres',l:5,s:286000,e:'[Z5]',c:'#132257',m:1155,str:91},
+  {n:'AC Chelsea',city:'Londres',l:5,s:340000,e:'[Z6]',c:'#034694',m:1220,str:93},
+  {n:'FC Arsenal',city:'Londres',l:5,s:410000,e:'[Z7]',c:'#ef0107',m:1300,str:95},
+  {n:'AS Liverpool',city:'Liverpool',l:5,s:500000,e:'[Z8]',c:'#c8102e',m:1390,str:97},
+  {n:'AC Manchester',city:'Manchester',l:5,s:620000,e:'[Z9]',c:'#6cabdd',m:1500,str:99}
+];
+var CLUBS_ALL=CLUBS_L1.concat(CLUBS_L2).concat(CLUBS_ENG);
 var CLUBS_L1_NAMES=CLUBS_L1.map(function(c){return c.n;});
 var CLUBS_L2_NAMES=CLUBS_L2.map(function(c){return c.n;});
+var CLUBS_ENG_NAMES=CLUBS_ENG.map(function(c){return c.n;});
 var CLUBS=CLUBS_L1;
 
 function findClubDef(name){
@@ -1409,6 +1434,7 @@ function findClubDef(name){
 }
 
 function rebuildActiveClubs(){
+  if(G.league==='ENG'){CLUBS=CLUBS_ENG;return;}
   var names=(G.league==='L2'?(G.l2Membership||CLUBS_L2_NAMES):(G.l1Membership||CLUBS_L1_NAMES));
   CLUBS=names.map(findClubDef).filter(Boolean);
 }
@@ -1417,12 +1443,24 @@ function repairLeagueMembership(){
   var l1=(G.l1Membership||[]).filter(function(n,i,arr){return arr.indexOf(n)===i;});
   var l2=(G.l2Membership||[]).filter(function(n,i,arr){return arr.indexOf(n)===i;});
   l2=l2.filter(function(n){return l1.indexOf(n)<0;});
-  CLUBS_ALL.forEach(function(c){
+  CLUBS_L1.concat(CLUBS_L2).forEach(function(c){
     if(l1.indexOf(c.n)<0&&l2.indexOf(c.n)<0){
       if(CLUBS_L1_NAMES.indexOf(c.n)>=0)l1.push(c.n);else l2.push(c.n);
     }
   });
   G.l1Membership=l1;G.l2Membership=l2;
+}
+
+function leagueOfClubName(name){
+  if(CLUBS_ENG_NAMES.indexOf(name)>=0)return 'ENG';
+  if((G.l2Membership||CLUBS_L2_NAMES).indexOf(name)>=0)return 'L2';
+  return 'L1';
+}
+
+function foreignTransferCandidates(){
+  if(G.league==='L1')return CLUBS_ENG;
+  if(G.league==='ENG')return (G.l1Membership||CLUBS_L1_NAMES).map(findClubDef).filter(Boolean);
+  return [];
 }
 
 function verifyClubSync(){
@@ -1476,6 +1514,7 @@ function simulateFullSeasonBatch(clubs){
 }
 
 function computePromotionRelegation(){
+  if(G.league!=='L1'&&G.league!=='L2')return {relegated:[],promoted:[],playerMoved:null};
   var activeSorted=G.table.map(function(t){return {n:t.n,pts:t.pts};}).sort(function(a,b){return b.pts-a.pts;});
   var otherLeague=G.league==='L2'?'L1':'L2';
   var otherNames=(otherLeague==='L2'?(G.l2Membership||CLUBS_L2_NAMES):(G.l1Membership||CLUBS_L1_NAMES));
@@ -3259,6 +3298,7 @@ function doWeek(){
 
 function doWeekActual(trainPerf){
   G._liveMatchData=null;
+  accrueLoanListedInterest();
   if(G.squad){
     (G.squad.starters||[]).concat(G.squad.bench||[]).forEach(function(p){
       if(p.relation!=null&&Math.random()<0.5)p.relation=Math.min(100,p.relation+1);
@@ -3590,7 +3630,9 @@ function startLoan(loanClubIdx){
   if(G.loan||G.inAcademy)return;
   var loanClub=CLUBS[loanClubIdx];
   if(!loanClub||loanClubIdx===G.myClubIdx)return;
-  G.loan={parentClub:G.club,parentClvl:G.clvl,parentClubIdx:G.myClubIdx};
+  var loanInterest=(G.clubInterest&&G.clubInterest[loanClub.n])||0;
+  G.loan={parentClub:G.club,parentClvl:G.clvl,parentClubIdx:G.myClubIdx,buyOption:Math.random()<(loanInterest>=30?0.55:0.2)};
+  G.loanListed=false;
   G.club=loanClub.n;
   G.clvl=loanClub.l;
   G.myClubIdx=loanClubIdx;
@@ -3599,16 +3641,45 @@ function startLoan(loanClubIdx){
   updateStanding();
   G.recentMatches=[];
   G._loanCandidates=null;
-  notif('Pret confirme ! Direction '+loanClub.n+' jusqu\'a la fin de la saison.');
-  addLog('Parti en pret a '+loanClub.n+' (retour a '+G.loan.parentClub+' en fin de saison)','transfer',true);
+  notif('Pret confirme ! Direction '+loanClub.n+' jusqu\'a la fin de la saison.'+(G.loan.buyOption?' Ce pret inclut une option d\'achat.':''));
+  addLog('Parti en pret a '+loanClub.n+' (retour a '+G.loan.parentClub+' en fin de saison)'+(G.loan.buyOption?' - avec option d\'achat':''),'transfer',true);
   renderContrats();
   updateUI();
 }
 
+function loanCandidatePool(){
+  return CLUBS.map(function(c,idx){return {c:c,idx:idx};}).filter(function(x){
+    return x.idx!==G.myClubIdx&&clubCanAffordAndNeeds(x.c);
+  });
+}
+
+function setLoanListed(val){
+  G.loanListed=val;
+  notif(val?'Tu es maintenant en disponibilite de pret.':'Tu n\'es plus en disponibilite de pret.','neu');
+  renderContrats();
+}
+
+function accrueLoanListedInterest(){
+  if(!G.loanListed||G.loan||G.inAcademy)return;
+  if(!G.clubInterest)G.clubInterest={};
+  var pool=loanCandidatePool();
+  if(pool.length===0)return;
+  var picks=Math.min(3,pool.length);
+  for(var i=0;i<picks;i++){
+    var c=pool[Math.floor(Math.random()*pool.length)].c;
+    var cur=G.clubInterest[c.n]||0;
+    var gain=5+Math.floor(Math.random()*8);
+    G.clubInterest[c.n]=Math.min(100,cur+gain);
+  }
+}
+
 function pickLoanDestination(){
-  var candidates=CLUBS.map(function(c,idx){return {c:c,idx:idx};}).filter(function(x){return x.idx!==G.myClubIdx&&x.c.l<=G.clvl;});
-  if(candidates.length===0)candidates=CLUBS.map(function(c,idx){return {c:c,idx:idx};}).filter(function(x){return x.idx!==G.myClubIdx;});
-  return candidates[Math.floor(Math.random()*candidates.length)];
+  var pool=loanCandidatePool().filter(function(x){return x.c.l<=G.clvl;});
+  if(pool.length===0)pool=loanCandidatePool();
+  if(pool.length===0)pool=CLUBS.map(function(c,idx){return {c:c,idx:idx};}).filter(function(x){return x.idx!==G.myClubIdx;});
+  var interested=pool.filter(function(x){return G.clubInterest&&(G.clubInterest[x.c.n]||0)>=30;});
+  var finalPool=interested.length?interested:pool;
+  return finalPool[Math.floor(Math.random()*finalPool.length)];
 }
 
 function triggerLoanOfferEvent(){
@@ -3639,13 +3710,20 @@ function declineLoanOffer(){
 
 function openLoanRequest(){
   if(G.inAcademy||G.loan||!isTransferWindowOpen())return;
-  var candidates=CLUBS.map(function(c,idx){return {c:c,idx:idx};}).filter(function(x){return x.idx!==G.myClubIdx;});
-  candidates.sort(function(a,b){return a.c.l-b.c.l;});
-  var pool=candidates.slice(0,7);
+  var pool=loanCandidatePool().filter(function(x){return x.c.l<=G.clvl;});
+  if(pool.length<3)pool=loanCandidatePool();
+  if(pool.length<3)pool=CLUBS.map(function(c,idx){return {c:c,idx:idx};}).filter(function(x){return x.idx!==G.myClubIdx;});
+  pool.sort(function(a,b){
+    var ia=(G.clubInterest&&G.clubInterest[a.c.n])||0;
+    var ib=(G.clubInterest&&G.clubInterest[b.c.n])||0;
+    if(ib!==ia)return ib-ia;
+    return a.c.l-b.c.l;
+  });
+  var top=pool.slice(0,7);
   var chosen=[];
-  while(chosen.length<3&&pool.length){
-    var i=Math.floor(Math.random()*pool.length);
-    chosen.push(pool.splice(i,1)[0]);
+  while(chosen.length<3&&top.length){
+    var i=Math.floor(Math.random()*top.length);
+    chosen.push(top.splice(i,1)[0]);
   }
   G._loanCandidates=chosen;
   renderContrats();
@@ -5139,6 +5217,17 @@ function showFin(){
       promBox.innerHTML='';
     }
   }
+  G._loanBuyOffer=null;
+  var buyBox=document.getElementById('fbuyoption');
+  if(buyBox){
+    if(!G.inAcademy&&G.loan&&G.loan.buyOption&&Math.random()<Math.min(0.9,Math.max(0.15,note/100))){
+      var buyPrice=Math.round(computeMarketValue()*0.85);
+      G._loanBuyOffer={club:G.club,parentClub:G.loan.parentClub,price:buyPrice};
+      buyBox.innerHTML='<div class="card" style="margin-bottom:11px;border-color:var(--g)"><div style="font-weight:700;color:var(--g);font-size:13px;margin-bottom:3px">&#9989; OPTION D\'ACHAT</div><div style="font-size:11px;color:var(--t2);margin-bottom:10px">'+G.club+' veut lever l\'option d\'achat pour <b style="color:var(--t)">'+buyPrice.toLocaleString()+' EUR</b> et te garder definitivement, au lieu de te renvoyer a '+G.loan.parentClub+'.</div><button class="btn btn-g" style="margin-bottom:7px" onclick="acceptBuyOption()">LEVER L\'OPTION D\'ACHAT</button><button class="btn btn-o" onclick="declineBuyOption()">REFUSER, RETOUR A '+G.loan.parentClub.toUpperCase()+'</button></div>';
+    }else{
+      buyBox.innerHTML='';
+    }
+  }
   if(!G.seasonHistory)G.seasonHistory=[];
   G.seasonHistory.push({
     season:G.sai,age:G.age,club:G.club,inAcademy:!!G.inAcademy,
@@ -5155,7 +5244,7 @@ function showFin(){
 function updateClubInterest(won){
   if(!G.clubInterest)G.clubInterest={};
   var excludeName=G.inAcademy?G.academyClub.n:G.club;
-  var eligible=CLUBS.filter(function(c){return c.m<=G.rep+80&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
+  var eligible=CLUBS.concat(foreignTransferCandidates()).filter(function(c){return c.m<=G.rep+80&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
   if(eligible.length===0)return;
   var picks=Math.min(3,eligible.length);
   for(var i=0;i<picks;i++){
@@ -5169,7 +5258,7 @@ function updateClubInterest(won){
 }
 
 function startNegotiation(clubName){
-  var club=CLUBS.filter(function(c){return c.n===clubName;})[0];
+  var club=CLUBS_ALL.filter(function(c){return c.n===clubName;})[0];
   if(!club)return;
   if(!G.negotiationAttempts)G.negotiationAttempts={};
   if(!G.negotiations)G.negotiations={};
@@ -5182,7 +5271,7 @@ function startNegotiation(clubName){
 
 function negoCounter(clubName,askPercent){
   var neg=G.negotiations&&G.negotiations[clubName];
-  var club=CLUBS.filter(function(c){return c.n===clubName;})[0];
+  var club=CLUBS_ALL.filter(function(c){return c.n===clubName;})[0];
   if(!neg||!club)return;
   var interest=(G.clubInterest&&G.clubInterest[clubName])||0;
   var askedAmount=Math.round(neg.offer*(1+askPercent/100));
@@ -5209,7 +5298,7 @@ function negoCounter(clubName,askPercent){
 
 function negoAccept(clubName){
   var neg=G.negotiations&&G.negotiations[clubName];
-  var club=CLUBS.filter(function(c){return c.n===clubName;})[0];
+  var club=CLUBS_ALL.filter(function(c){return c.n===clubName;})[0];
   if(!neg||!club)return;
   if(!G.negotiatedOffers)G.negotiatedOffers=[];
   G.negotiatedOffers.push({n:club.n,s:neg.offer,l:club.l,y:neg.years});
@@ -5248,7 +5337,7 @@ function openWinterTransfer(){
 
 function goTransfer(){
   var excludeName=G.inAcademy?G.academyClub.n:G.club;
-  var avail=CLUBS.filter(function(c){return c.m<=G.rep&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
+  var avail=CLUBS.concat(foreignTransferCandidates()).filter(function(c){return c.m<=G.rep&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
   var negotiatedNames=(G.negotiatedOffers||[]).map(function(o){return o.n;});
   var priority=avail.filter(function(c){
     var playerInt=G.interestedClubs&&G.interestedClubs.indexOf(c.n)>=0;
@@ -5270,7 +5359,7 @@ function goTransfer(){
   document.getElementById('btnstay').textContent=G.transferMode==='winter'?'FERMER LE MERCATO':'RESTER AU CLUB';
   var h='';
   (G.negotiatedOffers||[]).forEach(function(o){
-    var club=CLUBS.filter(function(c){return c.n===o.n;})[0]||{c:'#4a4a4a',e:'[?]'};
+    var club=CLUBS_ALL.filter(function(c){return c.n===o.n;})[0]||{c:'#4a4a4a',e:'[?]'};
     var sal=agentBoost?Math.round(o.s*agentMult):o.s;
     h+='<div class="cof" style="border-color:var(--g)" onclick="pickClub(this,\''+o.n+'\','+sal+','+o.l+','+o.y+')"><div class="cbadge" style="background:'+club.c+'33;border:2px solid '+club.c+'">'+club.e+'</div><div style="flex:1"><div class="cn">'+o.n+' &#10003;</div><div class="cl" style="color:var(--g)">Offre negociee &#183; '+o.y+' an'+(o.y>1?'s':'')+'</div><div class="cs">'+sal.toLocaleString()+' EUR/sem</div></div><div class="cstar">'+('*'.repeat(o.l))+'</div></div>';
   });
@@ -5303,6 +5392,9 @@ function confirmTransfer(){
   G.club=selclub.n;G.sal=selclub.s;G.clvl=selclub.l;
   G.inAcademy=false;
   G.loan=null;
+  var destLeague=leagueOfClubName(selclub.n);
+  var leagueChanged=destLeague!==G.league;
+  if(leagueChanged){G.league=destLeague;rebuildActiveClubs();}
   if(isNew&&G.clubInterest)delete G.clubInterest[selclub.n];
   if(isNew){
     G.contractYears=selclub.y||(2+Math.floor(Math.random()*3));
@@ -5326,8 +5418,8 @@ function confirmTransfer(){
       rebuildCalendarFrom(CLUBS.findIndex(function(c){return c.n===G.club;}),G.sem-1);
       G.myClubIdx=CLUBS.findIndex(function(c){return c.n===G.club;});
       updateStanding();
-      notif('Transfert hivernal vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
-      addLog('Transfert hivernal vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
+      notif(destLeague==='ENG'?'Transfert hivernal vers '+G.club+' - direction la Premier League !':'Transfert hivernal vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
+      addLog(destLeague==='ENG'?'Transfert hivernal vers '+G.club+' en Premier League'+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''):'Transfert hivernal vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
     }
     show('sg');updateUI();
     return;
@@ -5336,8 +5428,8 @@ function confirmTransfer(){
     G.squad=genSquad();
     G.recentMatches=[];
   }
-  notif(wasAcademy?'Tu quittes le centre de formation pour rejoindre '+G.club+' !':'Transfert vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
-  if(isNew)addLog(wasAcademy?'Fin de ta formation - tu rejoins l\'equipe pro de '+G.club+' !':'Transfert vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
+  notif(wasAcademy?'Tu quittes le centre de formation pour rejoindre '+G.club+' !':destLeague==='ENG'?'Transfert vers '+G.club+' - direction la Premier League !':'Transfert vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
+  if(isNew)addLog(wasAcademy?'Fin de ta formation - tu rejoins l\'equipe pro de '+G.club+' !':destLeague==='ENG'?'Transfert vers '+G.club+' en Premier League'+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''):'Transfert vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
   nextSeason();
 }
 
@@ -5361,6 +5453,31 @@ function resterClub(){
     addLog('Contrat expire sans negociation - accord minimal impose ('+G.sal.toLocaleString()+' EUR/sem, 1 an, -'+cut+'%)','injury');
   }
   nextSeason();
+}
+
+function acceptBuyOption(){
+  var offer=G._loanBuyOffer;
+  if(!offer||!G.loan)return;
+  if(!G.clubBudgets)G.clubBudgets={};
+  G.clubBudgets[offer.club]=Math.max(0,(G.clubBudgets[offer.club]||0)-offer.price);
+  G.clubBudgets[offer.parentClub]=(G.clubBudgets[offer.parentClub]||0)+offer.price;
+  G.nclubs++;
+  G.contractYears=2+Math.floor(Math.random()*3);
+  if(!G.transferHistory)G.transferHistory=[];
+  G.transferHistory.push({sai:G.sai,club:G.club,sal:G.sal,fee:offer.price});
+  if(G.clubInterest)delete G.clubInterest[offer.club];
+  G.loan=null;
+  G._loanBuyOffer=null;
+  notif('Option d\'achat levee ! Tu restes a '+offer.club+' definitivement pour '+offer.price.toLocaleString()+' EUR.');
+  addLog('Option d\'achat levee par '+offer.club+' - indemnite '+offer.price.toLocaleString()+' EUR versee a '+offer.parentClub,'transfer',true);
+  nextSeason();
+}
+
+function declineBuyOption(){
+  G._loanBuyOffer=null;
+  var buyBox=document.getElementById('fbuyoption');
+  if(buyBox)buyBox.innerHTML='';
+  notif('Tu refuses l\'option d\'achat.','neu');
 }
 
 function showAcademyGraduation(){
@@ -5765,7 +5882,7 @@ function normalizeG(g){
   if(typeof g.objFails!=='number')g.objFails=0;
   if(!g.objective)g.objective=null;
   if(!g.fixtures||!g.table||typeof g.myClubIdx!=='number'){g.fixtures=null;g.table=null;g.myClubIdx=-1;}
-  if(g.league!=='L1'&&g.league!=='L2')g.league='L1';
+  if(g.league!=='L1'&&g.league!=='L2'&&g.league!=='ENG')g.league='L1';
   if(!g.l1Membership)g.l1Membership=CLUBS_L1_NAMES.slice();
   if(!g.l2Membership)g.l2Membership=CLUBS_L2_NAMES.slice();
   if(typeof g.clubStanding!=='number')g.clubStanding=18;
@@ -5878,8 +5995,8 @@ function renderLigue(){
   var avgStr=CLUBS.reduce(function(a,c){return a+c.str;},0)/CLUBS.length;
   var maxStr=Math.max.apply(null,CLUBS.map(function(c){return c.str;}));
   var ligueRep=Math.round(avgStr/maxStr*100);
-  document.getElementById('liguename').textContent=G.inAcademy?'Championnat Jeunes':(G.league==='L2'?'Ligue 2':'Ligue 1');
-  document.getElementById('liguedesc').textContent=G.inAcademy?'Championnat reserve aux centres de formation. Fais tes preuves avant de rejoindre l\'equipe pro.':(G.league==='L2'?'Deuxieme division. Les 2 premiers montent en Ligue 1 en fin de saison.':'Elite du football national, '+CLUBS.length+' clubs. Les 2 derniers descendent en Ligue 2 en fin de saison.');
+  document.getElementById('liguename').textContent=G.inAcademy?'Championnat Jeunes':(G.league==='ENG'?'Premier League':G.league==='L2'?'Ligue 2':'Ligue 1');
+  document.getElementById('liguedesc').textContent=G.inAcademy?'Championnat reserve aux centres de formation. Fais tes preuves avant de rejoindre l\'equipe pro.':(G.league==='ENG'?'Elite du football anglais, '+CLUBS.length+' clubs parmi les plus prestigieux du monde.':G.league==='L2'?'Deuxieme division. Les 2 premiers montent en Ligue 1 en fin de saison.':'Elite du football national, '+CLUBS.length+' clubs. Les 2 derniers descendent en Ligue 2 en fin de saison.');
   document.getElementById('liguerepbar').style.width=ligueRep+'%';
   document.getElementById('liguerepval').textContent=ligueRep+'/100';
   document.getElementById('ligueclubs').textContent=CLUBS.length;
@@ -5959,18 +6076,23 @@ function renderContrats(){
   if(G.inAcademy){
     loanBox.innerHTML='';
   }else if(G.loan){
-    loanBox.innerHTML='<div class="card" style="margin-bottom:11px;border-color:var(--yel)"><div class="slbl" style="margin:0 0 5px">Statut</div><div style="font-size:12px;color:var(--t2);line-height:1.5">En pret depuis <b style="color:var(--t)">'+G.loan.parentClub+'</b>. Retour automatique en fin de saison.</div></div>';
+    loanBox.innerHTML='<div class="card" style="margin-bottom:11px;border-color:var(--yel)"><div class="slbl" style="margin:0 0 5px">Statut</div><div style="font-size:12px;color:var(--t2);line-height:1.5">En pret depuis <b style="color:var(--t)">'+G.loan.parentClub+'</b>. Retour automatique en fin de saison.'+(G.loan.buyOption?' <b style="color:var(--g)">Ce pret inclut une option d\'achat.</b>':'')+'</div></div>';
   }else if(G._loanCandidates){
     var lh='<div class="card" style="margin-bottom:11px"><div class="slbl" style="margin:0 0 5px">Choisis ta destination</div>';
     G._loanCandidates.forEach(function(x){
-      lh+='<div class="cof" style="margin:0 0 7px" onclick="startLoan('+x.idx+')"><div class="cbadge" style="background:'+x.c.c+'33;border:2px solid '+x.c.c+'">'+x.c.e+'</div><div style="flex:1"><div class="cn">'+x.c.n+'</div><div class="cl">Niveau '+x.c.l+'</div></div></div>';
+      var interestLvl=(G.clubInterest&&G.clubInterest[x.c.n])||0;
+      var loanBadge=interestLvl>=30?' &#128269; Interesse':'';
+      lh+='<div class="cof" style="margin:0 0 7px" onclick="startLoan('+x.idx+')"><div class="cbadge" style="background:'+x.c.c+'33;border:2px solid '+x.c.c+'">'+x.c.e+'</div><div style="flex:1"><div class="cn">'+x.c.n+'</div><div class="cl">Niveau '+x.c.l+loanBadge+'</div></div></div>';
     });
     lh+='<button class="btn btn-o" onclick="G._loanCandidates=null;renderContrats();">ANNULER</button></div>';
     loanBox.innerHTML=lh;
   }else if(isTransferWindowOpen()){
     loanBox.innerHTML='<div class="card" style="margin-bottom:11px"><div class="slbl" style="margin:0 0 5px">Pret</div><div style="font-size:12px;color:var(--t2);margin-bottom:10px">Pas assez de temps de jeu ? Demande a etre prete ailleurs jusqu\'a la fin de la saison.</div><button class="btn btn-o" onclick="openLoanRequest()">DEMANDER UN PRET</button></div>';
   }else{
-    loanBox.innerHTML='<div class="card" style="margin-bottom:11px"><div class="slbl" style="margin:0 0 5px">Pret</div><div style="font-size:12px;color:var(--t2)">Fenetre de transfert fermee. Prochaine ouverture: '+nextWindowLabel()+'.</div></div>';
+    var listedHtml=G.loanListed
+      ?'<div style="font-size:12px;color:var(--g);margin-bottom:10px">Tu es en disponibilite de pret : les clubs qui ont besoin de ton poste s\'interessent a toi plus vite en attendant l\'ouverture.</div><button class="btn btn-o" onclick="setLoanListed(false)">RETIRER DE LA LISTE</button>'
+      :'<div style="font-size:12px;color:var(--t2);margin-bottom:10px">Fenetre de transfert fermee. Prochaine ouverture: '+nextWindowLabel()+'.</div><button class="btn btn-o" onclick="setLoanListed(true)">SE METTRE EN DISPONIBILITE DE PRET</button>';
+    loanBox.innerHTML='<div class="card" style="margin-bottom:11px"><div class="slbl" style="margin:0 0 5px">Pret</div>'+listedHtml+'</div>';
   }
   var negoBox=document.getElementById('ctrNegoBox');
   if(G.inAcademy){
