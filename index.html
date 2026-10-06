@@ -1247,7 +1247,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--t);display:flex;justify-conten
 
 </div>
 <script>
-var APP_VERSION=46;
+var APP_VERSION=53;
 (function(){
   function setAppHeight(){
     var h=(window.visualViewport?window.visualViewport.height:window.innerHeight);
@@ -1322,7 +1322,14 @@ var CHANGELOG={
   43:{title:'Consulte les autres championnats',items:['Depuis l\'onglet Ligue, tu peux maintenant consulter le classement simule de n\'importe quel autre championnat (Ligue 1, Ligue 2, Premier League)','Pratique pour suivre ou te situer avant un transfert vers un autre championnat']},
   44:{title:'Centres de formation repenses',items:['5 centres au choix au lieu de 3, chacun avec une vraie philosophie (technique, physique, mentale ou equilibree) qui accelere la progression des stats correspondantes','Un indicateur de profil (ideal / bon / neutre) selon ton poste t\'aide a choisir','Vrai compromis : un centre prestigieux a plus de concurrence interne (donc moins de temps de jeu) mais t\'apporte un vrai bonus de reputation en passant pro']},
   45:{title:'Centres de formation aleatoires',items:['Les 5 centres proposes a la creation sont maintenant tires au hasard parmi un plus grand nombre de clubs, avec des philosophies aleatoires','Chaque nouvelle partie propose une offre differente, au lieu des 3 memes clubs a chaque fois']},
-  46:{title:'Correctif ecran des centres de formation',items:['Avec 5 centres a afficher, le bouton pour rejoindre un centre pouvait se retrouver coupe en bas de l\'ecran','La liste defile maintenant correctement et les boutons restent toujours visibles en bas']}
+  46:{title:'Correctif ecran des centres de formation',items:['Avec 5 centres a afficher, le bouton pour rejoindre un centre pouvait se retrouver coupe en bas de l\'ecran','La liste defile maintenant correctement et les boutons restent toujours visibles en bas']},
+  47:{title:'Championship : la 2e division anglaise',items:['18 nouveaux clubs anglais rejoignent la Premier League pour former une vraie deuxieme division','Promotion et relegation automatiques entre les deux, comme pour Ligue 1 et Ligue 2','Accessible directement depuis la France des que ta reputation est suffisante - un bon tremplin avant la Premier League']},
+  48:{title:'L\'Espagne rejoint le jeu',items:['La Liga et sa deuxieme division arrivent avec 36 nouveaux clubs espagnols','Meme systeme que partout ailleurs : promotion/relegation automatique, transferts internationaux bases sur ta reputation','Le systeme de championnats a ete repense pour accueillir plus facilement de nouveaux pays a l\'avenir']},
+  49:{title:'Le potentiel compte, pas seulement la reputation',items:['Un jeune joueur tres prometteur peut desormais interesser des clubs (y compris a l\'etranger) avant meme d\'avoir construit sa reputation en pro','Plus tu es jeune et doue, plus ton "potentiel" pese dans la balance - cet effet s\'estompe avec l\'age, place alors a la vraie reputation']},
+  50:{title:'L\'Italie rejoint le jeu',items:['La Serie A et la Serie B arrivent avec 36 nouveaux clubs italiens','Meme systeme que les autres championnats etrangers : promotion/relegation, transferts bases sur ta reputation et ton potentiel']},
+  51:{title:'Les 5 grands championnats sont au complet',items:['La Bundesliga et la 2. Bundesliga rejoignent le jeu avec 36 nouveaux clubs allemands','France, Angleterre, Espagne, Italie, Allemagne : 180 clubs au total repartis sur 10 championnats avec promotion/relegation','Toute une carriere internationale a batir, du centre de formation jusqu\'aux plus grands clubs d\'Europe']},
+  52:{title:'Des noms de joueurs coherents par pays',items:['Chaque pays a maintenant ses propres prenoms et noms de famille (anglais, espagnols, italiens, allemands) au lieu d\'un seul pool francais partage par tout le monde','Garantie anti-doublon : deux joueurs ne portent plus jamais exactement le meme nom, nulle part dans le monde du jeu']},
+  53:{title:'Des effectifs multinationaux, comme dans la vraie vie',items:['Les clubs comptent desormais une part de joueurs etrangers, avec leur nom et leur nationalite d\'origine','Plus marque dans l\'elite (jusqu\'a 35% d\'etrangers) que dans les divisions inferieures (15%), comme dans le vrai football']}
 };
 function showChangelog(fromV,toV){
   var versions=[];
@@ -1432,10 +1439,186 @@ var CLUBS_ENG=[
   {n:'AS Liverpool',city:'Liverpool',l:5,s:500000,e:'[Z8]',c:'#c8102e',m:1390,str:97},
   {n:'AC Manchester',city:'Manchester',l:5,s:620000,e:'[Z9]',c:'#6cabdd',m:1500,str:99}
 ];
-var CLUBS_ALL=CLUBS_L1.concat(CLUBS_L2).concat(CLUBS_ENG);
+var CLUBS_ENG2=[
+  {n:'AC Plymouth',city:'Plymouth',l:4,s:12000,e:'[K1]',c:'#1b5e20',m:250,str:50},
+  {n:'FC Preston',city:'Preston',l:4,s:14500,e:'[K2]',c:'#1f4e8c',m:270,str:52},
+  {n:'AS Luton',city:'Luton',l:4,s:17000,e:'[K3]',c:'#f68712',m:295,str:54},
+  {n:'AC Huddersfield',city:'Huddersfield',l:4,s:19500,e:'[K4]',c:'#0066b3',m:320,str:56},
+  {n:'FC Blackburn',city:'Blackburn',l:4,s:22000,e:'[K5]',c:'#009ee0',m:345,str:58},
+  {n:'AS Millwall',city:'Londres',l:4,s:25000,e:'[K6]',c:'#1b2a4a',m:370,str:60},
+  {n:'AC Coventry',city:'Coventry',l:4,s:28000,e:'[K7]',c:'#62cbf5',m:395,str:62},
+  {n:'FC Swansea',city:'Swansea',l:4,s:31000,e:'[K8]',c:'#000000',m:420,str:63},
+  {n:'AS Cardiff',city:'Cardiff',l:4,s:34000,e:'[K9]',c:'#0070b5',m:445,str:65},
+  {n:'AC Hull',city:'Hull',l:4,s:37000,e:'[L1]',c:'#f18a00',m:470,str:66},
+  {n:'FC Bristol',city:'Bristol',l:4,s:40000,e:'[L2]',c:'#e2231a',m:495,str:67},
+  {n:'AS Norwich',city:'Norwich',l:4,s:43000,e:'[L3]',c:'#00a650',m:520,str:69},
+  {n:'AC Watford',city:'Watford',l:4,s:46000,e:'[L4]',c:'#fbee23',m:540,str:70},
+  {n:'FC Stoke',city:'Stoke',l:4,s:49000,e:'[L5]',c:'#e03a3e',m:560,str:71},
+  {n:'AS Birmingham',city:'Birmingham',l:4,s:51000,e:'[L6]',c:'#0054a6',m:580,str:73},
+  {n:'AC Middlesbrough',city:'Middlesbrough',l:4,s:52500,e:'[L7]',c:'#e2231a',m:595,str:74},
+  {n:'FC Sheffield',city:'Sheffield',l:4,s:54000,e:'[L8]',c:'#ee2737',m:610,str:75},
+  {n:'AS Sunderland',city:'Sunderland',l:4,s:55000,e:'[L9]',c:'#eb172b',m:620,str:77}
+];
+var CLUBS_ESP=[
+  {n:'AC Alaves',city:'Vitoria',l:5,s:55000,e:'[M1]',c:'#1e4d91',m:600,str:76},
+  {n:'AS Las Palmas',city:'Las Palmas',l:5,s:66000,e:'[M2]',c:'#ffd400',m:630,str:78},
+  {n:'FC Mallorca',city:'Palma',l:5,s:78000,e:'[M3]',c:'#c8102e',m:660,str:79},
+  {n:'AC Osasuna',city:'Pampelune',l:5,s:90000,e:'[M4]',c:'#d81920',m:695,str:80},
+  {n:'FC Getafe',city:'Getafe',l:5,s:105000,e:'[M5]',c:'#005ba4',m:730,str:81},
+  {n:'AS Valladolid',city:'Valladolid',l:5,s:120000,e:'[M6]',c:'#6f1b3c',m:765,str:82},
+  {n:'AC Girona',city:'Girone',l:5,s:138000,e:'[M7]',c:'#cc0000',m:800,str:83},
+  {n:'FC Celta',city:'Vigo',l:5,s:158000,e:'[M8]',c:'#8ac6e8',m:840,str:85},
+  {n:'AS Vallecano',city:'Madrid',l:5,s:180000,e:'[M9]',c:'#e2231a',m:880,str:86},
+  {n:'AC Valencia',city:'Valence',l:5,s:205000,e:'[N1]',c:'#ee8f00',m:920,str:88},
+  {n:'FC Bilbao',city:'Bilbao',l:5,s:232000,e:'[N2]',c:'#e2231a',m:965,str:89},
+  {n:'AS Sociedad',city:'Saint-Sebastien',l:5,s:262000,e:'[N3]',c:'#0067b1',m:1010,str:90},
+  {n:'AC Villarreal',city:'Villarreal',l:5,s:295000,e:'[N4]',c:'#ffe600',m:1060,str:91},
+  {n:'FC Sevilla',city:'Seville',l:5,s:330000,e:'[N5]',c:'#d81920',m:1120,str:93},
+  {n:'AS Betis',city:'Seville',l:5,s:370000,e:'[N6]',c:'#00954c',m:1190,str:94},
+  {n:'AC Atletico',city:'Madrid',l:5,s:415000,e:'[N7]',c:'#c8102e',m:1260,str:96},
+  {n:'FC Barcelona',city:'Barcelone',l:5,s:470000,e:'[N8]',c:'#a50044',m:1340,str:97},
+  {n:'AS Madrid',city:'Madrid',l:5,s:560000,e:'[N9]',c:'#ffffff',m:1450,str:98}
+];
+var CLUBS_ESP2=[
+  {n:'AC Zaragoza',city:'Saragosse',l:4,s:10500,e:'[O1]',c:'#004a93',m:220,str:48},
+  {n:'FC Malaga',city:'Malaga',l:4,s:13000,e:'[O2]',c:'#005aa7',m:245,str:50},
+  {n:'AS Granada',city:'Grenade',l:4,s:15500,e:'[O3]',c:'#c8102e',m:270,str:52},
+  {n:'AC Elche',city:'Elche',l:4,s:18000,e:'[O4]',c:'#00954c',m:295,str:54},
+  {n:'FC Levante',city:'Valence',l:4,s:21000,e:'[O5]',c:'#0054a6',m:320,str:56},
+  {n:'AS Eibar',city:'Eibar',l:4,s:24000,e:'[O6]',c:'#6f1b3c',m:345,str:58},
+  {n:'AC Leganes',city:'Leganes',l:4,s:27500,e:'[O7]',c:'#0054a6',m:370,str:60},
+  {n:'FC Huesca',city:'Huesca',l:4,s:31000,e:'[O8]',c:'#00549f',m:395,str:62},
+  {n:'AS Albacete',city:'Albacete',l:4,s:34500,e:'[O9]',c:'#ee2737',m:420,str:64},
+  {n:'AC Gijon',city:'Gijon',l:4,s:38000,e:'[P1]',c:'#e2231a',m:445,str:66},
+  {n:'FC Oviedo',city:'Oviedo',l:4,s:41500,e:'[P2]',c:'#00549f',m:470,str:68},
+  {n:'AS Tenerife',city:'Tenerife',l:4,s:44500,e:'[P3]',c:'#005aa7',m:495,str:70},
+  {n:'AC Cartagena',city:'Carthagene',l:4,s:47000,e:'[P4]',c:'#ee2737',m:520,str:71},
+  {n:'FC Burgos',city:'Burgos',l:4,s:48500,e:'[P5]',c:'#000000',m:545,str:72},
+  {n:'AS Amorebieta',city:'Amorebieta',l:4,s:49500,e:'[P6]',c:'#00954c',m:565,str:73},
+  {n:'AC Santander',city:'Santander',l:4,s:50200,e:'[P7]',c:'#00954c',m:580,str:74},
+  {n:'FC Ferrol',city:'Ferrol',l:4,s:50700,e:'[P8]',c:'#0054a6',m:590,str:75},
+  {n:'AS Mirandes',city:'Miranda',l:4,s:51000,e:'[P9]',c:'#e2231a',m:595,str:76}
+];
+var CLUBS_ITA=[
+  {n:'AC Empoli',city:'Empoli',l:5,s:52000,e:'[Q1]',c:'#1e5fa8',m:580,str:75},
+  {n:'FC Frosinone',city:'Frosinone',l:5,s:63000,e:'[Q2]',c:'#ffd400',m:610,str:77},
+  {n:'AS Monza',city:'Monza',l:5,s:74000,e:'[Q3]',c:'#c8102e',m:640,str:78},
+  {n:'AC Lecce',city:'Lecce',l:5,s:86000,e:'[Q4]',c:'#d81920',m:675,str:79},
+  {n:'FC Verona',city:'Verone',l:5,s:100000,e:'[Q5]',c:'#0054a6',m:710,str:80},
+  {n:'AS Cagliari',city:'Cagliari',l:5,s:115000,e:'[Q6]',c:'#8b1e3f',m:745,str:81},
+  {n:'AC Udinese',city:'Udine',l:5,s:132000,e:'[Q7]',c:'#000000',m:780,str:82},
+  {n:'FC Genoa',city:'Genes',l:5,s:150000,e:'[Q8]',c:'#c8102e',m:820,str:84},
+  {n:'AS Sassuolo',city:'Sassuolo',l:5,s:172000,e:'[Q9]',c:'#00954c',m:860,str:85},
+  {n:'AC Torino',city:'Turin',l:5,s:196000,e:'[R1]',c:'#8b1e2d',m:900,str:86},
+  {n:'FC Bologna',city:'Bologne',l:5,s:222000,e:'[R2]',c:'#8b1e2d',m:945,str:87},
+  {n:'AS Fiorentina',city:'Florence',l:5,s:250000,e:'[R3]',c:'#5a2d81',m:990,str:88},
+  {n:'AC Atalanta',city:'Bergame',l:5,s:282000,e:'[R4]',c:'#1e5fa8',m:1040,str:90},
+  {n:'FC Lazio',city:'Rome',l:5,s:318000,e:'[R5]',c:'#8ac6e8',m:1095,str:91},
+  {n:'AS Roma',city:'Rome',l:5,s:358000,e:'[R6]',c:'#8b1e2d',m:1155,str:92},
+  {n:'AC Napoli',city:'Naples',l:5,s:405000,e:'[R7]',c:'#1e88d1',m:1220,str:94},
+  {n:'FC Inter',city:'Milan',l:5,s:465000,e:'[R8]',c:'#1e2d5a',m:1300,str:95},
+  {n:'AS Milano',city:'Milan',l:5,s:540000,e:'[R9]',c:'#c8102e',m:1400,str:97}
+];
+var CLUBS_ITA2=[
+  {n:'AC Cosenza',city:'Cosenza',l:4,s:10000,e:'[T1]',c:'#c8102e',m:210,str:46},
+  {n:'FC Cittadella',city:'Cittadella',l:4,s:12500,e:'[T2]',c:'#8b1e3f',m:235,str:48},
+  {n:'AS Modena',city:'Modene',l:4,s:15000,e:'[T3]',c:'#ffd400',m:260,str:50},
+  {n:'AC Catanzaro',city:'Catanzaro',l:4,s:17500,e:'[T4]',c:'#eb8f00',m:285,str:52},
+  {n:'FC Brescia',city:'Brescia',l:4,s:20500,e:'[T5]',c:'#1e5fa8',m:310,str:54},
+  {n:'AS Palermo',city:'Palerme',l:4,s:24000,e:'[T6]',c:'#8b1e3f',m:335,str:56},
+  {n:'AC Sudtirol',city:'Bolzano',l:4,s:27500,e:'[T7]',c:'#c8102e',m:360,str:58},
+  {n:'FC Pisa',city:'Pise',l:4,s:31000,e:'[T8]',c:'#1e5fa8',m:385,str:60},
+  {n:'AS Cremonese',city:'Cremone',l:4,s:34500,e:'[T9]',c:'#8b1e3f',m:410,str:62},
+  {n:'AC Spezia',city:'Spezia',l:4,s:38000,e:'[U1]',c:'#000000',m:435,str:64},
+  {n:'FC Sampdoria',city:'Genes',l:4,s:41500,e:'[U2]',c:'#1e5fa8',m:460,str:66},
+  {n:'AS Bari',city:'Bari',l:4,s:44500,e:'[U3]',c:'#c8102e',m:485,str:68},
+  {n:'AC Reggiana',city:'Reggio Emilia',l:4,s:46500,e:'[U4]',c:'#8b1e2d',m:505,str:69},
+  {n:'FC Venezia',city:'Venise',l:4,s:48000,e:'[U5]',c:'#1e5fa8',m:525,str:70},
+  {n:'AS Como',city:'Come',l:4,s:49000,e:'[U6]',c:'#1e5fa8',m:545,str:71},
+  {n:'AC Parma',city:'Parme',l:4,s:49600,e:'[U7]',c:'#ffd400',m:560,str:72},
+  {n:'FC Ternana',city:'Terni',l:4,s:50000,e:'[U8]',c:'#c8102e',m:570,str:73},
+  {n:'AS Ascoli',city:'Ascoli',l:4,s:50200,e:'[U9]',c:'#8b1e3f',m:575,str:75}
+];
+var CLUBS_GER=[
+  {n:'AC Heidenheim',city:'Heidenheim',l:5,s:52000,e:'[S1]',c:'#c8102e',m:580,str:75},
+  {n:'FC Bochum',city:'Bochum',l:5,s:63000,e:'[S2]',c:'#1e5fa8',m:610,str:77},
+  {n:'AS Mainz',city:'Mayence',l:5,s:74000,e:'[S3]',c:'#c8102e',m:640,str:78},
+  {n:'AC Augsburg',city:'Augsbourg',l:5,s:86000,e:'[S4]',c:'#c8102e',m:675,str:79},
+  {n:'FC Freiburg',city:'Fribourg',l:5,s:100000,e:'[S5]',c:'#000000',m:710,str:80},
+  {n:'AS Hoffenheim',city:'Hoffenheim',l:5,s:115000,e:'[S6]',c:'#1e5fa8',m:745,str:81},
+  {n:'AC Wolfsburg',city:'Wolfsburg',l:5,s:132000,e:'[S7]',c:'#65b32e',m:780,str:82},
+  {n:'FC Koln',city:'Cologne',l:5,s:150000,e:'[S8]',c:'#c8102e',m:820,str:84},
+  {n:'AS Union',city:'Berlin',l:5,s:172000,e:'[S9]',c:'#c8102e',m:860,str:85},
+  {n:'AC Monchengladbach',city:'Monchengladbach',l:5,s:196000,e:'[X1]',c:'#000000',m:900,str:86},
+  {n:'FC Werder',city:'Breme',l:5,s:222000,e:'[X2]',c:'#1e8c4e',m:945,str:87},
+  {n:'AS Hertha',city:'Berlin',l:5,s:250000,e:'[X3]',c:'#0054a6',m:990,str:88},
+  {n:'AC Frankfurt',city:'Francfort',l:5,s:282000,e:'[X4]',c:'#c8102e',m:1040,str:90},
+  {n:'FC Stuttgart',city:'Stuttgart',l:5,s:318000,e:'[X5]',c:'#c8102e',m:1095,str:91},
+  {n:'AS Leverkusen',city:'Leverkusen',l:5,s:358000,e:'[X6]',c:'#000000',m:1155,str:92},
+  {n:'AC Leipzig',city:'Leipzig',l:5,s:405000,e:'[X7]',c:'#dd0000',m:1220,str:94},
+  {n:'FC Dortmund',city:'Dortmund',l:5,s:465000,e:'[X8]',c:'#fde100',m:1300,str:95},
+  {n:'AS Munich',city:'Munich',l:5,s:540000,e:'[X9]',c:'#c8102e',m:1400,str:97}
+];
+var CLUBS_GER2=[
+  {n:'AC Sandhausen',city:'Sandhausen',l:4,s:10000,e:'[A1]',c:'#1e5fa8',m:210,str:46},
+  {n:'FC Ulm',city:'Ulm',l:4,s:12500,e:'[A2]',c:'#c8102e',m:235,str:48},
+  {n:'AS Elversberg',city:'Elversberg',l:4,s:15000,e:'[A3]',c:'#1e5fa8',m:260,str:50},
+  {n:'AC Munster',city:'Munster',l:4,s:17500,e:'[A4]',c:'#c8102e',m:285,str:52},
+  {n:'FC Magdeburg',city:'Magdebourg',l:4,s:20500,e:'[A5]',c:'#1e5fa8',m:310,str:54},
+  {n:'AS Rostock',city:'Rostock',l:4,s:24000,e:'[A6]',c:'#fde100',m:335,str:56},
+  {n:'AC Regensburg',city:'Ratisbonne',l:4,s:27500,e:'[A7]',c:'#c8102e',m:360,str:58},
+  {n:'FC Braunschweig',city:'Brunswick',l:4,s:31000,e:'[A8]',c:'#fde100',m:385,str:60},
+  {n:'AS Furth',city:'Furth',l:4,s:34500,e:'[A9]',c:'#1e8c4e',m:410,str:62},
+  {n:'AC Paderborn',city:'Paderborn',l:4,s:38000,e:'[B1]',c:'#0054a6',m:435,str:64},
+  {n:'FC Karlsruhe',city:'Karlsruhe',l:4,s:41500,e:'[B2]',c:'#1e5fa8',m:460,str:66},
+  {n:'AS Dusseldorf',city:'Dusseldorf',l:4,s:44500,e:'[B3]',c:'#c8102e',m:485,str:68},
+  {n:'AC Kiel',city:'Kiel',l:4,s:46500,e:'[B4]',c:'#1e5fa8',m:505,str:69},
+  {n:'FC Darmstadt',city:'Darmstadt',l:4,s:48000,e:'[B5]',c:'#000000',m:525,str:70},
+  {n:'AS Nurnberg',city:'Nuremberg',l:4,s:49000,e:'[B6]',c:'#c8102e',m:545,str:71},
+  {n:'AC Hannover',city:'Hanovre',l:4,s:49600,e:'[B7]',c:'#1e5fa8',m:560,str:72},
+  {n:'FC Schalke',city:'Gelsenkirchen',l:4,s:50000,e:'[B8]',c:'#1e5fa8',m:570,str:73},
+  {n:'AS Hamburg',city:'Hambourg',l:4,s:50200,e:'[B9]',c:'#000000',m:575,str:75}
+];
 var CLUBS_L1_NAMES=CLUBS_L1.map(function(c){return c.n;});
 var CLUBS_L2_NAMES=CLUBS_L2.map(function(c){return c.n;});
 var CLUBS_ENG_NAMES=CLUBS_ENG.map(function(c){return c.n;});
+var CLUBS_ENG2_NAMES=CLUBS_ENG2.map(function(c){return c.n;});
+var CLUBS_ESP_NAMES=CLUBS_ESP.map(function(c){return c.n;});
+var CLUBS_ESP2_NAMES=CLUBS_ESP2.map(function(c){return c.n;});
+var CLUBS_ITA_NAMES=CLUBS_ITA.map(function(c){return c.n;});
+var CLUBS_ITA2_NAMES=CLUBS_ITA2.map(function(c){return c.n;});
+var CLUBS_GER_NAMES=CLUBS_GER.map(function(c){return c.n;});
+var CLUBS_GER2_NAMES=CLUBS_GER2.map(function(c){return c.n;});
+var COUNTRIES=[
+  {id:'FR',adjective:'national',tier1:'L1',tier2:'L2',tier1Name:'Ligue 1',tier2Name:'Ligue 2',clubs1:CLUBS_L1,clubs2:CLUBS_L2},
+  {id:'ENG',adjective:'anglais',tier1:'ENG',tier2:'ENG2',tier1Name:'Premier League',tier2Name:'Championship',clubs1:CLUBS_ENG,clubs2:CLUBS_ENG2},
+  {id:'ESP',adjective:'espagnol',tier1:'ESP',tier2:'ESP2',tier1Name:'La Liga',tier2Name:'La Liga 2',clubs1:CLUBS_ESP,clubs2:CLUBS_ESP2},
+  {id:'ITA',adjective:'italien',tier1:'ITA',tier2:'ITA2',tier1Name:'Serie A',tier2Name:'Serie B',clubs1:CLUBS_ITA,clubs2:CLUBS_ITA2},
+  {id:'GER',adjective:'allemand',tier1:'GER',tier2:'GER2',tier1Name:'Bundesliga',tier2Name:'2. Bundesliga',clubs1:CLUBS_GER,clubs2:CLUBS_GER2}
+];
+var CLUBS_ALL=[].concat.apply([],COUNTRIES.map(function(c){return c.clubs1.concat(c.clubs2);}));
+var LEAGUE_META={};
+function registerCountryLeagues(){
+  LEAGUE_META={};
+  COUNTRIES.forEach(function(c){
+    var names1=c.clubs1.map(function(x){return x.n;});
+    var names2=c.clubs2.map(function(x){return x.n;});
+    LEAGUE_META[c.tier1]={name:c.tier1Name,otherLeagueId:c.tier2,isTopTier:true,staticNames:names1,membershipKey:c.tier1.toLowerCase()+'Membership',countryId:c.id,adjective:c.adjective};
+    LEAGUE_META[c.tier2]={name:c.tier2Name,otherLeagueId:c.tier1,isTopTier:false,staticNames:names2,membershipKey:c.tier2.toLowerCase()+'Membership',countryId:c.id,adjective:c.adjective};
+  });
+}
+registerCountryLeagues();
+function membershipFor(leagueId){
+  var meta=LEAGUE_META[leagueId];
+  if(!meta)return CLUBS_L1_NAMES;
+  return G[meta.membershipKey]||meta.staticNames;
+}
+function resolveMyLeague(myName){
+  for(var id in LEAGUE_META){
+    if(membershipFor(id).indexOf(myName)>=0)return id;
+  }
+  return null;
+}
 var CLUBS=CLUBS_L1;
 
 function findClubDef(name){
@@ -1443,43 +1626,48 @@ function findClubDef(name){
 }
 
 function rebuildActiveClubs(){
-  if(G.league==='ENG'){CLUBS=CLUBS_ENG;return;}
-  var names=(G.league==='L2'?(G.l2Membership||CLUBS_L2_NAMES):(G.l1Membership||CLUBS_L1_NAMES));
-  CLUBS=names.map(findClubDef).filter(Boolean);
+  CLUBS=membershipFor(G.league).map(findClubDef).filter(Boolean);
 }
 
 function repairLeagueMembership(){
-  var l1=(G.l1Membership||[]).filter(function(n,i,arr){return arr.indexOf(n)===i;});
-  var l2=(G.l2Membership||[]).filter(function(n,i,arr){return arr.indexOf(n)===i;});
-  l2=l2.filter(function(n){return l1.indexOf(n)<0;});
-  CLUBS_L1.concat(CLUBS_L2).forEach(function(c){
-    if(l1.indexOf(c.n)<0&&l2.indexOf(c.n)<0){
-      if(CLUBS_L1_NAMES.indexOf(c.n)>=0)l1.push(c.n);else l2.push(c.n);
-    }
+  COUNTRIES.forEach(function(c){
+    var m1=LEAGUE_META[c.tier1],m2=LEAGUE_META[c.tier2];
+    var own=(G[m1.membershipKey]||[]).filter(function(n,i,arr){return arr.indexOf(n)===i;});
+    var other=(G[m2.membershipKey]||[]).filter(function(n,i,arr){return arr.indexOf(n)===i;});
+    other=other.filter(function(n){return own.indexOf(n)<0;});
+    c.clubs1.concat(c.clubs2).forEach(function(cl){
+      if(own.indexOf(cl.n)<0&&other.indexOf(cl.n)<0){
+        if(m1.staticNames.indexOf(cl.n)>=0)own.push(cl.n);else other.push(cl.n);
+      }
+    });
+    G[m1.membershipKey]=own;G[m2.membershipKey]=other;
   });
-  G.l1Membership=l1;G.l2Membership=l2;
 }
 
 function leagueOfClubName(name){
-  if(CLUBS_ENG_NAMES.indexOf(name)>=0)return 'ENG';
-  if((G.l2Membership||CLUBS_L2_NAMES).indexOf(name)>=0)return 'L2';
-  return 'L1';
+  return resolveMyLeague(name)||'L1';
 }
 
 function foreignTransferCandidates(){
-  if(G.league==='L1')return CLUBS_ENG;
-  if(G.league==='ENG')return (G.l1Membership||CLUBS_L1_NAMES).map(findClubDef).filter(Boolean);
-  return [];
+  var meta=LEAGUE_META[G.league];
+  if(!meta)return [];
+  var candidates=[];
+  COUNTRIES.forEach(function(c){
+    if(c.id===meta.countryId)return;
+    candidates=candidates.concat(
+      membershipFor(c.tier1).map(findClubDef).filter(Boolean),
+      membershipFor(c.tier2).map(findClubDef).filter(Boolean)
+    );
+  });
+  return candidates;
 }
 
 function verifyClubSync(){
   var myName=G.inAcademy?G.academyClub.n:G.club;
   if(!myName)return;
   if(CLUBS[G.myClubIdx]&&CLUBS[G.myClubIdx].n===myName)return;
-  var inL2=(G.l2Membership||CLUBS_L2_NAMES).indexOf(myName)>=0;
-  var inL1=(G.l1Membership||CLUBS_L1_NAMES).indexOf(myName)>=0;
-  if(inL2&&G.league!=='L2'){G.league='L2';rebuildActiveClubs();}
-  else if(inL1&&G.league!=='L1'){G.league='L1';rebuildActiveClubs();}
+  var found=resolveMyLeague(myName);
+  if(found&&found!==G.league){G.league=found;rebuildActiveClubs();}
   var idx=CLUBS.findIndex(function(c){return c.n===myName;});
   if(idx>=0)G.myClubIdx=idx;
 }
@@ -1487,6 +1675,48 @@ function verifyClubSync(){
 var RIVALS=['Da Silva','Muller','Konte','Petrov','Okafor','Herrera','Diallo','Eriksen'];
 var FIRST_N=['Lucas','Hugo','Nathan','Enzo','Rayan','Matteo','Adam','Ilyas','Noah','Yanis','Leo','Gabriel'];
 var LAST_N=['Bernard','Petit','Moreau','Simon','Laurent','Michel','Garcia','Roux','Faure','Andre','Lopez','Girard'];
+var FIRST_N_ENG=['James','Oliver','Harry','George','Jack','Charlie','Thomas','Daniel','Ryan','Connor','Ethan','Liam','Callum','Joshua','Jamie','Alfie','Freddie','Archie','Tyler','Dylan','Mason','Luke','Ben','Sam','Jake'];
+var LAST_N_ENG=['Smith','Jones','Taylor','Brown','Wilson','Evans','Walker','Robinson','Wright','Green','Hughes','Turner','Morris','Bailey','Cooper','Clarke','Kelly','Hunt','Mitchell','Carter','Phillips','Parker','Bell','Wood','Ward'];
+var FIRST_N_ESP=['Alejandro','Pablo','Daniel','Carlos','Javier','Diego','Sergio','Adrian','Miguel','Alvaro','Ivan','David','Marcos','Hugo','Jorge','Rodrigo','Manuel','Raul','Victor','Ruben','Oscar','Fernando','Gonzalo','Lucas','Nicolas'];
+var LAST_N_ESP=['Garcia','Martinez','Lopez','Sanchez','Perez','Gonzalez','Fernandez','Rodriguez','Diaz','Moreno','Alvarez','Romero','Gutierrez','Ortiz','Ramos','Serrano','Blanco','Suarez','Molina','Castro','Ortega','Delgado','Guerrero','Vargas','Reyes'];
+var FIRST_N_ITA=['Matteo','Lorenzo','Francesco','Andrea','Alessandro','Davide','Marco','Luca','Simone','Federico','Riccardo','Gabriele','Giovanni','Antonio','Stefano','Roberto','Paolo','Nicolo','Leonardo','Tommaso','Mattia','Emanuele','Giorgio','Fabio','Daniele'];
+var LAST_N_ITA=['Rossi','Russo','Ferrari','Esposito','Bianchi','Romano','Colombo','Ricci','Marino','Greco','Bruno','Gallo','Conti','Deluca','Mancini','Costa','Giordano','Rizzo','Lombardi','Moretti','Barbieri','Fontana','Santoro','Mariani','Rinaldi'];
+var FIRST_N_GER=['Lukas','Finn','Jonas','Paul','Leon','Felix','Maximilian','Niklas','Tim','Jan','Moritz','Tobias','Julian','Fabian','Simon','Philipp','Florian','Christian','Sebastian','Daniel','Marcel','Kevin','Patrick','Benedikt','Dominik'];
+var LAST_N_GER=['Muller','Schmidt','Schneider','Fischer','Weber','Wagner','Becker','Hoffmann','Schulz','Koch','Richter','Klein','Wolf','Schroder','Neumann','Schwarz','Zimmermann','Braun','Kruger','Hofmann','Hartmann','Lange','Werner','Schmitt','Krause'];
+var COUNTRY_NAME_POOLS={FR:{first:FIRST_N,last:LAST_N},ENG:{first:FIRST_N_ENG,last:LAST_N_ENG},ESP:{first:FIRST_N_ESP,last:LAST_N_ESP},ITA:{first:FIRST_N_ITA,last:LAST_N_ITA},GER:{first:FIRST_N_GER,last:LAST_N_GER}};
+
+function getUsedWorldNames(){
+  if(!G._usedWorldNames){
+    G._usedWorldNames={};
+    if(G.worldPlayers)G.worldPlayers.forEach(function(p){G._usedWorldNames[p.n]=true;});
+    if(G.academyYouthPlayers)G.academyYouthPlayers.forEach(function(p){G._usedWorldNames[p.n]=true;});
+  }
+  return G._usedWorldNames;
+}
+
+function pickUniqueWorldName(countryId){
+  var used=getUsedWorldNames();
+  var pool=COUNTRY_NAME_POOLS[countryId]||COUNTRY_NAME_POOLS.FR;
+  var name,tries=0;
+  do{
+    name=pool.first[Math.floor(Math.random()*pool.first.length)]+' '+pool.last[Math.floor(Math.random()*pool.last.length)];
+    tries++;
+  }while(used[name]&&tries<80);
+  if(used[name]){
+    var base=name,suffix=2;
+    while(used[name]){name=base+' '+suffix;suffix++;}
+  }
+  used[name]=true;
+  return name;
+}
+
+function countryOfClub(name){
+  for(var i=0;i<COUNTRIES.length;i++){
+    var c=COUNTRIES[i];
+    if(c.clubs1.some(function(x){return x.n===name;})||c.clubs2.some(function(x){return x.n===name;}))return c.id;
+  }
+  return 'FR';
+}
 
 function generateFixtures(n){
   var teams=[];for(var i=0;i<n;i++)teams.push(i);
@@ -1523,34 +1753,30 @@ function simulateFullSeasonBatch(clubs){
 }
 
 function computePromotionRelegation(){
-  if(G.league!=='L1'&&G.league!=='L2')return {relegated:[],promoted:[],playerMoved:null};
+  var meta=LEAGUE_META[G.league];
+  if(!meta)return {relegated:[],promoted:[],playerMoved:null};
   var activeSorted=G.table.map(function(t){return {n:t.n,pts:t.pts};}).sort(function(a,b){return b.pts-a.pts;});
-  var otherLeague=G.league==='L2'?'L1':'L2';
-  var otherNames=(otherLeague==='L2'?(G.l2Membership||CLUBS_L2_NAMES):(G.l1Membership||CLUBS_L1_NAMES));
-  var otherClubs=otherNames.map(findClubDef).filter(Boolean);
+  var otherLeague=meta.otherLeagueId;
+  var otherMeta=LEAGUE_META[otherLeague];
+  var otherClubs=membershipFor(otherLeague).map(findClubDef).filter(Boolean);
   var otherSorted=simulateFullSeasonBatch(otherClubs);
   var relegated,promoted;
-  if(G.league==='L1'){
+  if(meta.isTopTier){
     relegated=activeSorted.slice(-2).map(function(x){return x.n;});
     promoted=otherSorted.slice(0,2).map(function(x){return x.n;});
   }else{
     promoted=activeSorted.slice(0,2).map(function(x){return x.n;});
     relegated=otherSorted.slice(-2).map(function(x){return x.n;});
   }
-  var l1=(G.l1Membership||CLUBS_L1_NAMES.slice()).slice();
-  var l2=(G.l2Membership||CLUBS_L2_NAMES.slice()).slice();
-  relegated.forEach(function(n){
-    var i=l1.indexOf(n);if(i>=0)l1.splice(i,1);
-    if(l2.indexOf(n)<0)l2.push(n);
-  });
-  promoted.forEach(function(n){
-    var i=l2.indexOf(n);if(i>=0)l2.splice(i,1);
-    if(l1.indexOf(n)<0)l1.push(n);
-  });
-  G.l1Membership=l1;G.l2Membership=l2;
+  var own=(G[meta.membershipKey]||meta.staticNames.slice()).slice();
+  var other=(G[otherMeta.membershipKey]||otherMeta.staticNames.slice()).slice();
+  relegated.forEach(function(n){var i=own.indexOf(n);if(i>=0)own.splice(i,1);if(other.indexOf(n)<0)other.push(n);});
+  promoted.forEach(function(n){var i=other.indexOf(n);if(i>=0)other.splice(i,1);if(own.indexOf(n)<0)own.push(n);});
+  G[meta.membershipKey]=own;
+  G[otherMeta.membershipKey]=other;
   var playerMoved=null;
-  if(G.league==='L1'&&relegated.indexOf(G.club)>=0){G.league='L2';playerMoved='relegated';}
-  else if(G.league==='L2'&&promoted.indexOf(G.club)>=0){G.league='L1';playerMoved='promoted';}
+  if(meta.isTopTier&&relegated.indexOf(G.club)>=0){G.league=otherLeague;playerMoved='relegated';}
+  else if(!meta.isTopTier&&promoted.indexOf(G.club)>=0){G.league=otherLeague;playerMoved='promoted';}
   return {relegated:relegated,promoted:promoted,playerMoved:playerMoved};
 }
 
@@ -1564,10 +1790,8 @@ function initLeagueSeason(){
   var myName=G.inAcademy?G.academyClub.n:G.club;
   G.myClubIdx=CLUBS.findIndex(function(c){return c.n===myName;});
   if(G.myClubIdx<0){
-    var inL2=(G.l2Membership||CLUBS_L2_NAMES).indexOf(myName)>=0;
-    var inL1=(G.l1Membership||CLUBS_L1_NAMES).indexOf(myName)>=0;
-    if(inL2&&G.league!=='L2'){G.league='L2';rebuildActiveClubs();}
-    else if(inL1&&G.league!=='L1'){G.league='L1';rebuildActiveClubs();}
+    var foundLeague=resolveMyLeague(myName);
+    if(foundLeague&&foundLeague!==G.league){G.league=foundLeague;rebuildActiveClubs();}
     G.myClubIdx=CLUBS.findIndex(function(c){return c.n===myName;});
   }
   if(G.myClubIdx<0)G.myClubIdx=0;
@@ -1643,12 +1867,22 @@ function statsFromOv(ov,pos){
   return out;
 }
 
-function mkWorldPlayer(pos,clubLvl,age){
+function pickPlayerNation(homeCountryId,clubLvl){
+  var foreignChance=clubLvl>=5?0.35:0.15;
+  if(Math.random()<foreignChance){
+    var others=COUNTRIES.filter(function(c){return c.id!==homeCountryId;}).map(function(c){return c.id;});
+    if(others.length)return others[Math.floor(Math.random()*others.length)];
+  }
+  return homeCountryId;
+}
+
+function mkWorldPlayer(pos,clubLvl,age,countryId){
   var base=25+clubLvl*9;
   var ov=Math.max(20,Math.min(92,base+Math.floor(Math.random()*16)-8));
   if(!G._nextPlayerId)G._nextPlayerId=1;
   var st=statsFromOv(ov,pos);
-  return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null,vit:st.vit,tir:st.tir,phy:st.phy,men:st.men,tec:st.tec,rep:Math.round(ov*1.2)};
+  var nation=pickPlayerNation(countryId||'FR',clubLvl);
+  return {id:'p'+(G._nextPlayerId++),n:pickUniqueWorldName(nation),nation:nation,p:pos,age:age,ov:ov,club:null,vit:st.vit,tir:st.tir,phy:st.phy,men:st.men,tec:st.tec,rep:Math.round(ov*1.2)};
 }
 
 function mkYouthPlayer(pos,tier,age){
@@ -1656,7 +1890,7 @@ function mkYouthPlayer(pos,tier,age){
   var ov=Math.max(8,Math.min(55,base+Math.floor(Math.random()*15)-7));
   if(!G._nextPlayerId)G._nextPlayerId=1;
   var st=statsFromOv(ov,pos);
-  return {id:'p'+(G._nextPlayerId++),n:FIRST_N[Math.floor(Math.random()*FIRST_N.length)]+' '+LAST_N[Math.floor(Math.random()*LAST_N.length)],p:pos,age:age,ov:ov,club:null,vit:st.vit,tir:st.tir,phy:st.phy,men:st.men,tec:st.tec,rep:Math.round(ov*1.2)};
+  return {id:'p'+(G._nextPlayerId++),n:pickUniqueWorldName('FR'),p:pos,age:age,ov:ov,club:null,vit:st.vit,tir:st.tir,phy:st.phy,men:st.men,tec:st.tec,rep:Math.round(ov*1.2)};
 }
 
 function initAcademyYouthPlayers(tier){
@@ -1678,14 +1912,17 @@ function initWorldPlayers(){
   if(G.worldPlayers&&G.worldPlayers.length)return;
   G.worldPlayers=[];
   G._nextPlayerId=1;
-  CLUBS_ALL.forEach(function(c){
-    WORLD_FORMATION.concat(WORLD_BENCH).forEach(function(slot){
-      for(var i=0;i<slot.n;i++){
-        var age=18+Math.floor(Math.random()*14);
-        var p=mkWorldPlayer(slot.p,c.l,age);
-        p.club=c.n;
-        G.worldPlayers.push(p);
-      }
+  G._usedWorldNames={};
+  COUNTRIES.forEach(function(country){
+    country.clubs1.concat(country.clubs2).forEach(function(c){
+      WORLD_FORMATION.concat(WORLD_BENCH).forEach(function(slot){
+        for(var i=0;i<slot.n;i++){
+          var age=18+Math.floor(Math.random()*14);
+          var p=mkWorldPlayer(slot.p,c.l,age,country.id);
+          p.club=c.n;
+          G.worldPlayers.push(p);
+        }
+      });
     });
   });
 }
@@ -2026,6 +2263,16 @@ function weightedOv(){
   var w=(G.archetypeWeights)||POS_WEIGHTS[G.pos]||POS_WEIGHTS.MIL;
   var val=G.vit*(w.vit||0)+G.tir*(w.tir||0)+G.phy*(w.phy||0)+G.men*(w.men||0)+G.tec*(w.tec||0)+(w.ref?(G.ref||0)*w.ref:0);
   return Math.floor(val);
+}
+
+function potentialBonus(){
+  var age=G.age||16;
+  var mult=age<=18?8:age<=21?4:age<=25?1.5:0;
+  return weightedOv()*mult;
+}
+
+function prospectScore(){
+  return (G.rep||0)+potentialBonus();
 }
 
 var STYLES=[
@@ -2412,8 +2659,12 @@ function startGame(){
     seasonGoals:0,seasonAssists:0,seasonCleanSheets:0,seasonYellow:0,seasonRed:0,seasonMOTM:0,seasonApps:0,
     careerGoals:0,careerAssists:0,careerCleanSheets:0,careerYellow:0,careerRed:0,careerMOTM:0,careerApps:0,
     loan:null,recentMatches:[],lastLoanOfferSai:null,winterWindowUsed:false,winterWindowNotified:false,transferMode:null,seasonHistory:[],
-    league:'L1',l1Membership:CLUBS_L1_NAMES.slice(),l2Membership:CLUBS_L2_NAMES.slice()
+    league:'L1'
   };
+  COUNTRIES.forEach(function(c){
+    G[c.tier1.toLowerCase()+'Membership']=c.clubs1.map(function(x){return x.n;});
+    G[c.tier2.toLowerCase()+'Membership']=c.clubs2.map(function(x){return x.n;});
+  });
   var rivClubPool=CLUBS_L1.filter(function(c){return c.n!==selAcademy.club.n;});
   G.riv.club=rivClubPool[Math.floor(Math.random()*rivClubPool.length)].n;
   AP={};
@@ -3810,7 +4061,7 @@ function ageWorldPlayers(){
     var retireChance=p.age>=34?Math.min(0.6,(p.age-33)*0.15):0;
     if(p.age>=38||Math.random()<retireChance){
       var clubDef=findClubDef(p.club)||{l:2};
-      var fresh=mkWorldPlayer(p.p,clubDef.l,17+Math.floor(Math.random()*3));
+      var fresh=mkWorldPlayer(p.p,clubDef.l,17+Math.floor(Math.random()*3),countryOfClub(p.club));
       fresh.club=p.club;
       arr[idx]=fresh;
     }
@@ -5260,9 +5511,9 @@ function showFin(){
   var promBox=document.getElementById('fpromrel');
   if(promBox){
     if(promRel&&promRel.playerMoved==='relegated'){
-      promBox.innerHTML='<div class="card" style="margin-bottom:11px;border-color:var(--red)"><div style="font-weight:700;color:var(--red);font-size:13px;margin-bottom:3px">&#8595; RELEGATION</div><div style="font-size:11px;color:var(--t2)">Ton club termine dans les 2 derniers et descend en Ligue 2 la saison prochaine.</div></div>';
+      promBox.innerHTML='<div class="card" style="margin-bottom:11px;border-color:var(--red)"><div style="font-weight:700;color:var(--red);font-size:13px;margin-bottom:3px">&#8595; RELEGATION</div><div style="font-size:11px;color:var(--t2)">Ton club termine dans les 2 derniers et descend en '+(LEAGUE_META[G.league]?LEAGUE_META[G.league].name:'Ligue 2')+' la saison prochaine.</div></div>';
     }else if(promRel&&promRel.playerMoved==='promoted'){
-      promBox.innerHTML='<div class="card" style="margin-bottom:11px;border-color:var(--g)"><div style="font-weight:700;color:var(--g);font-size:13px;margin-bottom:3px">&#8593; PROMOTION</div><div style="font-size:11px;color:var(--t2)">Ton club termine dans le top 2 et monte en Ligue 1 la saison prochaine !</div></div>';
+      promBox.innerHTML='<div class="card" style="margin-bottom:11px;border-color:var(--g)"><div style="font-weight:700;color:var(--g);font-size:13px;margin-bottom:3px">&#8593; PROMOTION</div><div style="font-size:11px;color:var(--t2)">Ton club termine dans le top 2 et monte en '+(LEAGUE_META[G.league]?LEAGUE_META[G.league].name:'Ligue 1')+' la saison prochaine !</div></div>';
     }else{
       promBox.innerHTML='';
     }
@@ -5294,7 +5545,8 @@ function showFin(){
 function updateClubInterest(won){
   if(!G.clubInterest)G.clubInterest={};
   var excludeName=G.inAcademy?G.academyClub.n:G.club;
-  var eligible=CLUBS.concat(foreignTransferCandidates()).filter(function(c){return c.m<=G.rep+80&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
+  var score=prospectScore();
+  var eligible=CLUBS.concat(foreignTransferCandidates()).filter(function(c){return c.m<=score+80&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
   if(eligible.length===0)return;
   var picks=Math.min(3,eligible.length);
   for(var i=0;i<picks;i++){
@@ -5302,7 +5554,7 @@ function updateClubInterest(won){
     var cur=G.clubInterest[c.n]||0;
     var gain=3+Math.floor(Math.random()*7);
     if(won)gain+=3;
-    if(c.m>G.rep)gain=Math.round(gain*0.5);
+    if(c.m>score)gain=Math.round(gain*0.5);
     G.clubInterest[c.n]=Math.min(100,cur+gain);
   }
 }
@@ -5387,7 +5639,7 @@ function openWinterTransfer(){
 
 function goTransfer(){
   var excludeName=G.inAcademy?G.academyClub.n:G.club;
-  var avail=CLUBS.concat(foreignTransferCandidates()).filter(function(c){return c.m<=G.rep&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
+  var avail=CLUBS.concat(foreignTransferCandidates()).filter(function(c){return c.m<=prospectScore()&&c.n!==excludeName&&clubCanAffordAndNeeds(c);});
   var negotiatedNames=(G.negotiatedOffers||[]).map(function(o){return o.n;});
   var priority=avail.filter(function(c){
     var playerInt=G.interestedClubs&&G.interestedClubs.indexOf(c.n)>=0;
@@ -5405,7 +5657,8 @@ function goTransfer(){
   var agentBoost=agentMult>1;
   selclub=null;document.getElementById('btntrans').disabled=true;
   var totalOffers=(G.negotiatedOffers||[]).length+top.length;
-  document.getElementById('trsub').textContent='Reputation: '+Math.round(G.rep)+' - '+totalOffers+' offre(s)'+(agentBoost?' (boostees par ton agent)':'');
+  var potBonus=potentialBonus();
+  document.getElementById('trsub').textContent='Reputation: '+Math.round(G.rep)+(potBonus>0?' (+'+Math.round(potBonus)+' potentiel)':'')+' - '+totalOffers+' offre(s)'+(agentBoost?' (boostees par ton agent)':'');
   document.getElementById('btnstay').textContent=G.transferMode==='winter'?'FERMER LE MERCATO':'RESTER AU CLUB';
   var h='';
   (G.negotiatedOffers||[]).forEach(function(o){
@@ -5445,6 +5698,7 @@ function confirmTransfer(){
   var destLeague=leagueOfClubName(selclub.n);
   var leagueChanged=destLeague!==G.league;
   if(leagueChanged){G.league=destLeague;rebuildActiveClubs();}
+  var destLeagueLabel=(leagueChanged&&LEAGUE_META[destLeague]&&LEAGUE_META[destLeague].countryId!=='FR')?LEAGUE_META[destLeague].name:null;
   if(isNew&&G.clubInterest)delete G.clubInterest[selclub.n];
   if(isNew){
     G.contractYears=selclub.y||(2+Math.floor(Math.random()*3));
@@ -5468,8 +5722,8 @@ function confirmTransfer(){
       rebuildCalendarFrom(CLUBS.findIndex(function(c){return c.n===G.club;}),G.sem-1);
       G.myClubIdx=CLUBS.findIndex(function(c){return c.n===G.club;});
       updateStanding();
-      notif(destLeague==='ENG'?'Transfert hivernal vers '+G.club+' - direction la Premier League !':'Transfert hivernal vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
-      addLog(destLeague==='ENG'?'Transfert hivernal vers '+G.club+' en Premier League'+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''):'Transfert hivernal vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
+      notif(destLeagueLabel?'Transfert hivernal vers '+G.club+' - direction la '+destLeagueLabel+' !':'Transfert hivernal vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
+      addLog(destLeagueLabel?'Transfert hivernal vers '+G.club+' en '+destLeagueLabel+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''):'Transfert hivernal vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
     }
     show('sg');updateUI();
     return;
@@ -5478,8 +5732,8 @@ function confirmTransfer(){
     G.squad=genSquad();
     G.recentMatches=[];
   }
-  notif(wasAcademy?'Tu quittes le centre de formation pour rejoindre '+G.club+' !':destLeague==='ENG'?'Transfert vers '+G.club+' - direction la Premier League !':'Transfert vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
-  if(isNew)addLog(wasAcademy?'Fin de ta formation - tu rejoins l\'equipe pro de '+G.club+' !':destLeague==='ENG'?'Transfert vers '+G.club+' en Premier League'+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''):'Transfert vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
+  notif(wasAcademy?'Tu quittes le centre de formation pour rejoindre '+G.club+' !':destLeagueLabel?'Transfert vers '+G.club+' - direction la '+destLeagueLabel+' !':'Transfert vers '+G.club+(fee>0?' pour '+fee.toLocaleString()+' EUR':'')+' !');
+  if(isNew)addLog(wasAcademy?'Fin de ta formation - tu rejoins l\'equipe pro de '+G.club+' !':destLeagueLabel?'Transfert vers '+G.club+' en '+destLeagueLabel+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''):'Transfert vers '+G.club+(fee>0?' - indemnite '+fee.toLocaleString()+' EUR':''),'transfer',true);
   nextSeason();
 }
 
@@ -5937,9 +6191,12 @@ function normalizeG(g){
   if(typeof g.objFails!=='number')g.objFails=0;
   if(!g.objective)g.objective=null;
   if(!g.fixtures||!g.table||typeof g.myClubIdx!=='number'){g.fixtures=null;g.table=null;g.myClubIdx=-1;}
-  if(g.league!=='L1'&&g.league!=='L2'&&g.league!=='ENG')g.league='L1';
-  if(!g.l1Membership)g.l1Membership=CLUBS_L1_NAMES.slice();
-  if(!g.l2Membership)g.l2Membership=CLUBS_L2_NAMES.slice();
+  if(!LEAGUE_META[g.league])g.league='L1';
+  COUNTRIES.forEach(function(c){
+    var k1=c.tier1.toLowerCase()+'Membership',k2=c.tier2.toLowerCase()+'Membership';
+    if(!g[k1])g[k1]=c.clubs1.map(function(x){return x.n;});
+    if(!g[k2])g[k2]=c.clubs2.map(function(x){return x.n;});
+  });
   if(typeof g.clubStanding!=='number')g.clubStanding=18;
   if(typeof g.rep==='number')g.rep=Math.round(g.rep);
   if(g.objective&&typeof g.objective.startRep==='number')g.objective.startRep=Math.round(g.objective.startRep);
@@ -6050,8 +6307,16 @@ function renderLigue(){
   var avgStr=CLUBS.reduce(function(a,c){return a+c.str;},0)/CLUBS.length;
   var maxStr=Math.max.apply(null,CLUBS.map(function(c){return c.str;}));
   var ligueRep=Math.round(avgStr/maxStr*100);
-  document.getElementById('liguename').textContent=G.inAcademy?'Championnat Jeunes':(G.league==='ENG'?'Premier League':G.league==='L2'?'Ligue 2':'Ligue 1');
-  document.getElementById('liguedesc').textContent=G.inAcademy?'Championnat reserve aux centres de formation. Fais tes preuves avant de rejoindre l\'equipe pro.':(G.league==='ENG'?'Elite du football anglais, '+CLUBS.length+' clubs parmi les plus prestigieux du monde.':G.league==='L2'?'Deuxieme division. Les 2 premiers montent en Ligue 1 en fin de saison.':'Elite du football national, '+CLUBS.length+' clubs. Les 2 derniers descendent en Ligue 2 en fin de saison.');
+  var ligueMeta=LEAGUE_META[G.league];
+  var otherLigueName=ligueMeta?LEAGUE_META[ligueMeta.otherLeagueId].name:'Ligue 2';
+  var ligueTitle=ligueMeta?ligueMeta.name:'Ligue 1';
+  var ligueDesc=ligueMeta
+    ?(ligueMeta.isTopTier
+        ?'Elite du football '+ligueMeta.adjective+', '+CLUBS.length+' clubs. Les 2 derniers descendent en '+otherLigueName+' en fin de saison.'
+        :'Deuxieme division. Les 2 premiers montent en '+otherLigueName+' en fin de saison.')
+    :'Elite du football national, '+CLUBS.length+' clubs. Les 2 derniers descendent en Ligue 2 en fin de saison.';
+  document.getElementById('liguename').textContent=G.inAcademy?'Championnat Jeunes':ligueTitle;
+  document.getElementById('liguedesc').textContent=G.inAcademy?'Championnat reserve aux centres de formation. Fais tes preuves avant de rejoindre l\'equipe pro.':ligueDesc;
   document.getElementById('liguerepbar').style.width=ligueRep+'%';
   document.getElementById('liguerepval').textContent=ligueRep+'/100';
   document.getElementById('ligueclubs').textContent=CLUBS.length;
@@ -6066,8 +6331,9 @@ function renderLigue(){
     var isMe=t.i===G.myClubIdx;
     var interested=G.interestedClubs&&G.interestedClubs.indexOf(t.n)>=0;
     var zoneCol=null;
-    if(G.league==='L1'&&idx>=sorted.length-2)zoneCol='var(--red)';
-    else if(G.league==='L2'&&idx<2)zoneCol='var(--g)';
+    var zoneMeta=LEAGUE_META[G.league];
+    if(zoneMeta&&zoneMeta.isTopTier&&idx>=sorted.length-2)zoneCol='var(--red)';
+    else if(zoneMeta&&!zoneMeta.isTopTier&&idx<2)zoneCol='var(--g)';
     var borderStyle=isMe?'border-color:var(--g)':(zoneCol?'border-color:'+zoneCol:'');
     h+='<div class="sqrow" style="cursor:pointer;'+borderStyle+'" onclick="viewClubDetail('+t.i+')"><div class="sqpos"'+(isMe?' style="background:var(--gl);color:var(--g)"':'')+'>'+(idx+1)+'</div><div class="sqname"'+(isMe?' style="color:var(--g)"':'')+'>'+t.n+(interested?' &#11088;':'')+'</div><div style="font-size:10px;color:var(--t3);width:56px;text-align:right">'+t.w+'V '+t.d+'N '+t.l+'D</div><div class="sqov" style="font-size:14px;color:'+(isMe?'var(--g)':'var(--t2)')+';margin-left:8px">'+t.pts+'</div></div>';
   });
@@ -6076,12 +6342,8 @@ function renderLigue(){
   renderOtherLeaguesRow();
 }
 
-var LEAGUE_DISPLAY_NAMES={L1:'Ligue 1',L2:'Ligue 2',ENG:'Premier League'};
-
 function clubsForLeagueId(id){
-  if(id==='ENG')return CLUBS_ENG;
-  if(id==='L2')return (G.l2Membership||CLUBS_L2_NAMES).map(findClubDef).filter(Boolean);
-  return (G.l1Membership||CLUBS_L1_NAMES).map(findClubDef).filter(Boolean);
+  return membershipFor(id).map(findClubDef).filter(Boolean);
 }
 
 function getOtherLeagueTable(id){
@@ -6096,9 +6358,10 @@ function getOtherLeagueTable(id){
 function renderOtherLeaguesRow(){
   var el=document.getElementById('otherLeaguesRow');
   if(!el)return;
-  var others=G.inAcademy?['L1','L2','ENG']:['L1','L2','ENG'].filter(function(id){return id!==G.league;});
+  var allIds=Object.keys(LEAGUE_META);
+  var others=G.inAcademy?allIds:allIds.filter(function(id){return id!==G.league;});
   el.innerHTML=others.map(function(id){
-    return '<button class="btn btn-o" style="flex:1;min-width:100px;padding:9px 6px;font-size:11px" onclick="showOtherLeague(\''+id+'\')">'+LEAGUE_DISPLAY_NAMES[id]+'</button>';
+    return '<button class="btn btn-o" style="flex:1;min-width:100px;padding:9px 6px;font-size:11px" onclick="showOtherLeague(\''+id+'\')">'+LEAGUE_META[id].name+'</button>';
   }).join('');
 }
 
@@ -6108,7 +6371,7 @@ function showOtherLeague(id){
     return '<div class="sqrow"><div class="sqpos">'+(idx+1)+'</div><div class="sqname">'+t.n+'</div><div class="sqov" style="color:var(--t2)">'+t.pts+'</div></div>';
   }).join('');
   var h='<div class="evt-overlay" id="otherLeagueOverlay"><div class="evt-modal" style="max-height:80vh;overflow-y:auto">'+
-    '<div class="evt-title" style="color:var(--yel)">'+LEAGUE_DISPLAY_NAMES[id]+'</div>'+
+    '<div class="evt-title" style="color:var(--yel)">'+(LEAGUE_META[id]?LEAGUE_META[id].name:id)+'</div>'+
     '<div class="evt-txt" style="margin-bottom:10px">Classement simule pour la saison '+G.sai+' ('+table.length+' clubs).</div>'+
     rows+
     '<button class="btn btn-g" style="margin-top:14px" onclick="closeOtherLeagueOverlay()">FERMER</button>'+
